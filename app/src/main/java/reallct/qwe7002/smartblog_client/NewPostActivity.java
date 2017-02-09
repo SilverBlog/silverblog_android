@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -44,7 +45,7 @@ public class NewPostActivity extends AppCompatActivity {
                 contentjson content = new contentjson();
                 content.setTitle(titleview.getText().toString());
                 content.setContent(editTextview.getText().toString());
-                content.setEncode(md5(titleview + password));
+                content.setEncode(getMD5(titleview.getText().toString() + password));
                 String json = gson.toJson(content);
                 new pushpost().execute(json);
             }
@@ -69,23 +70,44 @@ public class NewPostActivity extends AppCompatActivity {
         }
     }
 
-    public static String md5(String s) {
+
+    public static String getMD5(String source) {
+        String mdString = null;
+        if (source != null) {
+            try {
+                mdString = getBytes(source.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return mdString;
+    }
+
+    public static String getBytes(byte[] source) {
+        String s = null;
+        char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
+                '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        final int temp = 0xf;
+        final int arraySize = 32;
+        final int strLen = 16;
+        final int offset = 4;
         try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
+            java.security.MessageDigest md = java.security.MessageDigest
+                    .getInstance("MD5");
+            md.update(source);
+            byte[] tmp = md.digest();
+            char[] str = new char[arraySize];
+            int k = 0;
+            for (int i = 0; i < strLen; i++) {
+                byte byte0 = tmp[i];
+                str[k++] = hexDigits[byte0 >>> offset & temp];
+                str[k++] = hexDigits[byte0 & temp];
+            }
+            s = new String(str);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return s;
     }
 
     public class contentjson {
@@ -144,12 +166,12 @@ public class NewPostActivity extends AppCompatActivity {
             alertDialog
                     .setTitle("操作完成！")
                     .setPositiveButton("确定",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                        }
-                    })
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    finish();
+                                }
+                            })
                     .create()
                     .show();
 
