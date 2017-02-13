@@ -19,8 +19,7 @@ public class http {
             Response response = okHttpClient.newCall(request).execute();
             return response.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }

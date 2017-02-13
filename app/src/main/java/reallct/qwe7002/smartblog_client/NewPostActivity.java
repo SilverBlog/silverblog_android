@@ -17,10 +17,13 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 public class NewPostActivity extends AppCompatActivity {
     EditText titleview;
@@ -162,16 +165,24 @@ public class NewPostActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mpDialog.cancel();
+            if(result==null){
+                result="{\"status\":\"no\"}";
+            }
+            JsonParser parser = new JsonParser();
+            JsonObject object = (JsonObject) parser.parse(result);
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(NewPostActivity.this);
-            alertDialog
-                    .setTitle("操作完成！")
-                    .setPositiveButton("确定",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    finish();
-                                }
-                            })
+            if (Objects.equals(object.getAsJsonObject("status").toString(), "ok")) {
+                alertDialog.setTitle("操作完成！");
+            } else {
+                alertDialog.setTitle("操作失败！");
+            }
+            alertDialog.setPositiveButton("确定",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    })
                     .create()
                     .show();
 
