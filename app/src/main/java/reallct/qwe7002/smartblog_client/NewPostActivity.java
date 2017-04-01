@@ -1,19 +1,16 @@
 package reallct.qwe7002.smartblog_client;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -21,8 +18,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 public class NewPostActivity extends AppCompatActivity {
@@ -39,18 +34,19 @@ public class NewPostActivity extends AppCompatActivity {
         titleview = (EditText) findViewById(R.id.title);
         editTextview = (EditText) findViewById(R.id.mdcontent);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        this.setTitle("发布文章");
+        Button send = (Button) findViewById(R.id.button);
+        send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String password = sharedPreferences.getString("password", null);
                 Gson gson = new Gson();
-                contentjson content = new contentjson();
+                content_json content = new content_json();
                 content.setTitle(titleview.getText().toString());
                 content.setContent(editTextview.getText().toString());
                 content.setEncode(getMD5(titleview.getText().toString() + password));
                 String json = gson.toJson(content);
-                new pushpost().execute(json);
+                new push_post().execute(json);
             }
         });
         Intent intent = getIntent();
@@ -58,7 +54,7 @@ public class NewPostActivity extends AppCompatActivity {
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                handleSendText(intent); // 处理发送来的文字
+                handleSendText(intent);
             }
         }
     }
@@ -113,7 +109,7 @@ public class NewPostActivity extends AppCompatActivity {
         return s;
     }
 
-    public class contentjson {
+    private class content_json {
         private String title;
         private String content;
         private String encode;
@@ -122,11 +118,11 @@ public class NewPostActivity extends AppCompatActivity {
             this.title = title;
         }
 
-        public void setContent(String Content) {
+        void setContent(String Content) {
             this.content = Content;
         }
 
-        public void setEncode(String Encode) {
+        void setEncode(String Encode) {
             this.encode = Encode;
         }
 
@@ -143,7 +139,7 @@ public class NewPostActivity extends AppCompatActivity {
         }
     }
 
-    public class pushpost extends AsyncTask<String, Integer, String> {
+    private class push_post extends AsyncTask<String, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(NewPostActivity.this);
 
         @Override

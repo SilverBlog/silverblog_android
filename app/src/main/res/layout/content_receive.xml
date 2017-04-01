@@ -19,13 +19,13 @@
         android:layout_alignParentStart="true"
         android:id="@+id/mdcontent"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
         android:inputType="textMultiLine"
         android:gravity="left|top"
         android:selectAllOnFocus="false"
         android:minLines="6"
         android:layout_below="@+id/title"
-        android:hint="文章内容" />
+        android:hint="文章内容"
+        android:layout_above="@+id/button" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -37,5 +37,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="发布" />
 
 </RelativeLayout>
