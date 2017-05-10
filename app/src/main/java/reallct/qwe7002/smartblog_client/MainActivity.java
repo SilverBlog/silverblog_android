@@ -23,13 +23,11 @@ public class MainActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("host", String.valueOf(host.getText()));
                 editor.putString("password", String.valueOf(password.getText()));
                 editor.apply();
                 finish();
-                //// TODO: 2017/2/9  
             }
         });
     }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +19,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Objects;
 
 public class NewPostActivity extends AppCompatActivity {
     EditText titleview;
@@ -161,27 +161,26 @@ public class NewPostActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             mpDialog.cancel();
-            if(result==null){
-                result="{\"status\":\"no\"}";
-            }
             JsonParser parser = new JsonParser();
-            JsonObject object = (JsonObject) parser.parse(result);
+            final JsonObject objects = parser.parse(result).getAsJsonObject();
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(NewPostActivity.this);
-            if (Objects.equals(object.getAsJsonObject("status").toString(), "ok")) {
+            alertDialog.setTitle("操作失败！");
+            if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle("操作完成！");
-            } else {
-                alertDialog.setTitle("操作失败！");
             }
             alertDialog.setPositiveButton("确定",
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            if(objects.get("status").getAsBoolean()){
+                                Uri uri = Uri.parse(sharedPreferences.getString("host", null)+"/"+objects.get("name").getAsString());
+                                startActivity(new Intent(Intent.ACTION_VIEW,uri));
+                            }
                             finish();
                         }
                     })
                     .create()
                     .show();
-
         }
     }
 }
