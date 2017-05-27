@@ -30,7 +30,7 @@ class API {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
         okHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
-        String result="";
+        String result="{\"status\":false}";
         try {
             Response response = okHttpClient.newCall(request).execute();
             result=response.body().string();
