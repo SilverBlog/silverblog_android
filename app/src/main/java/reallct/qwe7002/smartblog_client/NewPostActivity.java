@@ -40,13 +40,15 @@ public class NewPostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String password = sharedPreferences.getString("password", null);
-                Gson gson = new Gson();
-                content_json content = new content_json();
-                content.setTitle(titleview.getText().toString());
-                content.setContent(editTextview.getText().toString());
-                content.setEncode(getMD5(titleview.getText().toString() + password));
-                String json = gson.toJson(content);
-                new push_post().execute(json);
+                if(password != null){
+                    Gson gson = new Gson();
+                    content_json content = new content_json();
+                    content.setTitle(titleview.getText().toString());
+                    content.setContent(editTextview.getText().toString());
+                    content.setEncode(getMD5(titleview.getText().toString() + password));
+                    String json = gson.toJson(content);
+                    new push_post().execute(json);
+                }
             }
         });
         Intent intent = getIntent();
@@ -114,7 +116,7 @@ public class NewPostActivity extends AppCompatActivity {
         private String content;
         private String encode;
 
-        public void setTitle(String title) {
+        void setTitle(String title) {
             this.title = title;
         }
 
@@ -164,7 +166,7 @@ public class NewPostActivity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(NewPostActivity.this);
-            alertDialog.setTitle("操作失败！");
+            alertDialog.setTitle("操作失败！请检查服务器地址以及API密码。");
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle("操作完成！");
             }
