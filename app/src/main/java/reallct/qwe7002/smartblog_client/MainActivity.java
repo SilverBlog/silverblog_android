@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -16,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button save = (Button) findViewById(R.id.button3);
-        Button newpost = (Button) findViewById(R.id.button4);
+        Button save = (Button) findViewById(R.id.save_button);
+        Button newpost = (Button) findViewById(R.id.send_button);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         final EditText host = (EditText) findViewById(R.id.host);
         final EditText password = (EditText) findViewById(R.id.password);
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("host", String.valueOf(host.getText()));
                 editor.putString("password", String.valueOf(password.getText()));
                 editor.apply();
-                finish();
+                Toast.makeText(MainActivity.this, "设置已保存！", Toast.LENGTH_LONG).show();
             }
         });
     }

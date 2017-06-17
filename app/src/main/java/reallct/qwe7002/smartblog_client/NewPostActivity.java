@@ -10,8 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -26,6 +26,11 @@ public class NewPostActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.new_post_toolbar_menu, menu);
+        return true;
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
@@ -35,10 +40,9 @@ public class NewPostActivity extends AppCompatActivity {
         editTextview = (EditText) findViewById(R.id.mdcontent);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("发布文章");
-        Button send = (Button) findViewById(R.id.button);
-        send.setOnClickListener(new View.OnClickListener() {
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onMenuItemClick(MenuItem item) {
                 String password = sharedPreferences.getString("password", null);
                 if(password != null){
                     Gson gson = new Gson();
@@ -49,6 +53,7 @@ public class NewPostActivity extends AppCompatActivity {
                     String json = gson.toJson(content);
                     new push_post().execute(json);
                 }
+                return true;
             }
         });
         Intent intent = getIntent();
@@ -167,10 +172,18 @@ public class NewPostActivity extends AppCompatActivity {
             final JsonObject objects = parser.parse(result).getAsJsonObject();
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(NewPostActivity.this);
             alertDialog.setTitle("操作失败！请检查服务器地址以及API密码。");
+            String okbutton="确定";
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle("操作完成！");
+                okbutton="访问新博文";
+                alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
             }
-            alertDialog.setPositiveButton("确定",
+            alertDialog.setPositiveButton(okbutton,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -180,9 +193,8 @@ public class NewPostActivity extends AppCompatActivity {
                             }
                             finish();
                         }
-                    })
-                    .create()
-                    .show();
+                    });
+            alertDialog.create().show();
         }
     }
 }
