@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="reallct.qwe7002.smartblog_client.MainActivity">
+    tools:context="reallct.qwe7002.smartblog_client.main_Activity">
 
     <EditText
         android:id="@+id/host"
@@ -50,8 +50,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/send_button"
-        android:text="编辑/删除文章"
-        android:visibility="invisible" />
+        android:text="编辑/删除文章" />
 
     <Button
         android:id="@+id/send_button"
