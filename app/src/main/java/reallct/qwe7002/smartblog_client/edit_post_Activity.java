@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,6 +22,7 @@ public class edit_post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText editTextview;
     SharedPreferences sharedPreferences;
+    int request_post_id;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,6 +47,7 @@ public class edit_post_Activity extends AppCompatActivity {
                 if (password != null) {
                     Gson gson = new Gson();
                     content_json content = new content_json();
+                    content.setPost_id(request_post_id);
                     content.setTitle(titleview.getText().toString());
                     content.setContent(editTextview.getText().toString());
                     content.setEncode(API.getMD5(titleview.getText().toString() + password));
@@ -59,14 +60,20 @@ public class edit_post_Activity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
-        new push_post().execute(Integer.toString(requestCode));
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        request_post_id = requestCode;
+        new get_post_content().execute(Integer.toString(requestCode));
     }
 
     private class content_json {
-        private String title;
+        private int post_id;
         private String content;
         private String encode;
+        private String title;
+
+        void setPost_id(int post_id) {
+            this.post_id = post_id;
+        }
 
         void setTitle(String title) {
             this.title = title;
@@ -78,6 +85,10 @@ public class edit_post_Activity extends AppCompatActivity {
 
         void setEncode(String Encode) {
             this.encode = Encode;
+        }
+
+        public int getPost_id() {
+            return post_id;
         }
 
         public String getTitle() {
@@ -110,7 +121,7 @@ public class edit_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_post(url, args[0],"new");
+            return API.send_request(url, args[0], "new");
         }
 
         @Override
@@ -118,7 +129,7 @@ public class edit_post_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            //// TODO: 2017/6/19  
+            //// TODO: 2017/6/19 文本信息
         }
     }
 
@@ -138,7 +149,7 @@ public class edit_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_post(url, args[0],"new");
+            return API.send_request(url, args[0], "edit");
         }
 
         @Override

@@ -59,7 +59,7 @@ public class new_post_Activity extends AppCompatActivity {
         String action = intent.getAction();
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
+            if ("text/plain" .equals(type)) {
                 handleSendText(intent);
             }
         }
@@ -122,7 +122,7 @@ public class new_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_post(url, args[0],"new");
+            return API.send_request(url, args[0], "new");
         }
 
         @Override

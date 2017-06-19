@@ -24,7 +24,7 @@
         android:gravity="left|top"
         android:selectAllOnFocus="false"
         android:minLines="6"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/post_id"
         android:hint="文章内容"
         android:layout_alignParentBottom="true" />
 
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/title"
+        android:id="@+id/post_id"
         android:hint="文章标题"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"

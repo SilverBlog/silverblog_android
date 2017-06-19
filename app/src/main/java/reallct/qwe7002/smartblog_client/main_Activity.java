@@ -19,7 +19,7 @@ public class main_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button save_button = (Button) findViewById(R.id.save_button);
         Button new_post_button = (Button) findViewById(R.id.send_button);
-        Button edit_post_button =(Button) findViewById(R.id.edit_button);
+        Button edit_post_button = (Button) findViewById(R.id.edit_button);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         final EditText host = (EditText) findViewById(R.id.host);
         final EditText password = (EditText) findViewById(R.id.password);

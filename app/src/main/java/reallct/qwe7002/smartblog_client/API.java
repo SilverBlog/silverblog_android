@@ -21,7 +21,7 @@ import static android.content.ContentValues.TAG;
 
 class API {
 
-    public static String getMD5(String source) {
+    static String getMD5(String source) {
         String mdString = null;
         if (source != null) {
             try {
@@ -33,7 +33,7 @@ class API {
         return mdString;
     }
 
-    public static String getBytes(byte[] source) {
+    private static String getBytes(byte[] source) {
         String s = null;
         char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8',
                 '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -59,13 +59,14 @@ class API {
         }
         return s;
     }
+
     private static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-    static String send_post(String url, String json,String method) {
+    static String send_request(String url, String json, String method) {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
-                .url(url + "/control/"+method)
+                .url(url + "/control/" + method)
                 .post(body)
                 .build();
         OkHttpClient okHttpClient = new OkHttpClient();
