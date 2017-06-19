@@ -5,6 +5,6 @@
     <item
         android:id="@+id/send_post_button"
         android:icon="@drawable/ic_menu_send"
-        android:post_id="@string/send_button"
+        android:title="@string/send_button"
         app:showAsAction="ifRoom" />
 </menu>
