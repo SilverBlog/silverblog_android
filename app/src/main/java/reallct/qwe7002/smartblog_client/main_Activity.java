@@ -28,17 +28,25 @@ public class main_Activity extends AppCompatActivity {
         new_post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (host.getText() != null) {
+                if (host.getText().length()!= 0&&password.getText().length()!= 0) {
                     Intent new_post_activity = new Intent(main_Activity.this, new_post_Activity.class);
                     startActivity(new_post_activity);
+                }else{
+                    Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
                 }
             }
         });
         edit_post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent edit_post_activity = new Intent(main_Activity.this, post_list_Activity.class);
-                startActivity(edit_post_activity);
+                if (host.getText().length()!= 0&&password.getText().length()!= 0) {
+                    Intent edit_post_activity = new Intent(main_Activity.this, post_list_Activity.class);
+                    startActivity(edit_post_activity);
+                }else{
+                    Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
             }
         });
         save_button.setOnClickListener(new View.OnClickListener() {

@@ -67,7 +67,10 @@ class API {
         String result = "{\"status\":false}";
         try {
             Response response = okHttpClient.newCall(request).execute();
-            result = response.body().string();
+            if (response.code() == 200) {
+                result = response.body().string();
+            }
+
         } catch (IOException ignored) {
         }
         return result;

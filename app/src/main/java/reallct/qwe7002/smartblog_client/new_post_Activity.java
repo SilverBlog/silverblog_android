@@ -35,7 +35,7 @@ public class new_post_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_receive);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        titleview = (EditText) findViewById(R.id.title);
+        titleview = (EditText) findViewById(R.id.titleview);
         editTextview = (EditText) findViewById(R.id.mdcontent);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("发布文章");

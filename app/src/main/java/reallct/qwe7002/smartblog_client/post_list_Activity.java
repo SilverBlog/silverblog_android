@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +38,7 @@ public class post_list_Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
         setSupportActionBar(toolbar);
+        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -74,16 +76,10 @@ public class post_list_Activity extends AppCompatActivity {
 
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
 
-        ProgressDialog mpDialog = new ProgressDialog(post_list_Activity.this);
 
         @Override
         protected void onPreExecute() {
-            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在获取数据，请稍后...");
-            mpDialog.setIndeterminate(false);
-            mpDialog.setCancelable(false);
-            mpDialog.show();
+            mSwipeRefreshWidget.setRefreshing(true);
         }
 
         @Override
@@ -94,7 +90,6 @@ public class post_list_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            mpDialog.cancel();
             mSwipeRefreshWidget.setRefreshing(false);
             JsonParser parser = new JsonParser();
             if (parser.parse(result).isJsonArray()) {
@@ -114,6 +109,7 @@ public class post_list_Activity extends AppCompatActivity {
                         finish();
                     }
                 });
+                alertDialog.show();
             }
 
         }
