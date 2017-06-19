@@ -1,12 +1,14 @@
 package reallct.qwe7002.smartblog_client;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -45,9 +47,8 @@ public class post_list_Activity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int click_location = position + 1;
                 Intent intent = new Intent(post_list_Activity.this, edit_post_Activity.class);
-                startActivityForResult(intent, click_location);
+                startActivityForResult(intent, position);
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -88,13 +89,25 @@ public class post_list_Activity extends AppCompatActivity {
             mpDialog.cancel();
             mSwipeRefreshWidget.setRefreshing(false);
             JsonParser parser = new JsonParser();
-            final JsonArray result_array = parser.parse(result).getAsJsonArray();
-            ArrayList<JsonElement> list = new ArrayList<>();
-            for (JsonElement item : result_array) {
-                list.add(item);
+            if(parser.parse(result).isJsonArray()){
+                final JsonArray result_array = parser.parse(result).getAsJsonArray();
+                ArrayList<JsonElement> list = new ArrayList<>();
+                for (JsonElement item : result_array) {
+                    list.add(item);
+                }
+                ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
+                listView.setAdapter(adapter);
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_list_Activity.this);
+                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
             }
-            ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
-            listView.setAdapter(adapter);
+
         }
     }
 

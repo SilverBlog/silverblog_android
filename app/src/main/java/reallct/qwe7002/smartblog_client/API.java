@@ -1,7 +1,5 @@
 package reallct.qwe7002.smartblog_client;
 
-import android.util.Log;
-
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -12,12 +10,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
-import static android.content.ContentValues.TAG;
-
-
-/**
- * Created by qwe70 on 2017/2/9.
- */
 
 class API {
 
