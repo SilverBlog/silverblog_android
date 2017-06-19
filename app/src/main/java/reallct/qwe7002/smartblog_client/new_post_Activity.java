@@ -113,7 +113,7 @@ public class new_post_Activity extends AppCompatActivity {
         protected void onPreExecute() {
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在获取数据，请稍后...");
+            mpDialog.setMessage("正在提交数据，请稍后...");
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
@@ -132,10 +132,10 @@ public class new_post_Activity extends AppCompatActivity {
             final JsonObject objects = parser.parse(result).getAsJsonObject();
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(new_post_Activity.this);
             alertDialog.setTitle("操作失败！请检查服务器地址以及API密码。");
-            String okbutton = "确定";
+            String ok_button = "确定";
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle("操作完成！");
-                okbutton = "访问新博文";
+                ok_button = "访问新博文";
                 alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -143,7 +143,7 @@ public class new_post_Activity extends AppCompatActivity {
                     }
                 });
             }
-            alertDialog.setPositiveButton(okbutton,
+            alertDialog.setPositiveButton(ok_button,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

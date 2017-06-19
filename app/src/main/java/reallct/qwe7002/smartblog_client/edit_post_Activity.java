@@ -121,7 +121,7 @@ public class edit_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_request(url, args[0], "new");
+            return API.send_request(url, "{\"post_id\":"+args[0]+"}", "get_post_content");
         }
 
         @Override
@@ -129,7 +129,19 @@ public class edit_post_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            //// TODO: 2017/6/19 文本信息
+            if (objects.get("status").getAsBoolean()) {
+                titleview.setText(objects.get("title").getAsString());
+                editTextview.setText(objects.get("content").getAsString());
+            }else{
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_post_Activity.this);
+                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+            }
         }
     }
 
@@ -140,7 +152,7 @@ public class edit_post_Activity extends AppCompatActivity {
         protected void onPreExecute() {
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在获取数据，请稍后...");
+            mpDialog.setMessage("正在提交数据，请稍后...");
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
