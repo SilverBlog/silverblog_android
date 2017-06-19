@@ -44,7 +44,12 @@ public class new_post_Activity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 String password = sharedPreferences.getString("password", null);
                 if (password != null) {
-                    String json = "{\"title\":\"" + titleview.getText().toString() + "\",\"content\":\"" + editTextview.getText().toString() + "\",\"encode\":\"" + API.getMD5(titleview.getText().toString() + password) + "\"}";
+                    Gson gson = new Gson();
+                    content_json content = new content_json();
+                    content.setTitle(titleview.getText().toString());
+                    content.setContent(editTextview.getText().toString());
+                    content.setEncode(API.getMD5(titleview.getText().toString() + password));
+                    String json = gson.toJson(content);
                     new push_post().execute(json);
                 }
                 return true;
@@ -54,7 +59,7 @@ public class new_post_Activity extends AppCompatActivity {
         String action = intent.getAction();
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain" .equals(type)) {
+            if ("text/plain".equals(type)) {
                 handleSendText(intent);
             }
         }
@@ -70,6 +75,36 @@ public class new_post_Activity extends AppCompatActivity {
         }
     }
 
+
+    private class content_json {
+        private String title;
+        private String content;
+        private String encode;
+
+        void setTitle(String title) {
+            this.title = title;
+        }
+
+        void setContent(String Content) {
+            this.content = Content;
+        }
+
+        void setEncode(String Encode) {
+            this.encode = Encode;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getEncode() {
+            return encode;
+        }
+    }
 
     private class push_post extends AsyncTask<String, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(new_post_Activity.this);
@@ -87,7 +122,7 @@ public class new_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_request(url, args[0], "new");
+            return API.send_request(url, args[0],"new");
         }
 
         @Override
@@ -96,7 +131,7 @@ public class new_post_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(new_post_Activity.this);
-            alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+            alertDialog.setTitle("操作失败！请检查服务器地址以及API密码。");
             String okbutton = "确定";
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle("操作完成！");

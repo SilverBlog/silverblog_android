@@ -45,7 +45,13 @@ public class edit_post_Activity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 String password = sharedPreferences.getString("password", null);
                 if (password != null) {
-                    String json = "{\"post_id\":\""+Integer.toString(request_post_id)+"\",\"title\":\"" + titleview.getText().toString() + "\",\"content\":\"" + editTextview.getText().toString() + "\",\"encode\":\"" + API.getMD5(titleview.getText().toString() + password) + "\"}";
+                    Gson gson = new Gson();
+                    content_json content = new content_json();
+                    content.setPost_id(request_post_id);
+                    content.setTitle(titleview.getText().toString());
+                    content.setContent(editTextview.getText().toString());
+                    content.setEncode(API.getMD5(titleview.getText().toString() + password));
+                    String json = gson.toJson(content);
                     new push_post().execute(json);
                 }
                 return true;
@@ -57,6 +63,45 @@ public class edit_post_Activity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         request_post_id = requestCode;
         new get_post_content().execute(Integer.toString(requestCode));
+    }
+
+    private class content_json {
+        private int post_id;
+        private String content;
+        private String encode;
+        private String title;
+
+        void setPost_id(int post_id) {
+            this.post_id = post_id;
+        }
+
+        void setTitle(String title) {
+            this.title = title;
+        }
+
+        void setContent(String Content) {
+            this.content = Content;
+        }
+
+        void setEncode(String Encode) {
+            this.encode = Encode;
+        }
+
+        public int getPost_id() {
+            return post_id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getEncode() {
+            return encode;
+        }
     }
 
     private class get_post_content extends AsyncTask<String, Integer, String> {
