@@ -4,15 +4,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -114,6 +111,7 @@ public class post_list_Activity extends AppCompatActivity {
 
         }
     }
+
     private class delete_post extends AsyncTask<String, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(post_list_Activity.this);
 
@@ -131,7 +129,7 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String password = sharedPreferences.getString("password", null);
-            return API.send_request(url,"{\"post_id\":"+args[0]+",\"encode\":\""+API.getMD5(args[0]+password)+"\"}","delete");
+            return API.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + API.getMD5(args[0] + password) + "\"}", "delete");
         }
 
         @Override

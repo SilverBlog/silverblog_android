@@ -55,7 +55,7 @@ public class main_Activity extends AppCompatActivity {
                 if (host.getText().length() != 0 && password.getText().length() != 0) {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("host", String.valueOf(host.getText()));
-                    editor.putString("password", String.valueOf(password.getText()));
+                    editor.putString("password", API.getMD5(String.valueOf(password.getText())));
                     editor.apply();
                     Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();

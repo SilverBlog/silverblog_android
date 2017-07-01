@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SliverBlog管理中心</string>
+    <string name="app_name">SliverBlog管理工具箱</string>
     <string name="title_activity_receive">添加文章</string>
     <string name="send_button">发送</string>
     <string name="title_activity_edit_post_">edit_post_Activity</string>
