@@ -39,7 +39,8 @@ public class new_post_Activity extends AppCompatActivity {
         editTextview = (EditText) findViewById(R.id.mdcontent);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("发布文章");
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        toolbar.setOnMenuItemClickListener(
+                new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 String password = sharedPreferences.getString("password", null);
