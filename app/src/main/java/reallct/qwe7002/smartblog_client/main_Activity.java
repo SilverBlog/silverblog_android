@@ -29,7 +29,7 @@ public class main_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (host.getText().length() != 0 && password.getText().length() != 0) {
-                    Intent new_post_activity = new Intent(main_Activity.this, new_post_Activity.class);
+                    Intent new_post_activity   = new Intent(main_Activity.this, new_post_Activity.class);
                     startActivity(new_post_activity);
                 } else {
                     Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
