@@ -49,7 +49,7 @@ public class new_post_Activity extends AppCompatActivity {
                     content_json content = new content_json();
                     content.setTitle(titleview.getText().toString());
                     content.setContent(editTextview.getText().toString());
-                    content.setEncode(API.getMD5(titleview.getText().toString() + password));
+                    content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
                     String json = gson.toJson(content);
                     new push_post().execute(json);
                 }
@@ -123,7 +123,7 @@ public class new_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_request(url, args[0],"new");
+            return silverblog_connect.send_request(url, args[0],"new");
         }
 
         @Override

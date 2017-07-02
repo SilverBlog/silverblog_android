@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
 
-class API {
+class silverblog_connect {
 
     static String getMD5(String source) {
         String mdString = null;

@@ -82,7 +82,7 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String url = sharedPreferences.getString("host", null);
-            return API.send_request(url, "{}", "get_post_list");
+            return silverblog_connect.send_request(url, "{}", "get_post_list");
         }
 
         @Override
@@ -129,7 +129,7 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String password = sharedPreferences.getString("password", null);
-            return API.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + API.getMD5(args[0] + password) + "\"}", "delete");
+            return silverblog_connect.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + silverblog_connect.getMD5(args[0] + password) + "\"}", "delete");
         }
 
         @Override
