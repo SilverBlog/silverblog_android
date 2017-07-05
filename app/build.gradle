@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 26
+    buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "reallct.qwe7002.smartblog_client"
         minSdkVersion 21
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,7 +26,8 @@ dependencies {
     })
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
