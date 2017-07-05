@@ -48,24 +48,29 @@ public class post_list_Activity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.edit_post_listview);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(post_list_Activity.this, edit_post_Activity.class);
-                startActivityForResult(intent, position);
-            }
-        });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_list_Activity.this);
-                alertDialog.setTitle("删除这篇文章？(警告！本操作不可逆，请谨慎操作！）");
-                alertDialog.setPositiveButton("确定",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                new delete_post().execute(Integer.toString(position));
-                            }
-                        });
-                return false;
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                new AlertDialog.Builder(post_list_Activity.this).setTitle("请选择操作").setItems(new String[]{"修改", "删除"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        switch (i) {
+                            case 0:
+                                Intent intent = new Intent(post_list_Activity.this, edit_post_Activity.class);
+                                intent.putExtra("position", position);
+                                startActivity(intent);
+                                break;
+                            case 1:
+                                new AlertDialog.Builder(post_list_Activity.this).setTitle("删除这篇文章？(警告！本操作不可逆，请谨慎操作！）").setPositiveButton("确定",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                new delete_post().execute(Integer.toString(position));
+                                            }
+                                        }).show();
+                                break;
+                        }
+
+                    }
+                }).show();
             }
         });
         new get_post_list_content().execute();
@@ -91,9 +96,10 @@ public class post_list_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             if (parser.parse(result).isJsonArray()) {
                 final JsonArray result_array = parser.parse(result).getAsJsonArray();
-                ArrayList<JsonElement> list = new ArrayList<>();
+                ArrayList<String> list = new ArrayList<>();
                 for (JsonElement item : result_array) {
-                    list.add(item);
+                    String item_string = item.getAsString();
+                    list.add(item_string);
                 }
                 ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
                 listView.setAdapter(adapter);
@@ -146,7 +152,8 @@ public class post_list_Activity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
+
+                            new get_post_list_content().execute();
                         }
                     });
             alertDialog.create().show();

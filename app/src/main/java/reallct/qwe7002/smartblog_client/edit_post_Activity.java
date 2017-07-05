@@ -40,6 +40,9 @@ public class edit_post_Activity extends AppCompatActivity {
         editTextview = (EditText) findViewById(R.id.mdcontent);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("修改文章");
+        Intent intent =getIntent();
+        request_post_id =intent.getIntExtra("position",-1);
+        new get_post_content().execute(Integer.toString(request_post_id));
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -57,12 +60,6 @@ public class edit_post_Activity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        request_post_id = requestCode;
-        new get_post_content().execute(Integer.toString(requestCode));
     }
 
     private class content_json {
