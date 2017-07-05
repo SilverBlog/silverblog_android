@@ -12,7 +12,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="reallct.qwe7002.smartblog_client.new_post_Activity"
     tools:showIn="@layout/activity_receive">
-
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/titleview"
+        android:hint="文章标题"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,15 +37,6 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/titleview" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/titleview"
-        android:hint="文章标题"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>
