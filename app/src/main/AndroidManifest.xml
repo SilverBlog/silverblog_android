@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".new_post_Activity"
+            android:name=".post_Activity"
             android:label="@string/title_activity_receive"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -31,10 +31,6 @@
         </activity>
         <activity
             android:name=".post_list_Activity"
-            android:label="@string/title_activity_edit_post_"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".edit_post_Activity"
             android:label="@string/title_activity_edit_post_"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

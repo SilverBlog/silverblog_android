@@ -18,12 +18,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class edit_post_Activity extends AppCompatActivity {
+public class post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText editTextview;
     SharedPreferences sharedPreferences;
     int request_post_id;
-
+    String action_name="new";
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_post_toolbar_menu, menu);
@@ -39,18 +39,15 @@ public class edit_post_Activity extends AppCompatActivity {
         titleview = (EditText) findViewById(R.id.titleview);
         editTextview = (EditText) findViewById(R.id.mdcontent);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        this.setTitle("修改文章");
-        Intent intent =getIntent();
-        request_post_id =intent.getIntExtra("position",-1);
-        new get_post_content().execute(Integer.toString(request_post_id));
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        this.setTitle("发布文章");
+        toolbar.setOnMenuItemClickListener(
+                new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 String password = sharedPreferences.getString("password", null);
                 if (password != null) {
                     Gson gson = new Gson();
                     content_json content = new content_json();
-                    content.setPost_id(request_post_id);
                     content.setTitle(titleview.getText().toString());
                     content.setContent(editTextview.getText().toString());
                     content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
@@ -60,9 +57,90 @@ public class edit_post_Activity extends AppCompatActivity {
                 return true;
             }
         });
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            }
+        }
+        if (intent.getBooleanExtra("edit",false)){
+            action_name="edit";
+            this.setTitle("修改文章");
+            request_post_id = intent.getIntExtra("position", -1);
+            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    String password = sharedPreferences.getString("password", null);
+                    if (password != null) {
+                        Gson gson = new Gson();
+                        edit_content_json content = new edit_content_json();
+                        content.setPost_id(request_post_id);
+                        content.setTitle(titleview.getText().toString());
+                        content.setContent(editTextview.getText().toString());
+                        content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
+                        String json = gson.toJson(content);
+                        new push_post().execute(json);
+                    }
+                    return true;
+                }
+            });
+            new get_post_content().execute(Integer.toString(request_post_id));
+        }
     }
 
-    private class content_json {
+    private class get_post_content extends AsyncTask<String, Integer, String> {
+
+        ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
+
+        @Override
+        protected void onPreExecute() {
+            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mpDialog.setTitle("正在连接服务器...");
+            mpDialog.setMessage("正在获取数据，请稍后...");
+            mpDialog.setIndeterminate(false);
+            mpDialog.setCancelable(false);
+            mpDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... args) {
+            String url = sharedPreferences.getString("host", null);
+            return silverblog_connect.send_request(url, "{\"post_id\":" + args[0] + "}", "get_post_content");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mpDialog.cancel();
+            JsonParser parser = new JsonParser();
+            final JsonObject objects = parser.parse(result).getAsJsonObject();
+            if (objects.get("status").getAsBoolean()) {
+                titleview.setText(objects.get("title").getAsString());
+                editTextview.setText(objects.get("content").getAsString());
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+            }
+        }
+    }
+    void handleSendText(Intent intent) {
+        String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+
+            titleview.setText(sharedTitle);
+            editTextview.setText(sharedText);
+        }
+    }
+
+    private class edit_content_json {
         private int post_id;
         private String content;
         private String encode;
@@ -101,49 +179,38 @@ public class edit_post_Activity extends AppCompatActivity {
         }
     }
 
-    private class get_post_content extends AsyncTask<String, Integer, String> {
+    private class content_json {
+        private String title;
+        private String content;
+        private String encode;
 
-        ProgressDialog mpDialog = new ProgressDialog(edit_post_Activity.this);
-
-        @Override
-        protected void onPreExecute() {
-            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在获取数据，请稍后...");
-            mpDialog.setIndeterminate(false);
-            mpDialog.setCancelable(false);
-            mpDialog.show();
+        void setTitle(String title) {
+            this.title = title;
         }
 
-        @Override
-        protected String doInBackground(String... args) {
-            String url = sharedPreferences.getString("host", null);
-            return silverblog_connect.send_request(url, "{\"post_id\":"+args[0]+"}", "get_post_content");
+        void setContent(String Content) {
+            this.content = Content;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            mpDialog.cancel();
-            JsonParser parser = new JsonParser();
-            final JsonObject objects = parser.parse(result).getAsJsonObject();
-            if (objects.get("status").getAsBoolean()) {
-                titleview.setText(objects.get("title").getAsString());
-                editTextview.setText(objects.get("content").getAsString());
-            }else{
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_post_Activity.this);
-                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
-                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });
-            }
+        void setEncode(String Encode) {
+            this.encode = Encode;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getEncode() {
+            return encode;
         }
     }
 
     private class push_post extends AsyncTask<String, Integer, String> {
-        ProgressDialog mpDialog = new ProgressDialog(edit_post_Activity.this);
+        ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
 
         @Override
         protected void onPreExecute() {
@@ -158,7 +225,7 @@ public class edit_post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return silverblog_connect.send_request(url, args[0], "edit");
+            return silverblog_connect.send_request(url, args[0],action_name);
         }
 
         @Override
@@ -166,12 +233,12 @@ public class edit_post_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_post_Activity.this);
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
             alertDialog.setTitle("操作失败！请检查服务器地址以及API密码。");
-            String okbutton = "确定";
+            String ok_button = "确定";
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle("操作完成！");
-                okbutton = "访问新博文";
+                ok_button = "访问新博文";
                 alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -179,7 +246,7 @@ public class edit_post_Activity extends AppCompatActivity {
                     }
                 });
             }
-            alertDialog.setPositiveButton(okbutton,
+            alertDialog.setPositiveButton(ok_button,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

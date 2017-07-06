@@ -54,7 +54,8 @@ public class post_list_Activity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
                             case 0:
-                                Intent intent = new Intent(post_list_Activity.this, edit_post_Activity.class);
+                                Intent intent = new Intent(post_list_Activity.this, post_Activity.class);
+                                intent.putExtra("edit", true);
                                 intent.putExtra("position", position);
                                 startActivity(intent);
                                 break;

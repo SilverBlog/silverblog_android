@@ -11,8 +11,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.regex.Pattern;
-
 
 public class main_Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -35,7 +33,7 @@ public class main_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (host_save != null && password_save != null) {
-                    Intent new_post_activity = new Intent(main_Activity.this, new_post_Activity.class);
+                    Intent new_post_activity = new Intent(main_Activity.this, post_Activity.class);
                     startActivity(new_post_activity);
                 } else {
                     if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
