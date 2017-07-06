@@ -23,7 +23,8 @@ public class post_Activity extends AppCompatActivity {
     EditText editTextview;
     SharedPreferences sharedPreferences;
     int request_post_id;
-    String action_name="new";
+    String action_name = "new";
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.new_post_toolbar_menu, menu);
@@ -42,21 +43,21 @@ public class post_Activity extends AppCompatActivity {
         this.setTitle("发布文章");
         toolbar.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                String password = sharedPreferences.getString("password", null);
-                if (password != null) {
-                    Gson gson = new Gson();
-                    content_json content = new content_json();
-                    content.setTitle(titleview.getText().toString());
-                    content.setContent(editTextview.getText().toString());
-                    content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
-                    String json = gson.toJson(content);
-                    new push_post().execute(json);
-                }
-                return true;
-            }
-        });
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        String password = sharedPreferences.getString("password", null);
+                        if (password != null) {
+                            Gson gson = new Gson();
+                            content_json content = new content_json();
+                            content.setTitle(titleview.getText().toString());
+                            content.setContent(editTextview.getText().toString());
+                            content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
+                            String json = gson.toJson(content);
+                            new push_post().execute(json);
+                        }
+                        return true;
+                    }
+                });
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
@@ -65,8 +66,8 @@ public class post_Activity extends AppCompatActivity {
                 handleSendText(intent);
             }
         }
-        if (intent.getBooleanExtra("edit",false)){
-            action_name="edit";
+        if (intent.getBooleanExtra("edit", false)) {
+            action_name = "edit";
             this.setTitle("修改文章");
             request_post_id = intent.getIntExtra("position", -1);
             toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -130,6 +131,7 @@ public class post_Activity extends AppCompatActivity {
             }
         }
     }
+
     void handleSendText(Intent intent) {
         String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -225,7 +227,7 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return silverblog_connect.send_request(url, args[0],action_name);
+            return silverblog_connect.send_request(url, args[0], action_name);
         }
 
         @Override
