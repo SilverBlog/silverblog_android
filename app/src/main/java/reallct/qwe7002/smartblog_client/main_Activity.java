@@ -65,7 +65,7 @@ public class main_Activity extends AppCompatActivity {
                 if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                     manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
-                if (host_save != null && password_save != null) {
+                if (host.getText().length() != 0 && password.getText().length() != 0) {
                     String hosturl = String.valueOf(host.getText());
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("host", String.valueOf(hosturl));
