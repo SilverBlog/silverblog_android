@@ -49,7 +49,7 @@ public class post_Activity extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                            alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                            alertDialog.setTitle("标题和内容不能为空！");
                             alertDialog.setNegativeButton("确定", null);
                             alertDialog.show();
                             return false;
@@ -87,7 +87,7 @@ public class post_Activity extends AppCompatActivity {
                     if (password != null) {
                         if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                            alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                            alertDialog.setTitle("标题和内容不能为空！");
                             alertDialog.setNegativeButton("确定", null);
                             alertDialog.show();
                             return false;
