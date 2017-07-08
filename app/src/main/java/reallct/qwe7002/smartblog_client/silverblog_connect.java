@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit;
 
 class silverblog_connect {
 
+    private static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
     static String getMD5(String source) {
         String mdString = null;
         if (source != null) {
@@ -51,9 +54,6 @@ class silverblog_connect {
         }
         return s;
     }
-
-    private static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
 
     static String send_request(String url, String json, String method) {
         RequestBody body = RequestBody.create(JSON, json);

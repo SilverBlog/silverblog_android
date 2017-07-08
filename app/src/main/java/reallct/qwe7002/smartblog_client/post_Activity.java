@@ -20,6 +20,7 @@ import com.google.gson.JsonParser;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
+    EditText nameview;
     EditText editTextview;
     SharedPreferences sharedPreferences;
     int request_post_id;
@@ -39,16 +40,25 @@ public class post_Activity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         titleview = (EditText) findViewById(R.id.titleview);
         editTextview = (EditText) findViewById(R.id.mdcontent);
+        nameview = (EditText) findViewById(R.id.nameview);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("发布文章");
         toolbar.setOnMenuItemClickListener(
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                            alertDialog.setTitle("标题和内容不能为空！");
+                            alertDialog.setNegativeButton("确定", null);
+                            alertDialog.show();
+                            return false;
+                        }
                         String password = sharedPreferences.getString("password", null);
                         if (password != null) {
                             Gson gson = new Gson();
                             content_json content = new content_json();
+                            content.setName(nameview.getText().toString());
                             content.setTitle(titleview.getText().toString());
                             content.setContent(editTextview.getText().toString());
                             content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
@@ -75,8 +85,16 @@ public class post_Activity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     String password = sharedPreferences.getString("password", null);
                     if (password != null) {
+                        if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                            alertDialog.setTitle("标题和内容不能为空！");
+                            alertDialog.setNegativeButton("确定", null);
+                            alertDialog.show();
+                            return false;
+                        }
                         Gson gson = new Gson();
-                        edit_content_json content = new edit_content_json();
+                        content_json content = new content_json();
+                        content.setName(nameview.getText().toString());
                         content.setPost_id(request_post_id);
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
@@ -88,6 +106,16 @@ public class post_Activity extends AppCompatActivity {
                 }
             });
             new get_post_content().execute(Integer.toString(request_post_id));
+        }
+    }
+
+    void handleSendText(Intent intent) {
+        String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+
+            titleview.setText(sharedTitle);
+            editTextview.setText(sharedText);
         }
     }
 
@@ -119,6 +147,7 @@ public class post_Activity extends AppCompatActivity {
             if (objects.get("status").getAsBoolean()) {
                 titleview.setText(objects.get("title").getAsString());
                 editTextview.setText(objects.get("content").getAsString());
+                nameview.setText(objects.get("name").getAsString());
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                 alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
@@ -132,82 +161,51 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
-    void handleSendText(Intent intent) {
-        String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (sharedText != null) {
-
-            titleview.setText(sharedTitle);
-            editTextview.setText(sharedText);
-        }
-    }
-
-    private class edit_content_json {
+    private class content_json {
         private int post_id;
         private String content;
         private String encode;
         private String title;
+        private String name;
 
-        void setPost_id(int post_id) {
-            this.post_id = post_id;
+        public String getName() {
+            return name;
         }
 
-        void setTitle(String title) {
-            this.title = title;
-        }
-
-        void setContent(String Content) {
-            this.content = Content;
-        }
-
-        void setEncode(String Encode) {
-            this.encode = Encode;
+        void setName(String name) {
+            this.name = name;
         }
 
         public int getPost_id() {
             return post_id;
         }
 
+        void setPost_id(int post_id) {
+            this.post_id = post_id;
+        }
+
         public String getTitle() {
             return title;
         }
 
-        public String getContent() {
-            return content;
-        }
-
-        public String getEncode() {
-            return encode;
-        }
-    }
-
-    private class content_json {
-        private String title;
-        private String content;
-        private String encode;
-
         void setTitle(String title) {
             this.title = title;
+        }
+
+        public String getContent() {
+            return content;
         }
 
         void setContent(String Content) {
             this.content = Content;
         }
 
-        void setEncode(String Encode) {
-            this.encode = Encode;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
         public String getEncode() {
             return encode;
+        }
+
+        void setEncode(String Encode) {
+            this.encode = Encode;
         }
     }
 
