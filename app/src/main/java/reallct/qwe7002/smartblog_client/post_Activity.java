@@ -50,7 +50,8 @@ public class post_Activity extends AppCompatActivity {
                         String password = sharedPreferences.getString("password", null);
                         if (password != null) {
                             Gson gson = new Gson();
-                            content_json content = new content_json(); content.setName(nameview.getText().toString());
+                            content_json content = new content_json();
+                            content.setName(nameview.getText().toString());
                             content.setTitle(titleview.getText().toString());
                             content.setContent(editTextview.getText().toString());
                             content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
