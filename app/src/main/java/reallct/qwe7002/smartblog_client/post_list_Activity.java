@@ -153,7 +153,6 @@ public class post_list_Activity extends AppCompatActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                             new get_post_list_content().execute();
                         }
                     });

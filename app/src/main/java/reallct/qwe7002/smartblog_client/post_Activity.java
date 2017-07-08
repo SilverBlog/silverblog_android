@@ -47,7 +47,7 @@ public class post_Activity extends AppCompatActivity {
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if(titleview.getText().length()==0 || editTextview.getText().length()==0){
+                        if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                             alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
                             alertDialog.setNegativeButton("确定", null);
@@ -85,7 +85,7 @@ public class post_Activity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     String password = sharedPreferences.getString("password", null);
                     if (password != null) {
-                        if(titleview.getText().length()==0 || editTextview.getText().length()==0){
+                        if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                             alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
                             alertDialog.setNegativeButton("确定", null);
@@ -106,6 +106,16 @@ public class post_Activity extends AppCompatActivity {
                 }
             });
             new get_post_content().execute(Integer.toString(request_post_id));
+        }
+    }
+
+    void handleSendText(Intent intent) {
+        String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+
+            titleview.setText(sharedTitle);
+            editTextview.setText(sharedText);
         }
     }
 
@@ -151,58 +161,51 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
-    void handleSendText(Intent intent) {
-        String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (sharedText != null) {
-
-            titleview.setText(sharedTitle);
-            editTextview.setText(sharedText);
-        }
-    }
-
     private class content_json {
         private int post_id;
         private String content;
         private String encode;
         private String title;
         private String name;
-        void setName(String name){
-            this.name=name;
-        }
-        void setPost_id(int post_id) {
-            this.post_id = post_id;
-        }
 
-        void setTitle(String title) {
-            this.title = title;
-        }
-
-        void setContent(String Content) {
-            this.content = Content;
-        }
-
-        void setEncode(String Encode) {
-            this.encode = Encode;
-        }
-
-        public String getName(){
+        public String getName() {
             return name;
         }
+
+        void setName(String name) {
+            this.name = name;
+        }
+
         public int getPost_id() {
             return post_id;
+        }
+
+        void setPost_id(int post_id) {
+            this.post_id = post_id;
         }
 
         public String getTitle() {
             return title;
         }
 
+        void setTitle(String title) {
+            this.title = title;
+        }
+
         public String getContent() {
             return content;
         }
 
+        void setContent(String Content) {
+            this.content = Content;
+        }
+
         public String getEncode() {
             return encode;
+        }
+
+        void setEncode(String Encode) {
+            this.encode = Encode;
         }
     }
 

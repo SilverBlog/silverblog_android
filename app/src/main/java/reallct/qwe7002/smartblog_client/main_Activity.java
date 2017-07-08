@@ -3,9 +3,9 @@ package reallct.qwe7002.smartblog_client;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -74,15 +74,15 @@ public class main_Activity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     return;
                 }
-                    String hosturl = String.valueOf(host.getText());
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("host", String.valueOf(hosturl));
-                    editor.putString("password", silverblog_connect.getMD5(String.valueOf(password.getText())));
-                    editor.apply();
-                    host_save = String.valueOf(hosturl);
-                    password_save = silverblog_connect.getMD5(String.valueOf(password.getText()));
-                    Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                String hosturl = String.valueOf(host.getText());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("host", String.valueOf(hosturl));
+                editor.putString("password", silverblog_connect.getMD5(String.valueOf(password.getText())));
+                editor.apply();
+                host_save = String.valueOf(hosturl);
+                password_save = silverblog_connect.getMD5(String.valueOf(password.getText()));
+                Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
 
             }
         });
