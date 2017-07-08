@@ -25,6 +25,16 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/nameview"
+        android:hint="文章URL(留空将使用拼音)"
+        android:layout_below="@+id/titleview"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:layout_alignParentStart="true"
         android:id="@+id/mdcontent"
@@ -35,7 +45,7 @@
         android:minLines="6"
         android:hint="文章内容"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/titleview" />
+        android:layout_below="@+id/nameview" />
 
 
 
