@@ -47,6 +47,13 @@ public class post_Activity extends AppCompatActivity {
                 new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
+                        if(titleview.getText().length()==0 || editTextview.getText().length()==0){
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                            alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                            alertDialog.setNegativeButton("确定", null);
+                            alertDialog.show();
+                            return false;
+                        }
                         String password = sharedPreferences.getString("password", null);
                         if (password != null) {
                             Gson gson = new Gson();
@@ -78,6 +85,13 @@ public class post_Activity extends AppCompatActivity {
                 public boolean onMenuItemClick(MenuItem item) {
                     String password = sharedPreferences.getString("password", null);
                     if (password != null) {
+                        if(titleview.getText().length()==0 || editTextview.getText().length()==0){
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                            alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
+                            alertDialog.setNegativeButton("确定", null);
+                            alertDialog.show();
+                            return false;
+                        }
                         Gson gson = new Gson();
                         content_json content = new content_json();
                         content.setName(nameview.getText().toString());

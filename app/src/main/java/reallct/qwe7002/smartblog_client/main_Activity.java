@@ -14,7 +14,8 @@ import android.widget.EditText;
 
 public class main_Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
-
+    String host_save;
+    String password_save;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +26,8 @@ public class main_Activity extends AppCompatActivity {
         final EditText host = (EditText) findViewById(R.id.host);
         final EditText password = (EditText) findViewById(R.id.password);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        final String host_save = sharedPreferences.getString("host", null);
-        final String password_save = sharedPreferences.getString("password", null);
+        host_save = sharedPreferences.getString("host", null);
+        password_save = sharedPreferences.getString("password", null);
         host.setText(host_save);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         new_post_button.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +72,8 @@ public class main_Activity extends AppCompatActivity {
                     editor.putString("host", String.valueOf(hosturl));
                     editor.putString("password", silverblog_connect.getMD5(String.valueOf(password.getText())));
                     editor.apply();
+                    host_save=String.valueOf(hosturl);
+                    password_save=silverblog_connect.getMD5(String.valueOf(password.getText()));
                     Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
