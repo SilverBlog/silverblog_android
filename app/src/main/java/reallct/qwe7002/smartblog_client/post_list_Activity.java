@@ -76,7 +76,7 @@ public class post_list_Activity extends AppCompatActivity {
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 new delete_post().execute(Integer.toString(position));
                                             }
-                                        }).show();
+                                        }).setNegativeButton("取消", null).show();
                                 break;
                         }
 
@@ -86,14 +86,14 @@ public class post_list_Activity extends AppCompatActivity {
         });
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         new get_post_list_content().execute();
     }
+
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
-
-
         @Override
         protected void onPreExecute() {
             mSwipeRefreshWidget.setRefreshing(true);
