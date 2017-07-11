@@ -20,9 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 import com.google.zxing.activity.CaptureActivity;
 
 
@@ -63,6 +61,9 @@ public class main_Activity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         host_save = sharedPreferences.getString("host", null);
         password_save = sharedPreferences.getString("password", null);
+        if(password_save !=null){
+            password.setHint(password.getHint()+"(密码已设置)");
+        }
         host.setText(host_save);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         edit_post_button.setOnClickListener(new View.OnClickListener() {

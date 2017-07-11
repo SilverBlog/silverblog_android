@@ -116,6 +116,9 @@ public class post_list_Activity extends AppCompatActivity {
                     String item_string = item.getAsString();
                     list.add(item_string);
                 }
+                if(list.size()==0){
+                    Snackbar.make(mSwipeRefreshWidget,"当前文章列表为空",Snackbar.LENGTH_LONG).show();
+                }
                 ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
                 listView.setAdapter(adapter);
             } else {
