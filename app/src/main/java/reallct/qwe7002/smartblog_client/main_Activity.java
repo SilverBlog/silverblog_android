@@ -56,7 +56,6 @@ public class main_Activity extends AppCompatActivity {
             }
         });
         Button save_button = (Button) findViewById(R.id.save_button);
-        Button new_post_button = (Button) findViewById(R.id.send_button);
         Button edit_post_button = (Button) findViewById(R.id.edit_button);
         final EditText host = (EditText) findViewById(R.id.host);
         final EditText password = (EditText) findViewById(R.id.password);
@@ -65,22 +64,6 @@ public class main_Activity extends AppCompatActivity {
         password_save = sharedPreferences.getString("password", null);
         host.setText(host_save);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        new_post_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (host_save != null && password_save != null) {
-                    Intent new_post_activity = new Intent(main_Activity.this, post_Activity.class);
-                    startActivity(new_post_activity);
-                    return;
-                }
-                if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
-                    manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-            }
-        });
         edit_post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,7 +114,8 @@ public class main_Activity extends AppCompatActivity {
                     startActivityForResult(intent, 0);
                     return;
                 }
-                Toast.makeText(this, "请授权相机权限，以便能够正常扫描二维码。", Toast.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(R.id.host), "请授权相机权限，以便能够正常扫描二维码。", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 break;
         }
     }
@@ -148,7 +132,8 @@ public class main_Activity extends AppCompatActivity {
             try {
                  objects = parser.parse(scanResult).getAsJsonObject();
             }catch(JsonParseException e){
-                Toast.makeText(this,"二维码错误！",Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.host), "二维码错误！", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 return;
             }
             String hosturl = String.valueOf(objects.get("url").getAsString());
@@ -157,6 +142,8 @@ public class main_Activity extends AppCompatActivity {
             editor.putString("password", silverblog_connect.getMD5(objects.get("password").getAsString()));
             editor.apply();
             host_save = String.valueOf(hosturl);
+            Snackbar.make(findViewById(R.id.host), "配置已保存", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
 
         }
     }

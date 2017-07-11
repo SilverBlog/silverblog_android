@@ -54,15 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/send_button"
-        android:text="编辑/删除文章" />
-
-    <Button
-        android:id="@+id/send_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/save_button"
-        android:text="发表新文章" />
+        android:text="文章管理" />
+
 </RelativeLayout>
