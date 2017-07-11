@@ -1,4 +1,4 @@
-package reallct.qwe7002.smartblog_client;
+package com.reallct.qwe7002.smartblog_client;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,14 @@ public class post_list_Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
         setSupportActionBar(toolbar);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent new_post_activity = new Intent(post_list_Activity.this, post_Activity.class);
+                startActivity(new_post_activity);
+            }
+        });
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
@@ -66,7 +76,7 @@ public class post_list_Activity extends AppCompatActivity {
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 new delete_post().execute(Integer.toString(position));
                                             }
-                                        }).show();
+                                        }).setNegativeButton("取消", null).show();
                                 break;
                         }
 
@@ -74,12 +84,16 @@ public class post_list_Activity extends AppCompatActivity {
                 }).show();
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         new get_post_list_content().execute();
     }
 
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
-
-
         @Override
         protected void onPreExecute() {
             mSwipeRefreshWidget.setRefreshing(true);
@@ -88,7 +102,7 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String url = sharedPreferences.getString("host", null);
-            return silverblog_connect.send_request(url, "{}", "get_post_list");
+            return api.send_request(url, "{}", "get_post_list");
         }
 
         @Override
@@ -101,6 +115,9 @@ public class post_list_Activity extends AppCompatActivity {
                 for (JsonElement item : result_array) {
                     String item_string = item.getAsString();
                     list.add(item_string);
+                }
+                if(list.size()==0){
+                    Snackbar.make(mSwipeRefreshWidget,"当前文章列表为空",Snackbar.LENGTH_LONG).show();
                 }
                 ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
                 listView.setAdapter(adapter);
@@ -136,7 +153,7 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String password = sharedPreferences.getString("password", null);
-            return silverblog_connect.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + silverblog_connect.getMD5(args[0] + password) + "\"}", "delete");
+            return api.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + api.getMD5(args[0] + password) + "\"}", "delete");
         }
 
         @Override
@@ -144,19 +161,13 @@ public class post_list_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_list_Activity.this);
-            alertDialog.setTitle("操作失败！请检查服务器地址以及API密码。");
+            String result_message = "操作失败！请检查服务器地址以及API密码。";
             if (objects.get("status").getAsBoolean()) {
-                alertDialog.setTitle("操作完成！");
+                result_message = "操作完成！";
             }
-            alertDialog.setPositiveButton("确定",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            new get_post_list_content().execute();
-                        }
-                    });
-            alertDialog.create().show();
+            Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            new get_post_list_content().execute();
         }
     }
 

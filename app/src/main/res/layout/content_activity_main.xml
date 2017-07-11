@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_receive"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,45 +9,52 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.reallct.qwe7002.smartblog_client.post_Activity"
-    tools:showIn="@layout/activity_receive">
-
+    tools:context="com.reallct.qwe7002.smartblog_client.main_Activity"
+    tools:showIn="@layout/activity_main">
     <EditText
-        android:id="@+id/titleview"
+        android:id="@+id/host"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:ems="10"
-        android:hint="文章标题"
+        android:hint="博客地址(例：https://myblog.com)"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/nameview"
+        android:id="@+id/password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/titleview"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:imeActionId="@+id/login"
+        android:imeOptions="actionUnspecified"
         android:ems="10"
-        android:hint="文章URL(留空将使用拼音)"
-        android:inputType="textPersonName" />
+        android:hint="管理员密码"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
+        />
 
-    <EditText
-        android:id="@+id/mdcontent"
+
+    <Button
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/nameview"
-        android:ems="10"
-        android:gravity="left|top"
-        android:hint="文章内容"
-        android:inputType="textMultiLine"
-        android:minLines="6"
-        android:selectAllOnFocus="false" />
+        android:layout_below="@+id/password"
+        android:text="保存" />
 
+    <Button
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/save_button"
+        android:text="文章管理" />
 
 </RelativeLayout>
