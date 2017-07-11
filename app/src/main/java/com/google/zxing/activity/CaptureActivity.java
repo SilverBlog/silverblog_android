@@ -29,7 +29,7 @@ import com.google.zxing.view.ViewfinderView;
 import java.io.IOException;
 import java.util.Vector;
 
-import reallct.qwe7002.smartblog_client.R;
+import com.reallct.qwe7002.smartblog_client.R;
 
 
 /**

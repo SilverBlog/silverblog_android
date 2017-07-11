@@ -25,7 +25,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import reallct.qwe7002.smartblog_client.R;
+import com.reallct.qwe7002.smartblog_client.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.activity.CaptureActivity;

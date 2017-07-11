@@ -32,7 +32,7 @@ import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.View;
 
-import reallct.qwe7002.smartblog_client.R;
+import com.reallct.qwe7002.smartblog_client.R;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.camera.CameraManager;
 

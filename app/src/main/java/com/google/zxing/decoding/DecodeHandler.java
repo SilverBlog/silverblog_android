@@ -22,7 +22,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import reallct.qwe7002.smartblog_client.R;
+import com.reallct.qwe7002.smartblog_client.R;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
