@@ -1,4 +1,4 @@
-package reallct.qwe7002.smartblog_client;
+package com.reallct.qwe7002.smartblog_client;
 
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
 
-class silverblog_connect {
+class api {
 
     private static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");

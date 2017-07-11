@@ -1,4 +1,4 @@
-package reallct.qwe7002.smartblog_client;
+package com.reallct.qwe7002.smartblog_client;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -61,7 +61,7 @@ public class post_Activity extends AppCompatActivity {
                             content.setName(nameview.getText().toString());
                             content.setTitle(titleview.getText().toString());
                             content.setContent(editTextview.getText().toString());
-                            content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
+                            content.setEncode(api.getMD5(titleview.getText().toString() + password));
                             String json = gson.toJson(content);
                             new push_post().execute(json);
                         }
@@ -98,7 +98,7 @@ public class post_Activity extends AppCompatActivity {
                         content.setPost_id(request_post_id);
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
-                        content.setEncode(silverblog_connect.getMD5(titleview.getText().toString() + password));
+                        content.setEncode(api.getMD5(titleview.getText().toString() + password));
                         String json = gson.toJson(content);
                         new push_post().execute(json);
                     }
@@ -136,7 +136,7 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return silverblog_connect.send_request(url, "{\"post_id\":" + args[0] + "}", "get_post_content");
+            return api.send_request(url, "{\"post_id\":" + args[0] + "}", "get_post_content");
         }
 
         @Override
@@ -225,7 +225,7 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return silverblog_connect.send_request(url, args[0], action_name);
+            return api.send_request(url, args[0], action_name);
         }
 
         @Override
