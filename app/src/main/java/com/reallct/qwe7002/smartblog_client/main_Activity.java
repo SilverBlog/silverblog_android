@@ -29,7 +29,7 @@ public class main_Activity extends AppCompatActivity {
     String host_save;
     String password_save;
     EditText host;
-
+    EditText password;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
@@ -57,7 +57,7 @@ public class main_Activity extends AppCompatActivity {
         Button save_button = (Button) findViewById(R.id.save_button);
         Button edit_post_button = (Button) findViewById(R.id.edit_button);
         host = (EditText) findViewById(R.id.host);
-        final EditText password = (EditText) findViewById(R.id.password);
+        password = (EditText) findViewById(R.id.password);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         host_save = sharedPreferences.getString("host", null);
         password_save = sharedPreferences.getString("password", null);
@@ -69,7 +69,7 @@ public class main_Activity extends AppCompatActivity {
         edit_post_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (host_save != null && password_save != null) {
+                if (host_save != null) {
                     Intent edit_post_activity = new Intent(main_Activity.this, post_list_Activity.class);
                     startActivity(edit_post_activity);
                     return;
@@ -99,6 +99,8 @@ public class main_Activity extends AppCompatActivity {
                 editor.putString("password", api.getMD5(String.valueOf(password.getText())));
                 editor.apply();
                 host_save = String.valueOf(hosturl);
+                password.setHint(password.getHint()+"(密码已设置)");
+                password.setText("");
                 password_save = api.getMD5(String.valueOf(password.getText()));
                 Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
@@ -139,16 +141,18 @@ public class main_Activity extends AppCompatActivity {
                 return;
             }
             String hosturl = objects.get("url").getAsString();
-            String password=objects.get("password").getAsString();
-            if(password.length()==0||hosturl.length()==0){
+            String password_save=objects.get("password").getAsString();
+            if(password_save.length()==0||hosturl.length()==0){
                 Snackbar.make(host, "请检查您的System.json配置文件。", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("host", hosturl);
-            editor.putString("password", password);
+            editor.putString("password", password_save);
             editor.apply();
             host.setText(hosturl);
+            password.setHint(password.getHint()+"(密码已设置)");
+            password.setText("");
             Snackbar.make(host, "配置已保存", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 

@@ -1,6 +1,5 @@
 package com.google.zxing.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
@@ -25,11 +23,10 @@ import com.google.zxing.camera.CameraManager;
 import com.google.zxing.decoding.CaptureActivityHandler;
 import com.google.zxing.decoding.InactivityTimer;
 import com.google.zxing.view.ViewfinderView;
+import com.reallct.qwe7002.smartblog_client.R;
 
 import java.io.IOException;
 import java.util.Vector;
-
-import com.reallct.qwe7002.smartblog_client.R;
 
 
 /**
