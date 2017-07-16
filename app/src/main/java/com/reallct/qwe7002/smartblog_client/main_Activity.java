@@ -140,17 +140,17 @@ public class main_Activity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 return;
             }
-            String hosturl = objects.get("url").getAsString();
-            String password_save=objects.get("password").getAsString();
-            if(password_save.length()==0||hosturl.length()==0){
+            host_save = objects.get("url").getAsString();
+            password_save=objects.get("password").getAsString();
+            if(password_save.length()==0||host_save.length()==0){
                 Snackbar.make(host, "请检查您的System.json配置文件。", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("host", hosturl);
+            editor.putString("host", host_save);
             editor.putString("password", password_save);
             editor.apply();
-            host.setText(hosturl);
+            host.setText(host_save);
             password.setHint(password.getHint()+"(密码已设置)");
             password.setText("");
             Snackbar.make(host, "配置已保存", Snackbar.LENGTH_LONG)
