@@ -29,7 +29,7 @@ public class post_list_Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ListView listView;
     SwipeRefreshLayout mSwipeRefreshWidget;
-
+    get_post_list_content get_post_list_content_exec;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,8 @@ public class post_list_Activity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshWidget.setRefreshing(true);
-                new get_post_list_content().execute();
+                get_post_list_content_exec=new get_post_list_content();
+                get_post_list_content_exec.execute();
             }
         });
         listView = (ListView) findViewById(R.id.edit_post_listview);
@@ -90,7 +91,13 @@ public class post_list_Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new get_post_list_content().execute();
+        get_post_list_content_exec=new get_post_list_content();
+        get_post_list_content_exec.execute();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();  // Always call the superclass
+        get_post_list_content_exec.cancel(true);
     }
 
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
@@ -167,7 +174,8 @@ public class post_list_Activity extends AppCompatActivity {
             }
             Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            new get_post_list_content().execute();
+            get_post_list_content_exec=new get_post_list_content();
+            get_post_list_content_exec.execute();
         }
     }
 
