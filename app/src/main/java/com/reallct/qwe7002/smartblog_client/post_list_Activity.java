@@ -96,7 +96,6 @@ public class post_list_Activity extends AppCompatActivity {
                                         }).setNegativeButton("取消", null).show();
                                 break;
                         }
-
                     }
                 }).show();
             }
