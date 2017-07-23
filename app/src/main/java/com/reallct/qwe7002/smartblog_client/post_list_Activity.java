@@ -45,6 +45,7 @@ public class post_list_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_list_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
+        setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -52,7 +53,6 @@ public class post_list_Activity extends AppCompatActivity {
                 return false;
             }
         });
-        setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
