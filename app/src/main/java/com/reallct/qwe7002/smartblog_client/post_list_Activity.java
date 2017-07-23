@@ -12,6 +12,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +31,13 @@ public class post_list_Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ListView listView;
     SwipeRefreshLayout mSwipeRefreshWidget;
+    get_post_list_content get_post_list_content_exec;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.post_list_menu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,13 @@ public class post_list_Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
         setSupportActionBar(toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                new push_to_git().execute();
+                return false;
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +68,8 @@ public class post_list_Activity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 mSwipeRefreshWidget.setRefreshing(true);
-                new get_post_list_content().execute();
+                get_post_list_content_exec = new get_post_list_content();
+                get_post_list_content_exec.execute();
             }
         });
         listView = (ListView) findViewById(R.id.edit_post_listview);
@@ -79,7 +96,6 @@ public class post_list_Activity extends AppCompatActivity {
                                         }).setNegativeButton("取消", null).show();
                                 break;
                         }
-
                     }
                 }).show();
             }
@@ -90,7 +106,48 @@ public class post_list_Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new get_post_list_content().execute();
+        get_post_list_content_exec = new get_post_list_content();
+        get_post_list_content_exec.execute();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();  // Always call the superclass
+        get_post_list_content_exec.cancel(true);
+    }
+
+    private class push_to_git extends AsyncTask<Void, Integer, String> {
+        ProgressDialog mpDialog = new ProgressDialog(post_list_Activity.this);
+
+        @Override
+        protected void onPreExecute() {
+            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mpDialog.setTitle("正在连接服务器...");
+            mpDialog.setMessage("正在提交数据，请稍后...");
+            mpDialog.setIndeterminate(false);
+            mpDialog.setCancelable(false);
+            mpDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... args) {
+            String url = sharedPreferences.getString("host", null);
+            return api.send_request(url, "{}", "git_page_publish");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            mpDialog.cancel();
+            JsonParser parser = new JsonParser();
+            final JsonObject objects = parser.parse(result).getAsJsonObject();
+            String result_message = "操作失败！请检查服务器地址以及API密码。";
+            if (objects.get("status").getAsBoolean()) {
+                result_message = "操作完成！";
+            }
+            Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+
     }
 
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
@@ -116,8 +173,8 @@ public class post_list_Activity extends AppCompatActivity {
                     String item_string = item.getAsString();
                     list.add(item_string);
                 }
-                if(list.size()==0){
-                    Snackbar.make(mSwipeRefreshWidget,"当前文章列表为空",Snackbar.LENGTH_LONG).show();
+                if (list.size() == 0) {
+                    Snackbar.make(mSwipeRefreshWidget, "当前文章列表为空", Snackbar.LENGTH_LONG).show();
                 }
                 ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
                 listView.setAdapter(adapter);
@@ -167,7 +224,8 @@ public class post_list_Activity extends AppCompatActivity {
             }
             Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            new get_post_list_content().execute();
+            get_post_list_content_exec = new get_post_list_content();
+            get_post_list_content_exec.execute();
         }
     }
 

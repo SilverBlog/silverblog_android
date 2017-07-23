@@ -57,10 +57,8 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         setContentView(R.layout.activity_scanner);
         Toolbar toolbar = (Toolbar) findViewById(R.id.maintoolbar);
         setSupportActionBar(toolbar);
-        //ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_content);
-//		cancelScanButton = (Button) this.findViewById(R.id.btn_cancel_scan);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
         this.setTitle("扫描二维码");
@@ -90,14 +88,6 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         initBeepSound();
         vibrate = true;
 
-        //quit the scan view
-//		cancelScanButton.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				CaptureActivity.this.finish();
-//			}
-//		});
     }
 
     @Override
@@ -133,8 +123,6 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
             Intent resultIntent = new Intent();
             Bundle bundle = new Bundle();
             bundle.putString("result", resultString);
-            // 不能使用Intent传递大于40kb的bitmap，可以使用一个单例对象存储这个bitmap
-//            bundle.putParcelable("bitmap", barcode);
             resultIntent.putExtras(bundle);
             this.setResult(RESULT_OK, resultIntent);
         }
@@ -144,9 +132,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     private void initCamera(SurfaceHolder surfaceHolder) {
         try {
             CameraManager.get().openDriver(surfaceHolder);
-        } catch (IOException ioe) {
-            return;
-        } catch (RuntimeException e) {
+        } catch (IOException | RuntimeException ioe) {
             return;
         }
         if (handler == null) {

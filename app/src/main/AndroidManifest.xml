@@ -38,7 +38,6 @@
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
         <activity
             android:name=".post_list_Activity"
-            android:label="@string/title_activity_edit_post_"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

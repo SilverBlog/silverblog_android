@@ -30,6 +30,7 @@ public class main_Activity extends AppCompatActivity {
     String password_save;
     EditText host;
     EditText password;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
@@ -61,8 +62,8 @@ public class main_Activity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         host_save = sharedPreferences.getString("host", null);
         password_save = sharedPreferences.getString("password", null);
-        if(password_save !=null){
-            password.setHint(password.getHint()+"(密码已设置)");
+        if (password_save != null) {
+            password.setHint(password.getHint() + "(密码已设置)");
         }
         host.setText(host_save);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -99,7 +100,9 @@ public class main_Activity extends AppCompatActivity {
                 editor.putString("password", api.getMD5(String.valueOf(password.getText())));
                 editor.apply();
                 host_save = String.valueOf(hosturl);
-                password.setHint(password.getHint()+"(密码已设置)");
+                if (password_save == null) {
+                    password.setHint(password.getHint() + "(密码已设置)");
+                }
                 password.setText("");
                 password_save = api.getMD5(String.valueOf(password.getText()));
                 Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
@@ -134,24 +137,24 @@ public class main_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             JsonObject objects;
             try {
-                 objects = parser.parse(scanResult).getAsJsonObject();
-            }catch(IllegalStateException e){
+                objects = parser.parse(scanResult).getAsJsonObject();
+            } catch (IllegalStateException e) {
                 Snackbar.make(host, "二维码错误！", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return;
             }
-            String hosturl = objects.get("url").getAsString();
-            String password_save=objects.get("password").getAsString();
-            if(password_save.length()==0||hosturl.length()==0){
+            host_save = objects.get("url").getAsString();
+            password_save = objects.get("password").getAsString();
+            if (password_save.length() == 0 || host_save.length() == 0) {
                 Snackbar.make(host, "请检查您的System.json配置文件。", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("host", hosturl);
+            editor.putString("host", host_save);
             editor.putString("password", password_save);
             editor.apply();
-            host.setText(hosturl);
-            password.setHint(password.getHint()+"(密码已设置)");
+            host.setText(host_save);
+            password.setHint(password.getHint() + "(密码已设置)");
             password.setText("");
             Snackbar.make(host, "配置已保存", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
