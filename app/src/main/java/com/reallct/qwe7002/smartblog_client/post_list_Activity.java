@@ -32,6 +32,7 @@ public class post_list_Activity extends AppCompatActivity {
     ListView listView;
     SwipeRefreshLayout mSwipeRefreshWidget;
     get_post_list_content get_post_list_content_exec;
+    ArrayList<String> list;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,7 +92,7 @@ public class post_list_Activity extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                new delete_post().execute(Integer.toString(position));
+                                                new delete_post().execute(Integer.toString(position),list.get(position));
                                             }
                                         }).setNegativeButton("取消", null).show();
                                 break;
@@ -168,7 +169,7 @@ public class post_list_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             if (parser.parse(result).isJsonArray()) {
                 final JsonArray result_array = parser.parse(result).getAsJsonArray();
-                ArrayList<String> list = new ArrayList<>();
+                list = new ArrayList<>();
                 for (JsonElement item : result_array) {
                     String item_string = item.getAsString();
                     list.add(item_string);
@@ -210,7 +211,7 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String password = sharedPreferences.getString("password", null);
-            return api.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + api.getMD5(args[0] + password) + "\"}", "delete");
+            return api.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + api.getMD5(args[0]+args[1] + password) + "\"}", "delete");
         }
 
         @Override
