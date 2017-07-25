@@ -1,12 +1,14 @@
 package com.reallct.qwe7002.smartblog_client;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +27,7 @@ public class post_Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     int request_post_id;
     String action_name = "new";
+    private Context context;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -36,6 +39,7 @@ public class post_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
+        context = getApplicationContext();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         titleview = (EditText) findViewById(R.id.titleview);
@@ -242,6 +246,9 @@ public class post_Activity extends AppCompatActivity {
                 alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent();
+                        intent.setAction("com.reallct.qwe7002.smartblog_client");
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                         finish();
                     }
                 });
@@ -254,6 +261,9 @@ public class post_Activity extends AppCompatActivity {
                                 Uri uri = Uri.parse(sharedPreferences.getString("host", null) + "/" + objects.get("name").getAsString());
                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                             }
+                            Intent intent = new Intent();
+                            intent.setAction("com.reallct.qwe7002.smartblog_client");
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                             finish();
                         }
                     });

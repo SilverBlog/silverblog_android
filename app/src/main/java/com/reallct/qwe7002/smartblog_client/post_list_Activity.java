@@ -1,13 +1,17 @@
 package com.reallct.qwe7002.smartblog_client;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +37,12 @@ public class post_list_Activity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshWidget;
     get_post_list_content get_post_list_content_exec;
     ArrayList<String> list;
+    private MyReceiver receiver;
+    private IntentFilter filter;
 
+    private Context context;
+
+    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_list_menu, menu);
@@ -44,6 +53,12 @@ public class post_list_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_post);
+        context = getApplicationContext();
+
+        receiver = new MyReceiver();
+        filter = new IntentFilter();
+        filter.addAction(MY_BROADCAST_TAG);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
         setSupportActionBar(toolbar);
@@ -68,9 +83,9 @@ public class post_list_Activity extends AppCompatActivity {
         mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mSwipeRefreshWidget.setRefreshing(true);
-                get_post_list_content_exec = new get_post_list_content();
-                get_post_list_content_exec.execute();
+                Intent intent = new Intent();
+                intent.setAction(MY_BROADCAST_TAG);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
             }
         });
         listView = (ListView) findViewById(R.id.edit_post_listview);
@@ -101,19 +116,26 @@ public class post_list_Activity extends AppCompatActivity {
                 }).show();
             }
         });
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver,filter);
+        Intent intent = new Intent();
+        intent.setAction(MY_BROADCAST_TAG);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        get_post_list_content_exec = new get_post_list_content();
-        get_post_list_content_exec.execute();
+    class MyReceiver extends BroadcastReceiver
+    {
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            mSwipeRefreshWidget.setRefreshing(true);
+            get_post_list_content_exec = new get_post_list_content();
+            get_post_list_content_exec.execute();
+        }
     }
-
     @Override
     public void onDestroy() {
-        super.onDestroy();  // Always call the superclass
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
         get_post_list_content_exec.cancel(true);
     }
 
@@ -225,8 +247,9 @@ public class post_list_Activity extends AppCompatActivity {
             }
             Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
-            get_post_list_content_exec = new get_post_list_content();
-            get_post_list_content_exec.execute();
+            Intent intent = new Intent();
+            intent.setAction(MY_BROADCAST_TAG);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
     }
 
