@@ -163,7 +163,7 @@ public class post_list_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            String result_message = "操作失败！请检查服务器地址以及API密码。";
+            String result_message = "操作失败！请查看API服务器输出！";
             if (objects.get("status").getAsBoolean()) {
                 result_message = "操作完成！";
             }
