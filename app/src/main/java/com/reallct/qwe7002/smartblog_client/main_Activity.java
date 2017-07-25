@@ -94,12 +94,12 @@ public class main_Activity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     return;
                 }
-                String hosturl = String.valueOf(host.getText());
+                String host_url = String.valueOf(host.getText());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("host", hosturl);
+                editor.putString("host", host_url);
                 editor.putString("password", api.getMD5(String.valueOf(password.getText())));
                 editor.apply();
-                host_save = String.valueOf(hosturl);
+                host_save = String.valueOf(host_url);
                 if (password_save == null) {
                     password.setHint(password.getHint() + "(密码已设置)");
                 }
