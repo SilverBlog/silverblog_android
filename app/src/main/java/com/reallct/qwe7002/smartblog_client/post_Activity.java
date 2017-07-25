@@ -172,40 +172,20 @@ public class post_Activity extends AppCompatActivity {
         private String title;
         private String name;
 
-        public String getName() {
-            return name;
-        }
-
         void setName(String name) {
             this.name = name;
-        }
-
-        public int getPost_id() {
-            return post_id;
         }
 
         void setPost_id(int post_id) {
             this.post_id = post_id;
         }
 
-        public String getTitle() {
-            return title;
-        }
-
         void setTitle(String title) {
             this.title = title;
         }
 
-        public String getContent() {
-            return content;
-        }
-
         void setContent(String Content) {
             this.content = Content;
-        }
-
-        public String getEncode() {
-            return encode;
         }
 
         void setEncode(String Encode) {
