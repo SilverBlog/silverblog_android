@@ -4,7 +4,7 @@
 .DS_Store
 /build
 /captures
-
+gradle.properties
 # Built application files
 *.apk
 *.ap_

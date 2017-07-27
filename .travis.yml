@@ -24,5 +24,5 @@ deploy:
   provider: releases
   api_key:
     secure: $Github_token
-  file: app/build/outputs/apk/app-release-unsigned.apk
+  file: app/build/outputs/apk/app-release.apk
   skip_cleanup: true
