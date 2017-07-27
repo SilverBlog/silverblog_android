@@ -1,11 +1,9 @@
 language: android
 
-notifications:
-  email: true
+sudo: false
 
 android:
   components:
-    - tools
     - build-tools-26.0.0
     - android-26
     - extra-android-m2repository
@@ -20,9 +18,11 @@ before_install:
 script:
   - ./gradlew assembleRelease
  
+before_deploy:
+
 deploy:
   provider: releases
   api_key:
     secure: $Github_token
-  file: app/build/outputs/apk/app-release.apk
+  file: app/build/outputs/apk/app-release-unsigned.apk
   skip_cleanup: true
