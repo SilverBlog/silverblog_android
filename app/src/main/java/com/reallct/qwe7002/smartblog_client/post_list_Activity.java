@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -41,8 +40,6 @@ public class post_list_Activity extends AppCompatActivity {
     get_post_list_content get_post_list_content_exec;
     ArrayList<String> title_list;
     private MyReceiver receiver;
-    private IntentFilter filter;
-
     private Context context;
 
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
@@ -60,7 +57,7 @@ public class post_list_Activity extends AppCompatActivity {
         context = getApplicationContext();
 
         receiver = new MyReceiver();
-        filter = new IntentFilter();
+        IntentFilter filter = new IntentFilter();
         filter.addAction(MY_BROADCAST_TAG);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -222,15 +219,7 @@ public class post_list_Activity extends AppCompatActivity {
                         new int[]{android.R.id.text1, android.R.id.text2});
                 listView.setAdapter(adapter);
             } else {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_list_Activity.this);
-                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
-                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });
-                alertDialog.show();
+                Snackbar.make(findViewById(R.id.fab), "获取文章列表失败，请检查网络状态！", Snackbar.LENGTH_LONG).show();
             }
 
         }
@@ -265,8 +254,7 @@ public class post_list_Activity extends AppCompatActivity {
             if (objects.get("status").getAsBoolean()) {
                 result_message = "操作完成！";
             }
-            Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG).show();
             Intent intent = new Intent();
             intent.setAction(MY_BROADCAST_TAG);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
