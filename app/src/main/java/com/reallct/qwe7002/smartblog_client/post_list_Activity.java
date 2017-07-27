@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -30,19 +31,22 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class post_list_Activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ListView listView;
     SwipeRefreshLayout mSwipeRefreshWidget;
     get_post_list_content get_post_list_content_exec;
-    ArrayList<String> list;
+    ArrayList<String> title_list;
     private MyReceiver receiver;
     private IntentFilter filter;
 
     private Context context;
 
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_list_menu, menu);
@@ -107,7 +111,7 @@ public class post_list_Activity extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                new delete_post().execute(Integer.toString(position),list.get(position));
+                                                new delete_post().execute(Integer.toString(position), title_list.get(position));
                                             }
                                         }).setNegativeButton("取消", null).show();
                                 break;
@@ -116,15 +120,14 @@ public class post_list_Activity extends AppCompatActivity {
                 }).show();
             }
         });
-        LocalBroadcastManager.getInstance(context).registerReceiver(receiver,filter);
+        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
         Intent intent = new Intent();
         intent.setAction(MY_BROADCAST_TAG);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
     }
 
-    class MyReceiver extends BroadcastReceiver
-    {
+    class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
             mSwipeRefreshWidget.setRefreshing(true);
@@ -132,6 +135,7 @@ public class post_list_Activity extends AppCompatActivity {
             get_post_list_content_exec.execute();
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -191,15 +195,31 @@ public class post_list_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             if (parser.parse(result).isJsonArray()) {
                 final JsonArray result_array = parser.parse(result).getAsJsonArray();
-                list = new ArrayList<>();
+                title_list = new ArrayList<>();
+                ArrayList<String> time_list = new ArrayList<>();
                 for (JsonElement item : result_array) {
-                    String item_string = item.getAsString();
-                    list.add(item_string);
+                    JsonObject sub_item = item.getAsJsonObject();
+                    title_list.add(sub_item.get("title").getAsString());
+                    time_list.add(sub_item.get("time").getAsString());
                 }
-                if (list.size() == 0) {
+
+                if (title_list.size() == 0) {
                     Snackbar.make(mSwipeRefreshWidget, "当前文章列表为空", Snackbar.LENGTH_LONG).show();
                 }
-                ListAdapter adapter = new ArrayAdapter<>(post_list_Activity.this, android.R.layout.simple_list_item_1, list);
+
+                List<HashMap<String, String>> list = new ArrayList<>();
+                for (int i = 0; i < title_list.size(); i++) {
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("title", title_list.get(i));
+                    hashMap.put("time", time_list.get(i));
+                    list.add(hashMap);
+                }
+                ListAdapter adapter = new SimpleAdapter(
+                        post_list_Activity.this,
+                        list,
+                        android.R.layout.simple_list_item_2,
+                        new String[]{"title", "time"},
+                        new int[]{android.R.id.text1, android.R.id.text2});
                 listView.setAdapter(adapter);
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_list_Activity.this);
@@ -233,7 +253,7 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String password = sharedPreferences.getString("password", null);
-            return api.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + api.getMD5(args[0]+args[1] + password) + "\"}", "delete");
+            return api.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + api.getMD5(args[0] + args[1] + password) + "\"}", "delete");
         }
 
         @Override
