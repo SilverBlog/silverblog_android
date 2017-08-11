@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -41,7 +42,7 @@ public class post_list_Activity extends AppCompatActivity {
     ArrayList<String> title_list;
     private MyReceiver receiver;
     private Context context;
-
+    private int tabposition = 0;
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
 
     @Override
@@ -121,13 +122,30 @@ public class post_list_Activity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setAction(MY_BROADCAST_TAG);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        TabLayout tab = (TabLayout) findViewById(R.id.tab_layout2);
+        tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tabposition = tab.getPosition();
+                Intent intent = new Intent();
+                intent.setAction(MY_BROADCAST_TAG);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
 
     }
 
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
-            mSwipeRefreshWidget.setRefreshing(true);
             get_post_list_content_exec = new get_post_list_content();
             get_post_list_content_exec.execute();
         }
@@ -174,15 +192,17 @@ public class post_list_Activity extends AppCompatActivity {
 
     }
 
-    private class get_post_list_content extends AsyncTask<Void, Integer, String> {
+    private class get_post_list_content extends AsyncTask<Integer, Integer, String> {
+
         @Override
         protected void onPreExecute() {
             mSwipeRefreshWidget.setRefreshing(true);
         }
 
         @Override
-        protected String doInBackground(Void... args) {
+        protected String doInBackground(Integer... args) {
             String url = sharedPreferences.getString("host", null);
+
             return api.send_request(url, "{}", "get_post_list");
         }
 
