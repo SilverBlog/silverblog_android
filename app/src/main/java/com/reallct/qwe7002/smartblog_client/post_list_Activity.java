@@ -42,9 +42,9 @@ public class post_list_Activity extends AppCompatActivity {
     ArrayList<String> title_list;
     private MyReceiver receiver;
     private Context context;
-    private int tabposition = 0;
+    private int tab_position = 0;
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
-
+    ArrayList<Integer> list_position;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_list_menu, menu);
@@ -101,7 +101,7 @@ public class post_list_Activity extends AppCompatActivity {
                             case 0:
                                 Intent intent = new Intent(post_list_Activity.this, post_Activity.class);
                                 intent.putExtra("edit", true);
-                                intent.putExtra("position", position);
+                                intent.putExtra("position",  list_position.get(position));
                                 startActivity(intent);
                                 break;
                             case 1:
@@ -109,7 +109,7 @@ public class post_list_Activity extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                new delete_post().execute(Integer.toString(position), title_list.get(position));
+                                                new delete_post().execute(Integer.toString(list_position.get(position)), title_list.get(list_position.get(position)));
                                             }
                                         }).setNegativeButton("取消", null).show();
                                 break;
@@ -126,18 +126,23 @@ public class post_list_Activity extends AppCompatActivity {
         tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tabposition = tab.getPosition();
-                Intent intent = new Intent();
-                intent.setAction(MY_BROADCAST_TAG);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                if (tab_position != tab.getPosition()) {
+                    tab_position = tab.getPosition();
+                    listView.setAdapter(null);
+                    Intent intent = new Intent();
+                    intent.setAction(MY_BROADCAST_TAG);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
 
@@ -202,8 +207,11 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... args) {
             String url = sharedPreferences.getString("host", null);
-
-            return api.send_request(url, "{}", "get_post_list");
+            String function_name ="get_post_list";
+            if (tab_position==1){
+                function_name="get_menu_list";
+            }
+            return api.send_request(url, "{}", function_name);
         }
 
         @Override
@@ -213,11 +221,26 @@ public class post_list_Activity extends AppCompatActivity {
             if (parser.parse(result).isJsonArray()) {
                 final JsonArray result_array = parser.parse(result).getAsJsonArray();
                 title_list = new ArrayList<>();
+                list_position=new ArrayList<>();
                 ArrayList<String> time_list = new ArrayList<>();
+                int for_i = 0;
                 for (JsonElement item : result_array) {
                     JsonObject sub_item = item.getAsJsonObject();
-                    title_list.add(sub_item.get("title").getAsString());
-                    time_list.add(sub_item.get("time").getAsString());
+                    Boolean add_switch = true;
+                    //检查是否为绝对路径
+                    if (sub_item.has("absolute")&&sub_item.get("absolute").getAsBoolean()) {
+                            add_switch=false;
+                    }
+                    if (add_switch) {
+                        title_list.add(sub_item.get("title").getAsString());
+                        String time="";
+                        if (sub_item.has("time")){
+                            time=sub_item.get("time").getAsString();
+                        }
+                        list_position.add(for_i);
+                        time_list.add(time);
+                    }
+                    for_i++;
                 }
 
                 if (title_list.size() == 0) {
