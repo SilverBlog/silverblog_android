@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -41,8 +42,11 @@ public class post_list_Activity extends AppCompatActivity {
     ArrayList<String> title_list;
     private MyReceiver receiver;
     private Context context;
-
+    private int tab_position = 0;
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
+    ArrayList<Integer> list_position;
+    String share_title = null;
+    String share_text = null;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,12 +54,24 @@ public class post_list_Activity extends AppCompatActivity {
         return true;
     }
 
+    void handleSendText(Intent intent) {
+        share_title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        share_text = intent.getStringExtra(Intent.EXTRA_TEXT);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_post);
         context = getApplicationContext();
-
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            }
+        }
         receiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MY_BROADCAST_TAG);
@@ -75,6 +91,10 @@ public class post_list_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent new_post_activity = new Intent(post_list_Activity.this, post_Activity.class);
+                new_post_activity.putExtra("share_title", share_title);
+                new_post_activity.putExtra("share_text", share_text);
+                share_text = null;
+                share_title = null;
                 startActivity(new_post_activity);
             }
         });
@@ -100,7 +120,11 @@ public class post_list_Activity extends AppCompatActivity {
                             case 0:
                                 Intent intent = new Intent(post_list_Activity.this, post_Activity.class);
                                 intent.putExtra("edit", true);
-                                intent.putExtra("position", position);
+                                intent.putExtra("position", list_position.get(position));
+                                intent.putExtra("share_title", share_title);
+                                intent.putExtra("share_text", share_text);
+                                share_text = null;
+                                share_title = null;
                                 startActivity(intent);
                                 break;
                             case 1:
@@ -108,7 +132,7 @@ public class post_list_Activity extends AppCompatActivity {
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                new delete_post().execute(Integer.toString(position), title_list.get(position));
+                                                new delete_post().execute(Integer.toString(list_position.get(position)), title_list.get(list_position.get(position)));
                                             }
                                         }).setNegativeButton("取消", null).show();
                                 break;
@@ -118,16 +142,38 @@ public class post_list_Activity extends AppCompatActivity {
             }
         });
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
-        Intent intent = new Intent();
-        intent.setAction(MY_BROADCAST_TAG);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        Intent Broadcast_intent = new Intent();
+        Broadcast_intent.setAction(MY_BROADCAST_TAG);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(Broadcast_intent);
+        TabLayout tab = (TabLayout) findViewById(R.id.tab_layout2);
+        tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab_position != tab.getPosition()) {
+                    tab_position = tab.getPosition();
+                    listView.setAdapter(null);
+                    Intent intent = new Intent();
+                    intent.setAction(MY_BROADCAST_TAG);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
 
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
-            mSwipeRefreshWidget.setRefreshing(true);
             get_post_list_content_exec = new get_post_list_content();
             get_post_list_content_exec.execute();
         }
@@ -174,16 +220,21 @@ public class post_list_Activity extends AppCompatActivity {
 
     }
 
-    private class get_post_list_content extends AsyncTask<Void, Integer, String> {
+    private class get_post_list_content extends AsyncTask<Integer, Integer, String> {
+
         @Override
         protected void onPreExecute() {
             mSwipeRefreshWidget.setRefreshing(true);
         }
 
         @Override
-        protected String doInBackground(Void... args) {
+        protected String doInBackground(Integer... args) {
             String url = sharedPreferences.getString("host", null);
-            return api.send_request(url, "{}", "get_post_list");
+            String function_name = "get_post_list";
+            if (tab_position == 1) {
+                function_name = "get_menu_list";
+            }
+            return api.send_request(url, "{}", function_name);
         }
 
         @Override
@@ -193,11 +244,26 @@ public class post_list_Activity extends AppCompatActivity {
             if (parser.parse(result).isJsonArray()) {
                 final JsonArray result_array = parser.parse(result).getAsJsonArray();
                 title_list = new ArrayList<>();
+                list_position = new ArrayList<>();
                 ArrayList<String> time_list = new ArrayList<>();
+                int for_i = 0;
                 for (JsonElement item : result_array) {
                     JsonObject sub_item = item.getAsJsonObject();
-                    title_list.add(sub_item.get("title").getAsString());
-                    time_list.add(sub_item.get("time").getAsString());
+                    Boolean add_switch = true;
+                    //检查是否为绝对路径
+                    if (sub_item.has("absolute") && sub_item.get("absolute").getAsBoolean()) {
+                        add_switch = false;
+                    }
+                    if (add_switch) {
+                        title_list.add(sub_item.get("title").getAsString());
+                        String time = "";
+                        if (sub_item.has("time")) {
+                            time = sub_item.get("time").getAsString();
+                        }
+                        list_position.add(for_i);
+                        time_list.add(time);
+                    }
+                    for_i++;
                 }
 
                 if (title_list.size() == 0) {
@@ -260,5 +326,4 @@ public class post_list_Activity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }
     }
-
 }
