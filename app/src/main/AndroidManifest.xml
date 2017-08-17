@@ -3,10 +3,10 @@
     package="com.reallct.qwe7002.smartblog_client">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
+    <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- 自动聚焦权限 -->
@@ -26,6 +26,11 @@
         <activity
             android:name=".post_Activity"
             android:label="@string/title_activity_receive"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name="com.google.zxing.activity.CaptureActivity" />
+        <activity
+            android:name=".post_list_Activity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -35,10 +40,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="com.google.zxing.activity.CaptureActivity" />
-        <activity
-            android:name=".post_list_Activity"
-            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

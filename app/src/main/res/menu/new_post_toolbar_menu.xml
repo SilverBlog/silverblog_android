@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/send_post_button"
-        android:title="@string/send_button"
-        app:showAsAction="always" />
+        android:title="@string/send_button" />
+    <item
+        android:id="@+id/send_edit_app_button"
+        android:title="分享" />
 </menu>

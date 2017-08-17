@@ -35,6 +35,45 @@ public class post_Activity extends AppCompatActivity {
         return true;
     }
 
+    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                alertDialog.setTitle("标题和内容不能为空！");
+                alertDialog.setNegativeButton("确定", null);
+                alertDialog.show();
+                return false;
+            }
+            switch (menuItem.getItemId()) {
+                case R.id.send_post_button:
+                    String password = sharedPreferences.getString("password", null);
+                    if (password != null) {
+                        Gson gson = new Gson();
+                        content_json content = new content_json();
+                        content.setName(nameview.getText().toString());
+                        content.setTitle(titleview.getText().toString());
+                        content.setContent(editTextview.getText().toString());
+                        content.setEncode(api.getMD5(titleview.getText().toString() + password));
+                        String json = gson.toJson(content);
+                        new push_post().execute(json);
+                    }
+                    break;
+                case R.id.send_edit_app_button:
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
+                    intent.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
+                    intent.setType("text/plain");
+                    startActivity(intent);
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,81 +86,18 @@ public class post_Activity extends AppCompatActivity {
         nameview = (EditText) findViewById(R.id.nameview);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("发布文章");
-        toolbar.setOnMenuItemClickListener(
-                new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                            alertDialog.setTitle("标题和内容不能为空！");
-                            alertDialog.setNegativeButton("确定", null);
-                            alertDialog.show();
-                            return false;
-                        }
-                        String password = sharedPreferences.getString("password", null);
-                        if (password != null) {
-                            Gson gson = new Gson();
-                            content_json content = new content_json();
-                            content.setName(nameview.getText().toString());
-                            content.setTitle(titleview.getText().toString());
-                            content.setContent(editTextview.getText().toString());
-                            content.setEncode(api.getMD5(titleview.getText().toString() + password));
-                            String json = gson.toJson(content);
-                            new push_post().execute(json);
-                        }
-                        return true;
-                    }
-                });
+        toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                handleSendText(intent);
-            }
-        }
+        titleview.setText(intent.getStringExtra("share_title"));
+        editTextview.setText(intent.getStringExtra("share_text"));
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
             this.setTitle("修改文章");
             request_post_id = intent.getIntExtra("position", -1);
-            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    String password = sharedPreferences.getString("password", null);
-                    if (password != null) {
-                        if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                            alertDialog.setTitle("标题和内容不能为空！");
-                            alertDialog.setNegativeButton("确定", null);
-                            alertDialog.show();
-                            return false;
-                        }
-                        Gson gson = new Gson();
-                        content_json content = new content_json();
-                        content.setName(nameview.getText().toString());
-                        content.setPost_id(request_post_id);
-                        content.setTitle(titleview.getText().toString());
-                        content.setContent(editTextview.getText().toString());
-                        content.setEncode(api.getMD5(titleview.getText().toString() + password));
-                        String json = gson.toJson(content);
-                        new push_post().execute(json);
-                    }
-                    return true;
-                }
-            });
             new get_post_content().execute(Integer.toString(request_post_id));
         }
     }
 
-    void handleSendText(Intent intent) {
-        String sharedTitle = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (sharedText != null) {
-
-            titleview.setText(sharedTitle);
-            editTextview.setText(sharedText);
-        }
-    }
 
     private class get_post_content extends AsyncTask<String, Integer, String> {
 
