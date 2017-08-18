@@ -86,7 +86,7 @@ public class post_list_Activity extends AppCompatActivity {
                 return false;
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +113,11 @@ public class post_list_Activity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                new AlertDialog.Builder(post_list_Activity.this).setTitle("请选择操作").setItems(new String[]{"修改", "删除"}, new DialogInterface.OnClickListener() {
+                String[] itemlist=new String[]{"修改", "删除"};
+                if(tab_position==1){
+                    itemlist=new String[]{"修改"};
+                }
+                new AlertDialog.Builder(post_list_Activity.this).setTitle("请选择操作").setItems( itemlist, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
@@ -123,6 +127,9 @@ public class post_list_Activity extends AppCompatActivity {
                                 intent.putExtra("position", list_position.get(position));
                                 intent.putExtra("share_title", share_title);
                                 intent.putExtra("share_text", share_text);
+                                if (tab_position==1){
+                                    intent.putExtra("menu",true);
+                                }
                                 share_text = null;
                                 share_title = null;
                                 startActivity(intent);
@@ -155,6 +162,10 @@ public class post_list_Activity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.setAction(MY_BROADCAST_TAG);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                }
+                fab.setVisibility(View.VISIBLE);
+                if(tab_position==1){
+                    fab.setVisibility(View.GONE);
                 }
             }
 
@@ -230,11 +241,11 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... args) {
             String url = sharedPreferences.getString("host", null);
-            String function_name = "get_post_list";
+            String mode = "{}";
             if (tab_position == 1) {
-                function_name = "get_menu_list";
+                mode ="{\"menu\":true}";
             }
-            return api.send_request(url, "{}", function_name);
+            return api.send_request(url, mode, "get_post_list");
         }
 
         @Override
@@ -253,6 +264,9 @@ public class post_list_Activity extends AppCompatActivity {
                     //检查是否为绝对路径
                     if (sub_item.has("absolute") && sub_item.get("absolute").getAsBoolean()) {
                         add_switch = false;
+                    }
+                    if (sub_item.get("name").getAsString().equals("index") || sub_item.get("name").getAsString().equals("/")){
+                        add_switch=false;
                     }
                     if (add_switch) {
                         title_list.add(sub_item.get("title").getAsString());

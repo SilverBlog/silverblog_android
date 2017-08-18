@@ -28,6 +28,7 @@ public class post_Activity extends AppCompatActivity {
     int request_post_id;
     String action_name = "new";
     private Context context;
+    private Boolean edit_menu;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -51,10 +52,14 @@ public class post_Activity extends AppCompatActivity {
                     if (password != null) {
                         Gson gson = new Gson();
                         content_json content = new content_json();
+                        if(action_name.equals("edit")) {
+                            content.setPost_id(request_post_id);
+                        }
                         content.setName(nameview.getText().toString());
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
                         content.setEncode(api.getMD5(titleview.getText().toString() + password));
+                        content.setmenu(edit_menu);
                         String json = gson.toJson(content);
                         new push_post().execute(json);
                     }
@@ -90,6 +95,7 @@ public class post_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         titleview.setText(intent.getStringExtra("share_title"));
         editTextview.setText(intent.getStringExtra("share_text"));
+        edit_menu = intent.getBooleanExtra("menu", false);
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
             this.setTitle("修改文章");
@@ -116,7 +122,11 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return api.send_request(url, "{\"post_id\":" + args[0] + "}", "get_post_content");
+            String request_json="{\"post_id\":" + args[0] + "}";
+            if (edit_menu){
+                request_json="{\"post_id\":" + args[0] + ",\"menu\":true}";
+            }
+            return api.send_request(url,request_json , "get_post_content");
         }
 
         @Override
@@ -126,6 +136,7 @@ public class post_Activity extends AppCompatActivity {
             final JsonObject objects = parser.parse(result).getAsJsonObject();
             if (objects.get("status").getAsBoolean()) {
                 if (editTextview.getText().length() == 0) {
+
                     titleview.setText(objects.get("title").getAsString());
                     editTextview.setText(objects.get("content").getAsString());
                 }
@@ -149,6 +160,11 @@ public class post_Activity extends AppCompatActivity {
         private String encode;
         private String title;
         private String name;
+        private Boolean menu;
+
+        void setmenu(Boolean menu) {
+            this.menu = menu;
+        }
 
         void setName(String name) {
             this.name = name;
