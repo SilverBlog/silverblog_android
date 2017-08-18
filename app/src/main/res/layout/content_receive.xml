@@ -13,42 +13,65 @@
     tools:context="com.reallct.qwe7002.smartblog_client.post_Activity"
     tools:showIn="@layout/activity_receive">
 
-    <EditText
-        android:id="@+id/titleview"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/title_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:ems="10"
-        android:hint="文章标题"
-        android:inputType="textPersonName" />
+        android:layout_alignParentStart="true">
 
-    <EditText
-        android:id="@+id/nameview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/titleview"
-        android:ems="10"
-        android:hint="文章URL(留空将使用拼音)"
-        android:inputType="textPersonName" />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/titleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:ems="10"
+            android:hint="文章标题" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/mdcontent"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/name_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/nameview"
-        android:ems="10"
-        android:gravity="left|top"
-        android:hint="文章内容"
-        android:inputType="textMultiLine"
-        android:minLines="6"
-        android:selectAllOnFocus="false" />
+        android:layout_below="@+id/title_group">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/nameview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:ems="10"
+            android:hint="文章URL(留空将使用拼音)"
+            android:inputType="textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_group"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/mdcontent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:ems="10"
+            android:gravity="left|top"
+            android:hint="文章内容"
+            android:inputType="textMultiLine"
+            android:minLines="6"
+            android:selectAllOnFocus="false" />
+    </android.support.design.widget.TextInputLayout>
 
 
 </RelativeLayout>
