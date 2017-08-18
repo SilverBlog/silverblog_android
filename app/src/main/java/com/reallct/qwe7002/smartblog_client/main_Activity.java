@@ -1,6 +1,7 @@
 package com.reallct.qwe7002.smartblog_client;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,7 +64,7 @@ public class main_Activity extends AppCompatActivity {
         host_save = sharedPreferences.getString("host", null);
         password_save = sharedPreferences.getString("password", null);
         if (password_save != null) {
-            password.setHint(password.getHint() + "(密码已设置)");
+            password.setText("{\"password_seted\"}");
         }
         host.setText(host_save);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -89,7 +90,7 @@ public class main_Activity extends AppCompatActivity {
                 if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                     manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
-                if (host.getText().length() == 0 || password.getText().length() == 0) {
+                if (host.getText().length() == 0 || password.getText().toString().equals("{\"password_seted\"}") || password.getText().length() == 0) {
                     Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     return;
@@ -101,7 +102,7 @@ public class main_Activity extends AppCompatActivity {
                 editor.apply();
                 host_save = String.valueOf(host_url);
                 if (password_save == null) {
-                    password.setHint(password.getHint() + "(密码已设置)");
+                    password.setText("{\"password_seted\"}");
                 }
                 password.setText("");
                 password_save = api.getMD5(String.valueOf(password.getText()));
@@ -128,6 +129,7 @@ public class main_Activity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -154,8 +156,7 @@ public class main_Activity extends AppCompatActivity {
             editor.putString("password", password_save);
             editor.apply();
             host.setText(host_save);
-            password.setHint(password.getHint() + "(密码已设置)");
-            password.setText("");
+            password.setText("{\"password_seted\"}");
             Snackbar.make(host, "配置已保存", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
