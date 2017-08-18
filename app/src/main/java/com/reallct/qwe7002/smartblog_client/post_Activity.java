@@ -125,8 +125,10 @@ public class post_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
             if (objects.get("status").getAsBoolean()) {
-                titleview.setText(objects.get("title").getAsString());
-                editTextview.setText(objects.get("content").getAsString());
+                if (editTextview.getText().length() == 0) {
+                    titleview.setText(objects.get("title").getAsString());
+                    editTextview.setText(objects.get("content").getAsString());
+                }
                 nameview.setText(objects.get("name").getAsString());
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
