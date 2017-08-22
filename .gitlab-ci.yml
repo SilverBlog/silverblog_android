@@ -4,6 +4,12 @@ stages:
 - build
 
 before_script:
+- echo systemProp.http.proxyHost=192.168.3.1 >> gradle.properties
+- echo systemProp.http.proxyPort=1080 >> gradle.properties
+- echo systemProp.https.proxyHost=192.168.3.1 >> gradle.properties
+- echo systemProp.https.proxyPort=1080 >> gradle.properties
+- echo org.gradle.jvmargs=-Xmx1536m >> gradle.properties
+- echo org.gradle.parallel=true >> gradle.properties
 - export GRADLE_USER_HOME=$(pwd)/.gradle
 - chmod +x ./gradlew
 
