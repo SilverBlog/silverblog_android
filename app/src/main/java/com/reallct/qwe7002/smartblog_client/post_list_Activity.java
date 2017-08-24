@@ -113,26 +113,17 @@ public class post_list_Activity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                String[] itemlist=new String[]{"修改", "删除"};
                 if(tab_position==1){
-                    itemlist=new String[]{"修改"};
+                    start_post_activity(position);
+                    return;
+
                 }
-                new AlertDialog.Builder(post_list_Activity.this).setTitle("请选择操作").setItems( itemlist, new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(post_list_Activity.this).setTitle("请选择操作").setItems(new String[]{"修改", "删除"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
                             case 0:
-                                Intent intent = new Intent(post_list_Activity.this, post_Activity.class);
-                                intent.putExtra("edit", true);
-                                intent.putExtra("position", list_position.get(position));
-                                intent.putExtra("share_title", share_title);
-                                intent.putExtra("share_text", share_text);
-                                if (tab_position==1){
-                                    intent.putExtra("menu",true);
-                                }
-                                share_text = null;
-                                share_title = null;
-                                startActivity(intent);
+                                start_post_activity(position);
                                 break;
                             case 1:
                                 new AlertDialog.Builder(post_list_Activity.this).setTitle("删除这篇文章？(警告！本操作不可逆，请谨慎操作！）").setPositiveButton("确定",
@@ -182,6 +173,19 @@ public class post_list_Activity extends AppCompatActivity {
 
     }
 
+    private void start_post_activity(int position) {
+        Intent intent = new Intent(post_list_Activity.this, post_Activity.class);
+        intent.putExtra("edit", true);
+        intent.putExtra("position", list_position.get(position));
+        intent.putExtra("share_title", share_title);
+        intent.putExtra("share_text", share_text);
+        if (tab_position == 1) {
+            intent.putExtra("menu", true);
+        }
+        share_text = null;
+        share_title = null;
+        startActivity(intent);
+    }
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
