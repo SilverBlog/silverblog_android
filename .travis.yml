@@ -16,6 +16,8 @@ before_install:
   - chmod +x gradlew
 
 script:
+  - echo org.gradle.jvmargs=-Xmx1536m >> gradle.properties
+  - echo org.gradle.parallel=true >> gradle.properties
   - ./gradlew assembleRelease
  
 before_deploy:
