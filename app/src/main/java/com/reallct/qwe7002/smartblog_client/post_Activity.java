@@ -123,10 +123,11 @@ public class post_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String request_json="{\"post_id\":" + args[0] + "}";
+            String active_name = "get_post_content";
             if (edit_menu){
-                request_json="{\"post_id\":" + args[0] + ",\"menu\":true}";
+                active_name = "get_menu_content";
             }
-            return api.send_request(url,request_json , "get_post_content");
+            return api.send_request(url, request_json, active_name);
         }
 
         @Override

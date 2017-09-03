@@ -246,10 +246,11 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(Integer... args) {
             String url = sharedPreferences.getString("host", null);
             String mode = "{}";
+            String active_name = "get_post_list";
             if (tab_position == 1) {
-                mode ="{\"menu\":true}";
+                active_name = "get_menu_list";
             }
-            return api.send_request(url, mode, "get_post_list");
+            return api.send_request(url, mode, active_name);
         }
 
         @Override
