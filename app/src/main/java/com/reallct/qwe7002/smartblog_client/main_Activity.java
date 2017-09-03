@@ -98,14 +98,10 @@ public class main_Activity extends AppCompatActivity {
                 String host_url = String.valueOf(host.getText());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("host", host_url);
-                editor.putString("password", api.getMD5(String.valueOf(password.getText())));
+                editor.putString("password", request.getMD5(String.valueOf(password.getText())));
                 editor.apply();
                 host_save = String.valueOf(host_url);
-                if (password_save == null) {
-                    password.setText("{\"password_seted\"}");
-                }
-                password.setText("");
-                password_save = api.getMD5(String.valueOf(password.getText()));
+                password.setText("{\"password_seted\"}");
                 Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 

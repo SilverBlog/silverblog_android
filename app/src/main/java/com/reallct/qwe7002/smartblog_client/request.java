@@ -11,7 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
 
-class api {
+class request {
 
     private static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
