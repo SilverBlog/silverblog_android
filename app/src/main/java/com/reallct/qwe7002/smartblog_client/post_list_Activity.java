@@ -217,7 +217,7 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String url = sharedPreferences.getString("host", null);
-            return api.send_request(url, "{}", "git_page_publish");
+            return request.send_request(url, "{}", "git_page_publish");
         }
 
         @Override
@@ -246,10 +246,11 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(Integer... args) {
             String url = sharedPreferences.getString("host", null);
             String mode = "{}";
+            String active_name = "get_post_list";
             if (tab_position == 1) {
-                mode ="{\"menu\":true}";
+                active_name = "get_menu_list";
             }
-            return api.send_request(url, mode, "get_post_list");
+            return request.send_request(url, mode, active_name);
         }
 
         @Override
@@ -326,7 +327,7 @@ public class post_list_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String password = sharedPreferences.getString("password", null);
-            return api.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + api.getMD5(args[0] + args[1] + password) + "\"}", "delete");
+            return request.send_request(url, "{\"post_id\":" + args[0] + ",\"encode\":\"" + request.getMD5(args[0] + args[1] + password) + "\"}", "delete");
         }
 
         @Override

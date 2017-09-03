@@ -58,8 +58,7 @@ public class post_Activity extends AppCompatActivity {
                         content.setName(nameview.getText().toString());
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
-                        content.setEncode(api.getMD5(titleview.getText().toString() + password));
-                        content.setmenu(edit_menu);
+                        content.setEncode(request.getMD5(titleview.getText().toString() + password));
                         String json = gson.toJson(content);
                         new push_post().execute(json);
                     }
@@ -123,10 +122,11 @@ public class post_Activity extends AppCompatActivity {
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
             String request_json="{\"post_id\":" + args[0] + "}";
+            String active_name = "get_post_content";
             if (edit_menu){
-                request_json="{\"post_id\":" + args[0] + ",\"menu\":true}";
+                active_name = "get_menu_content";
             }
-            return api.send_request(url,request_json , "get_post_content");
+            return request.send_request(url, request_json, active_name);
         }
 
         @Override
@@ -160,11 +160,6 @@ public class post_Activity extends AppCompatActivity {
         private String encode;
         private String title;
         private String name;
-        private Boolean menu;
-
-        void setmenu(Boolean menu) {
-            this.menu = menu;
-        }
 
         void setName(String name) {
             this.name = name;
@@ -203,7 +198,13 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            return api.send_request(url, args[0], action_name);
+            if (action_name.equals("edit")) {
+                action_name = "edit_post";
+                if (edit_menu) {
+                    action_name = "edit_menu";
+                }
+            }
+            return request.send_request(url, args[0], action_name);
         }
 
         @Override
