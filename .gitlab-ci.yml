@@ -23,7 +23,7 @@ build:
   script:
   - ./gradlew assembleDebug
   
-artifacts:
+  artifacts:
     paths:
     - app/build/outputs/apk/app-debug.apk
     expire_in: after
