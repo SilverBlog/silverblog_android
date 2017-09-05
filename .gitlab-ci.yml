@@ -22,10 +22,3 @@ build:
   stage: build
   script:
   - ./gradlew assembleDebug
-  artifacts:
-    paths:
-    - app/build/outputs/apk/app-debug.apk
-    expire_in: 60 mins
-tags:
-except:
-- tags
