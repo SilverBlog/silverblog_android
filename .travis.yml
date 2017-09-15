@@ -24,6 +24,8 @@ script:
 before_deploy:
 
 deploy:
+  on:
+    tags: true
   provider: releases
   api_key:
     secure: $Github_token
