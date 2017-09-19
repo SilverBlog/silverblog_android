@@ -1,7 +1,8 @@
 language: android
 
 sudo: false
-
+on:
+  tags: true
 android:
   components:
     - build-tools-26.0.0
@@ -24,8 +25,6 @@ script:
 before_deploy:
 
 deploy:
-  on:
-    tags: true
   provider: releases
   api_key:
     secure: $Github_token
