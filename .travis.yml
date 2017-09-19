@@ -1,8 +1,7 @@
 language: android
 
 sudo: false
-on:
-  tags: true
+
 android:
   components:
     - build-tools-26.0.0
@@ -30,3 +29,5 @@ deploy:
     secure: $Github_token
   file: app/build/outputs/apk/app-release.apk
   skip_cleanup: true
+  on:
+    tags: true
