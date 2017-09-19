@@ -12,6 +12,11 @@
     tools:context="com.reallct.qwe7002.smartblog_client.main_Activity"
     tools:showIn="@layout/activity_main">
 
+    <View
+        android:id="@+id/eton_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true" />
     <android.support.design.widget.TextInputLayout
         android:id="@+id/host_group"
         android:layout_width="wrap_content"
@@ -24,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="博客地址(例：https://myblog.com)"
+            android:hint="@string/https_myblog_com"
 
             android:inputType="textPersonName" />
     </android.support.design.widget.TextInputLayout>
@@ -43,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
             android:ems="10"
-            android:hint="管理员密码"
+            android:hint="@string/admin_password"
             android:imeActionId="@+id/login"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
@@ -54,18 +59,18 @@
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/password_group"
-        android:text="保存" />
+        android:layout_toStartOf="@+id/eton_placeholder"
+        android:text="@string/save_button" />
 
     <Button
         android:id="@+id/edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/edit_button"
+        android:layout_alignBaseline="@+id/save_button"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/save_button"
-        android:text="文章管理" />
+        android:layout_toEndOf="@+id/eton_placeholder" />
 
 </RelativeLayout>
