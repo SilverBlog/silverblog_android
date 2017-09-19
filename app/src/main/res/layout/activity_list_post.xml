@@ -27,12 +27,12 @@
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="文章" />
+                android:text="@string/document" />
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="菜单" />
+                android:text="@string/menu" />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 

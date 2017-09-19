@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             app:corner_color="@color/corner_color"
             app:frame_color="@color/viewfinder_frame"
-            app:label_text="请执行[./control_server.py]并扫描输出的二维码"
+            app:label_text="@string/scanner_notify"
             app:label_text_color="@color/colorPrimary"
             app:laser_color="@color/laser_color"
             app:mask_color="@color/viewfinder_mask"

@@ -118,7 +118,7 @@ public class post_list_Activity extends AppCompatActivity {
                     return;
 
                 }
-                new AlertDialog.Builder(post_list_Activity.this).setTitle("请选择操作").setItems(new String[]{"修改", "删除"}, new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(post_list_Activity.this).setTitle(R.string.select).setItems(new String[]{getString(R.string.modify), getString(R.string.delete)}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch (i) {
@@ -126,13 +126,13 @@ public class post_list_Activity extends AppCompatActivity {
                                 start_post_activity(position);
                                 break;
                             case 1:
-                                new AlertDialog.Builder(post_list_Activity.this).setTitle("删除这篇文章？(警告！本操作不可逆，请谨慎操作！）").setPositiveButton("确定",
+                                new AlertDialog.Builder(post_list_Activity.this).setTitle(R.string.delete_notify).setPositiveButton(R.string.ok_button,
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
                                                 new delete_post().execute(Integer.toString(list_position.get(position)), title_list.get(list_position.get(position)));
                                             }
-                                        }).setNegativeButton("取消", null).show();
+                                        }).setNegativeButton(R.string.cancel, null).show();
                                 break;
                         }
                     }
@@ -207,8 +207,8 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在提交数据，请稍后...");
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
@@ -225,9 +225,9 @@ public class post_list_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            String result_message = "操作失败！请查看API服务器输出！";
+            String result_message = getString(R.string.git_push_error);
             if (objects.get("status").getAsBoolean()) {
-                result_message = "操作完成！";
+                result_message = getString(R.string.submit_success);
             }
             Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -265,12 +265,7 @@ public class post_list_Activity extends AppCompatActivity {
                 int for_i = 0;
                 for (JsonElement item : result_array) {
                     JsonObject sub_item = item.getAsJsonObject();
-                    Boolean add_switch = true;
-                    //检查是否为绝对路径
-                    if (sub_item.has("absolute")) {
-                        add_switch = false;
-                    }
-                    if (add_switch) {
+                    if (!sub_item.has("absolute")) {
                         title_list.add(sub_item.get("title").getAsString());
                         String time = "";
                         if (sub_item.has("time")) {
@@ -283,7 +278,7 @@ public class post_list_Activity extends AppCompatActivity {
                 }
 
                 if (title_list.size() == 0) {
-                    Snackbar.make(mSwipeRefreshWidget, "当前文章列表为空", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
                 }
 
                 List<HashMap<String, String>> list = new ArrayList<>();
@@ -301,7 +296,7 @@ public class post_list_Activity extends AppCompatActivity {
                         new int[]{android.R.id.text1, android.R.id.text2});
                 listView.setAdapter(adapter);
             } else {
-                Snackbar.make(findViewById(R.id.fab), "获取文章列表失败，请检查网络状态！", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
 
         }
@@ -313,8 +308,8 @@ public class post_list_Activity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在提交数据，请稍后...");
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
@@ -332,9 +327,9 @@ public class post_list_Activity extends AppCompatActivity {
             mpDialog.cancel();
             JsonParser parser = new JsonParser();
             final JsonObject objects = parser.parse(result).getAsJsonObject();
-            String result_message = "操作失败！请检查服务器地址以及API密码。";
+            String result_message = getString(R.string.submit_error);
             if (objects.get("status").getAsBoolean()) {
-                result_message = "操作完成！";
+                result_message = getString(R.string.submit_success);
             }
             Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG).show();
             Intent intent = new Intent();
