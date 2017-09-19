@@ -267,11 +267,8 @@ public class post_list_Activity extends AppCompatActivity {
                     JsonObject sub_item = item.getAsJsonObject();
                     Boolean add_switch = true;
                     //检查是否为绝对路径
-                    if (sub_item.has("absolute") && sub_item.get("absolute").getAsBoolean()) {
+                    if (sub_item.has("absolute")) {
                         add_switch = false;
-                    }
-                    if (sub_item.get("name").getAsString().equals("index") || sub_item.get("name").getAsString().equals("/")){
-                        add_switch=false;
                     }
                     if (add_switch) {
                         title_list.add(sub_item.get("title").getAsString());

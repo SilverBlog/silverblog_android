@@ -233,7 +233,7 @@ public class post_Activity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (objects.get("status").getAsBoolean()) {
-                                Uri uri = Uri.parse(sharedPreferences.getString("host", null) + "/" + objects.get("name").getAsString());
+                                Uri uri = Uri.parse(sharedPreferences.getString("host", null) + "/post/" + objects.get("name").getAsString());
                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                             }
                             Intent intent = new Intent();

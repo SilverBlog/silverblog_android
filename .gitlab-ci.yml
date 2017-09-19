@@ -26,3 +26,4 @@ build:
   artifacts:
     paths:
     - app/build/outputs/apk/app-debug.apk
+    expire_in: 1 week
