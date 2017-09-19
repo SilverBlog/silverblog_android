@@ -17,11 +17,15 @@ before_install:
 notifications:
   webhooks:https://fathomless-fjord-24024.herokuapp.com/notify
 script:
+  - echo org.gradle.jvmargs=-Xmx1536m >> gradle.properties
+  - echo org.gradle.parallel=true >> gradle.properties
   - ./gradlew assembleRelease
  
 before_deploy:
 
 deploy:
+  on:
+    tags: true
   provider: releases
   api_key:
     secure: $Github_token
