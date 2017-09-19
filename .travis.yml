@@ -21,7 +21,8 @@ script:
   - echo org.gradle.parallel=true >> gradle.properties
   - ./gradlew assembleRelease
  
-before_deploy:
+on:
+  tags: true
 
 deploy:
   provider: releases
@@ -29,5 +30,3 @@ deploy:
     secure: $Github_token
   file: app/build/outputs/apk/app-release.apk
   skip_cleanup: true
-  on:
-    tags: true
