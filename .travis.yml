@@ -16,6 +16,8 @@ before_install:
   - chmod +x gradlew
 notifications:
   webhooks:https://fathomless-fjord-24024.herokuapp.com/notify
+  on_success: always 
+  on_failure: always
 script:
   - echo org.gradle.jvmargs=-Xmx1536m >> gradle.properties
   - echo org.gradle.parallel=true >> gradle.properties
