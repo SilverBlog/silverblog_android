@@ -5,6 +5,6 @@
     <item
         android:id="@+id/send_post_button"
         android:icon="@android:drawable/ic_menu_camera"
-        android:title="扫描二维码"
+        android:title="@string/scan_button"
         app:showAsAction="ifRoom" />
 </menu>

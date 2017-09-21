@@ -6,5 +6,5 @@
         android:title="@string/send_button" />
     <item
         android:id="@+id/send_edit_app_button"
-        android:title="分享" />
+        android:title="@string/share_menu_button" />
 </menu>
