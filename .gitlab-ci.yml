@@ -22,8 +22,6 @@ build:
   stage: build
   script:
   - ./gradlew assembleDebug
-  only:
-    - develop
   artifacts:
     paths:
     - app/build/outputs/apk/app-debug.apk
