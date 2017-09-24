@@ -53,12 +53,18 @@ public class post_Activity extends AppCompatActivity {
                 return false;
             }
             switch (menuItem.getItemId()) {
+                case R.id.preview_button:
+                    Intent start_preview = new Intent(post_Activity.this, post_preview.class);
+                    start_preview.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
+                    start_preview.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
+                    startActivity(start_preview);
+                    break;
                 case R.id.send_post_button:
                     String password = sharedPreferences.getString("password", null);
                     if (password != null) {
                         Gson gson = new Gson();
                         content_json content = new content_json();
-                        if(action_name.equals("edit")) {
+                        if (action_name.equals("edit")) {
                             content.setPost_id(request_post_id);
                         }
                         content.setName(nameview.getText().toString());
@@ -74,6 +80,7 @@ public class post_Activity extends AppCompatActivity {
                     intent.setAction(Intent.ACTION_SEND);
                     intent.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
                     intent.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
+                    intent.putExtra(Intent.EXTRA_TITLE, titleview.getText().toString());
                     intent.setType("text/plain");
                     startActivity(intent);
                     break;
@@ -152,9 +159,9 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            String request_json="{\"post_id\":" + args[0] + "}";
+            String request_json = "{\"post_id\":" + args[0] + "}";
             String active_name = "get_post_content";
-            if (edit_menu){
+            if (edit_menu) {
                 active_name = "get_menu_content";
             }
             return request.send_request(url, request_json, active_name);

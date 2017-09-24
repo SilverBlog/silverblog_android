@@ -37,4 +37,6 @@
     <string name="scan_qr">请授权相机权限，以便能够正常扫描二维码。</string>
     <string name="QRcode_error">二维码错误！</string>
     <string name="check_config">请检查您的System.json配置文件。</string>
+    <string name="title_activity_post_preview">post_preview</string>
+    <string name="preview">预览</string>
 </resources>
