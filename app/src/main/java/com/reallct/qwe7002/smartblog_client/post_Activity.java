@@ -47,8 +47,8 @@ public class post_Activity extends AppCompatActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                alertDialog.setTitle("标题和内容不能为空！");
-                alertDialog.setNegativeButton("确定", null);
+                alertDialog.setTitle(R.string.content_not_none);
+                alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 alertDialog.show();
                 return false;
             }
@@ -95,7 +95,7 @@ public class post_Activity extends AppCompatActivity {
         editTextview = (RxMDEditText) findViewById(R.id.mdcontent);
         nameview = (EditText) findViewById(R.id.nameview);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        this.setTitle("发布文章");
+        this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
         titleview.setText(intent.getStringExtra("share_title"));
@@ -113,7 +113,7 @@ public class post_Activity extends AppCompatActivity {
                 .setHorizontalRulesColor(Color.LTGRAY)//default color of horizontal rules's background
                 .setInlineCodeBgColor(Color.LTGRAY)//default color of inline code's background
                 .setCodeBgColor(Color.LTGRAY)//default color of code's background
-                .setTodoColor(Color.DKGRAY)//default color of todo
+                .setTodoColor(Color.DKGRAY)//default color
                 .setTodoDoneColor(Color.DKGRAY)//default color of done
                 .setUnOrderListColor(Color.BLACK)//default color of unorder list
                 .setLinkColor(Color.RED)//default color of link text
@@ -128,7 +128,7 @@ public class post_Activity extends AppCompatActivity {
                 .subscribe();
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
-            this.setTitle("修改文章");
+            this.setTitle(getString(R.string.edit_title));
             request_post_id = intent.getIntExtra("position", -1);
             new get_post_content().execute(Integer.toString(request_post_id));
         }
@@ -142,8 +142,8 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在获取数据，请稍后...");
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
@@ -174,8 +174,8 @@ public class post_Activity extends AppCompatActivity {
                 nameview.setText(objects.get("name").getAsString());
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
-                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                alertDialog.setTitle(R.string.submit_error);
+                alertDialog.setNegativeButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
