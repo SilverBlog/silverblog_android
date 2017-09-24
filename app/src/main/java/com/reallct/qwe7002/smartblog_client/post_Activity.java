@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,11 +20,16 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.yydcdut.rxmarkdown.RxMDConfiguration;
+import com.yydcdut.rxmarkdown.RxMDEditText;
+import com.yydcdut.rxmarkdown.RxMarkdown;
+import com.yydcdut.rxmarkdown.loader.DefaultLoader;
+import com.yydcdut.rxmarkdown.syntax.edit.EditFactory;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText nameview;
-    EditText editTextview;
+    RxMDEditText editTextview;
     SharedPreferences sharedPreferences;
     int request_post_id;
     String action_name = "new";
@@ -86,7 +92,7 @@ public class post_Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         titleview = (EditText) findViewById(R.id.titleview);
-        editTextview = (EditText) findViewById(R.id.mdcontent);
+        editTextview = (RxMDEditText) findViewById(R.id.mdcontent);
         nameview = (EditText) findViewById(R.id.nameview);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle("发布文章");
@@ -95,6 +101,31 @@ public class post_Activity extends AppCompatActivity {
         titleview.setText(intent.getStringExtra("share_title"));
         editTextview.setText(intent.getStringExtra("share_text"));
         edit_menu = intent.getBooleanExtra("menu", false);
+        RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
+                .setDefaultImageSize(100, 100)//default image width & height
+                .setBlockQuotesColor(Color.LTGRAY)//default color of block quotes
+                .setHeader1RelativeSize(1.6f)//default relative size of header1
+                .setHeader2RelativeSize(1.5f)//default relative size of header2
+                .setHeader3RelativeSize(1.4f)//default relative size of header3
+                .setHeader4RelativeSize(1.3f)//default relative size of header4
+                .setHeader5RelativeSize(1.2f)//default relative size of header5
+                .setHeader6RelativeSize(1.1f)//default relative size of header6
+                .setHorizontalRulesColor(Color.LTGRAY)//default color of horizontal rules's background
+                .setInlineCodeBgColor(Color.LTGRAY)//default color of inline code's background
+                .setCodeBgColor(Color.LTGRAY)//default color of code's background
+                .setTodoColor(Color.DKGRAY)//default color of todo
+                .setTodoDoneColor(Color.DKGRAY)//default color of done
+                .setUnOrderListColor(Color.BLACK)//default color of unorder list
+                .setLinkColor(Color.RED)//default color of link text
+                .setLinkUnderline(true)//default value of whether displays link underline
+                .setRxMDImageLoader(new DefaultLoader(context))//default image loader
+                .setDebug(true)//default value of debug
+                .build();
+        RxMarkdown.live(editTextview)
+                .config(rxMDConfiguration)
+                .factory(EditFactory.create())
+                .intoObservable()
+                .subscribe();
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
             this.setTitle("修改文章");

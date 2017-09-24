@@ -58,7 +58,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true">
 
-        <android.support.design.widget.TextInputEditText
+        <com.yydcdut.rxmarkdown.RxMDEditText
             android:id="@+id/mdcontent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
