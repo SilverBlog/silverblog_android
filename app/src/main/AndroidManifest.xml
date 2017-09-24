@@ -26,7 +26,6 @@
         </activity>
         <activity
             android:name=".post_Activity"
-            android:label="@string/title_activity_receive"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
@@ -42,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:label="@string/preview_page"
             android:name=".post_preview"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

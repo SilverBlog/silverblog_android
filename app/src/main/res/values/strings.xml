@@ -39,4 +39,5 @@
     <string name="check_config">请检查您的System.json配置文件。</string>
     <string name="title_activity_post_preview">post_preview</string>
     <string name="preview">预览</string>
+    <string name="preview_page">文章预览</string>
 </resources>
