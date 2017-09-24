@@ -19,6 +19,8 @@ cache:
   - .gradle/
 
 build:
+  only:
+    - develop
   stage: build
   script:
   - ./gradlew assembleDebug
