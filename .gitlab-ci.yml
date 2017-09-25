@@ -1,8 +1,5 @@
 image: jangrewe/gitlab-ci-android
 
-only:
-- develop
-
 stages:
 - build
 
