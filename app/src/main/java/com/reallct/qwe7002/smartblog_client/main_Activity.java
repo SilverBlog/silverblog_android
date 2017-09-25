@@ -79,7 +79,7 @@ public class main_Activity extends AppCompatActivity {
                 if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                     manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
-                Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, R.string.check_input, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
             }
@@ -91,7 +91,7 @@ public class main_Activity extends AppCompatActivity {
                     manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
                 if (host.getText().length() == 0 || password.getText().toString().equals("{\"password_seted\"}") || password.getText().length() == 0) {
-                    Snackbar.make(view, "请先配置服务器信息", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, R.string.check_input, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     return;
                 }
@@ -102,7 +102,7 @@ public class main_Activity extends AppCompatActivity {
                 editor.apply();
                 host_save = String.valueOf(host_url);
                 password.setText("{\"password_seted\"}");
-                Snackbar.make(view, "配置已保存", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, R.string.config_save, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
             }
@@ -118,7 +118,7 @@ public class main_Activity extends AppCompatActivity {
                     startActivityForResult(intent, 0);
                     return;
                 }
-                Snackbar.make(host, "请授权相机权限，以便能够正常扫描二维码。", Snackbar.LENGTH_LONG)
+                Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 break;
         }
@@ -137,14 +137,14 @@ public class main_Activity extends AppCompatActivity {
             try {
                 objects = parser.parse(scanResult).getAsJsonObject();
             } catch (IllegalStateException e) {
-                Snackbar.make(host, "二维码错误！", Snackbar.LENGTH_LONG)
+                Snackbar.make(host, R.string.QRcode_error, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return;
             }
             host_save = objects.get("url").getAsString();
             password_save = objects.get("password").getAsString();
             if (password_save.length() == 0 || host_save.length() == 0) {
-                Snackbar.make(host, "请检查您的System.json配置文件。", Snackbar.LENGTH_LONG)
+                Snackbar.make(host, R.string.check_config, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -153,7 +153,7 @@ public class main_Activity extends AppCompatActivity {
             editor.apply();
             host.setText(host_save);
             password.setText("{\"password_seted\"}");
-            Snackbar.make(host, "配置已保存", Snackbar.LENGTH_LONG)
+            Snackbar.make(host, R.string.config_save, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
         }

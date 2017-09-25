@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,11 +20,16 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.yydcdut.rxmarkdown.RxMDConfiguration;
+import com.yydcdut.rxmarkdown.RxMDEditText;
+import com.yydcdut.rxmarkdown.RxMarkdown;
+import com.yydcdut.rxmarkdown.loader.DefaultLoader;
+import com.yydcdut.rxmarkdown.syntax.edit.EditFactory;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText nameview;
-    EditText editTextview;
+    RxMDEditText editTextview;
     SharedPreferences sharedPreferences;
     int request_post_id;
     String action_name = "new";
@@ -41,18 +47,24 @@ public class post_Activity extends AppCompatActivity {
         public boolean onMenuItemClick(MenuItem menuItem) {
             if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                alertDialog.setTitle("标题和内容不能为空！");
-                alertDialog.setNegativeButton("确定", null);
+                alertDialog.setTitle(R.string.content_not_none);
+                alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 alertDialog.show();
                 return false;
             }
             switch (menuItem.getItemId()) {
+                case R.id.preview_button:
+                    Intent start_preview = new Intent(post_Activity.this, post_preview.class);
+                    start_preview.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
+                    start_preview.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
+                    startActivity(start_preview);
+                    break;
                 case R.id.send_post_button:
                     String password = sharedPreferences.getString("password", null);
                     if (password != null) {
                         Gson gson = new Gson();
                         content_json content = new content_json();
-                        if(action_name.equals("edit")) {
+                        if (action_name.equals("edit")) {
                             content.setPost_id(request_post_id);
                         }
                         content.setName(nameview.getText().toString());
@@ -68,6 +80,7 @@ public class post_Activity extends AppCompatActivity {
                     intent.setAction(Intent.ACTION_SEND);
                     intent.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
                     intent.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
+                    intent.putExtra(Intent.EXTRA_TITLE, titleview.getText().toString());
                     intent.setType("text/plain");
                     startActivity(intent);
                     break;
@@ -86,18 +99,43 @@ public class post_Activity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         titleview = (EditText) findViewById(R.id.titleview);
-        editTextview = (EditText) findViewById(R.id.mdcontent);
+        editTextview = (RxMDEditText) findViewById(R.id.mdcontent);
         nameview = (EditText) findViewById(R.id.nameview);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        this.setTitle("发布文章");
+        this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
         titleview.setText(intent.getStringExtra("share_title"));
         editTextview.setText(intent.getStringExtra("share_text"));
         edit_menu = intent.getBooleanExtra("menu", false);
+        RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
+                .setDefaultImageSize(100, 100)//default image width & height
+                .setBlockQuotesColor(Color.LTGRAY)//default color of block quotes
+                .setHeader1RelativeSize(1.6f)//default relative size of header1
+                .setHeader2RelativeSize(1.5f)//default relative size of header2
+                .setHeader3RelativeSize(1.4f)//default relative size of header3
+                .setHeader4RelativeSize(1.3f)//default relative size of header4
+                .setHeader5RelativeSize(1.2f)//default relative size of header5
+                .setHeader6RelativeSize(1.1f)//default relative size of header6
+                .setHorizontalRulesColor(Color.LTGRAY)//default color of horizontal rules's background
+                .setInlineCodeBgColor(Color.LTGRAY)//default color of inline code's background
+                .setCodeBgColor(Color.LTGRAY)//default color of code's background
+                .setTodoColor(Color.DKGRAY)//default color
+                .setTodoDoneColor(Color.DKGRAY)//default color of done
+                .setUnOrderListColor(Color.BLACK)//default color of unorder list
+                .setLinkColor(Color.RED)//default color of link text
+                .setLinkUnderline(true)//default value of whether displays link underline
+                .setRxMDImageLoader(new DefaultLoader(context))//default image loader
+                .setDebug(true)//default value of debug
+                .build();
+        RxMarkdown.live(editTextview)
+                .config(rxMDConfiguration)
+                .factory(EditFactory.create())
+                .intoObservable()
+                .subscribe();
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
-            this.setTitle("修改文章");
+            this.setTitle(getString(R.string.edit_title));
             request_post_id = intent.getIntExtra("position", -1);
             new get_post_content().execute(Integer.toString(request_post_id));
         }
@@ -111,8 +149,8 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle("正在连接服务器...");
-            mpDialog.setMessage("正在获取数据，请稍后...");
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
@@ -121,9 +159,9 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String url = sharedPreferences.getString("host", null);
-            String request_json="{\"post_id\":" + args[0] + "}";
+            String request_json = "{\"post_id\":" + args[0] + "}";
             String active_name = "get_post_content";
-            if (edit_menu){
+            if (edit_menu) {
                 active_name = "get_menu_content";
             }
             return request.send_request(url, request_json, active_name);
@@ -143,8 +181,8 @@ public class post_Activity extends AppCompatActivity {
                 nameview.setText(objects.get("name").getAsString());
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                alertDialog.setTitle("操作失败！请检查服务器配置及网络连接。");
-                alertDialog.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                alertDialog.setTitle(R.string.submit_error);
+                alertDialog.setNegativeButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         finish();
