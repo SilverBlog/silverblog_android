@@ -17,7 +17,7 @@ public class post_preview extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        RichText.fromMarkdown("# " + intent.getStringExtra(Intent.EXTRA_SUBJECT) + "\n" + intent.getStringExtra(Intent.EXTRA_TEXT)).into((TextView) findViewById(R.id.markdown_view));
+        RichText.fromMarkdown("# " + intent.getStringExtra(Intent.EXTRA_SUBJECT) + "\n\n" + intent.getStringExtra(Intent.EXTRA_TEXT)).into((TextView) findViewById(R.id.markdown_view));
 
     }
 
