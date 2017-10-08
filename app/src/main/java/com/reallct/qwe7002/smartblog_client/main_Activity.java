@@ -97,12 +97,12 @@ public class main_Activity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     return;
                 }
-                String host_url = String.valueOf(host.getText());
+                host_save = String.valueOf(host.getText());
+                password_save = String.valueOf(password.getText());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("host", host_url);
-                editor.putString("password", request.getMD5(String.valueOf(password.getText())));
+                editor.putString("host", host_save);
+                editor.putString("password", request.getMD5(password_save));
                 editor.apply();
-                host_save = String.valueOf(host_url);
                 password.setText("{\"password_seted\"}");
                 Snackbar.make(view, R.string.config_save, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
