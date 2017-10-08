@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -23,25 +25,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class post_list_card_Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class post_list_card_Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     SwipeRefreshLayout mSwipeRefreshWidget;
-    get_post_list_content get_post_list_content_exec;
     private MyReceiver receiver;
     private Context context;
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
     ArrayList<Integer> list_position;
     private Toolbar toolbar;
+    NavigationView navigationView;
 
     void handleSendText(Intent intent) {
         public_value.share_title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
@@ -95,30 +103,32 @@ public class post_list_card_Activity extends AppCompatActivity
         filter.addAction(MY_BROADCAST_TAG);
 
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
-        Intent Broadcast_intent = new Intent();
-        Broadcast_intent.setAction(MY_BROADCAST_TAG);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(Broadcast_intent);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.getMenu().add("test");
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
         mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Intent intent = new Intent();
-                intent.setAction(MY_BROADCAST_TAG);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                new get_post_list_content().execute();
+                new get_menu_list_content().execute();
             }
         });
+        new get_post_list_content().execute();
+        new get_menu_list_content().execute();
+        new get_system_info_content().execute();
     }
 
     class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
-            Snackbar.make(findViewById(R.id.fab), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
-            get_post_list_content_exec = new get_post_list_content();
-            get_post_list_content_exec.execute();
+            if (arg1.hasExtra("result")) {
+                Snackbar.make(findViewById(R.id.fab), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
+            }
+            if (arg1.getBooleanExtra("success", false)) {
+                new get_post_list_content().execute();
+                new get_menu_list_content().execute();
+            }
         }
     }
 
@@ -136,7 +146,6 @@ public class post_list_card_Activity extends AppCompatActivity
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
-        get_post_list_content_exec.cancel(true);
     }
 
     @Override
@@ -152,16 +161,6 @@ public class post_list_card_Activity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     private class push_to_git extends AsyncTask<Void, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
@@ -233,5 +232,123 @@ public class post_list_card_Activity extends AppCompatActivity
             }
 
         }
+    }
+
+    private class get_system_info_content extends AsyncTask<Void, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(Void... args) {
+            String mode = "{}";
+            String active_name = "system_info";
+            return request.send_request(public_value.host, mode, active_name);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            JsonParser parser = new JsonParser();
+            if (parser.parse(result).isJsonObject()) {
+                JsonObject result_object = parser.parse(result).getAsJsonObject();
+                View headerView = navigationView.getHeaderView(0);
+                ImageView ivAvatar = headerView.findViewById(R.id.imageView);
+                String imageURL = result_object.get("author_image").getAsString();
+                if (!isAbsURL(imageURL)) {
+                    imageURL = getAbsUrl(public_value.host, imageURL);
+                }
+
+                Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
+
+
+                TextView username = headerView.findViewById(R.id.username);
+                TextView desc = headerView.findViewById(R.id.desc);
+                username.setText(result_object.get("author_name").getAsString());
+                desc.setText(result_object.get("project_description").getAsString());
+            } else {
+                Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    public static Boolean isAbsURL(String URL) {
+        try {
+            URI u = new URI(URL);
+            return u.isAbsolute();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public static String getAbsUrl(String absolutePath, String relativePath) {
+        try {
+            URL absoluteUrl = new URL(absolutePath);
+            URL parseUrl = new URL(absoluteUrl, relativePath);
+            return parseUrl.toString();
+        } catch (MalformedURLException e) {
+            return "";
+        }
+    }
+
+    private class get_menu_list_content extends AsyncTask<Void, Integer, String> {
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(Void... args) {
+            String mode = "{}";
+            String active_name = "get_menu_list";
+            return request.send_request(public_value.host, mode, active_name);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            JsonParser parser = new JsonParser();
+            if (parser.parse(result).isJsonArray()) {
+                final JsonArray result_array = parser.parse(result).getAsJsonArray();
+                public_value.menu_list = result_array;
+                navigationView.getMenu().clear();
+                for (JsonElement item : result_array) {
+                    JsonObject sub_item = item.getAsJsonObject();
+                    navigationView.getMenu().add(sub_item.get("title").getAsString());
+                }
+                navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        int id = item.getItemId();
+                        JsonArray menu_list = public_value.menu_list;
+                        JsonObject menu_item = menu_list.get(id).getAsJsonObject();
+                        if (menu_item.has("absolute")) {
+                            Uri uri = Uri.parse(menu_item.get("absolute").getAsString());
+                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                        }
+                        Intent intent = new Intent(context, post_Activity.class);
+                        intent.putExtra("edit", true);
+                        intent.putExtra("position", id);
+                        intent.putExtra("menu", true);
+                        intent.putExtra("share_title", public_value.share_title);
+                        intent.putExtra("share_text", public_value.share_text);
+                        public_value.share_text = null;
+                        public_value.share_title = null;
+                        context.startActivity(intent);
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        drawer.closeDrawer(GravityCompat.START);
+                        return false;
+                    }
+                });
+            } else {
+                Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
+            }
+
+        }
+
+
     }
 }

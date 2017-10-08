@@ -261,6 +261,7 @@ public class post_Activity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
                         intent.setAction("com.reallct.qwe7002.smartblog_client");
+                        intent.putExtra("success", true);
                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                         finish();
                     }
@@ -276,6 +277,7 @@ public class post_Activity extends AppCompatActivity {
                             }
                             Intent intent = new Intent();
                             intent.setAction("com.reallct.qwe7002.smartblog_client");
+                            intent.putExtra("success", true);
                             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                             finish();
                         }

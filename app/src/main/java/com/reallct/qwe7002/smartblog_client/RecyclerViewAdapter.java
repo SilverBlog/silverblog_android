@@ -137,6 +137,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
             Intent intent = new Intent();
             intent.putExtra("result", result_message);
+            intent.putExtra("success", true);
             intent.setAction(MY_BROADCAST_TAG);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
         }

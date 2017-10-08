@@ -33,6 +33,7 @@
                     android:maxLines="2"
                     android:textSize="30sp"
                     android:layout_margin="15dp"
+                    android:textColor="#212121"
                     android:text="给SilverBlog设计了一个手机文章发布器" />
 
                 <View
