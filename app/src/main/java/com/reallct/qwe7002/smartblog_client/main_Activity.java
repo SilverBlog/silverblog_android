@@ -72,7 +72,9 @@ public class main_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (host_save != null) {
-                    Intent edit_post_activity = new Intent(main_Activity.this, post_list_Activity.class);
+                    public_value.host = host_save;
+                    public_value.password = password_save;
+                    Intent edit_post_activity = new Intent(main_Activity.this, post_list_card_Activity.class);
                     startActivity(edit_post_activity);
                     return;
                 }
