@@ -3,14 +3,18 @@ package com.reallct.qwe7002.smartblog_client;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
 import android.widget.TextView;
 
 import com.yydcdut.rxmarkdown.RxMDConfiguration;
 import com.yydcdut.rxmarkdown.RxMarkdown;
+import com.yydcdut.rxmarkdown.callback.OnLinkClickCallback;
 import com.yydcdut.rxmarkdown.loader.DefaultLoader;
 import com.yydcdut.rxmarkdown.syntax.text.TextFactory;
 
@@ -46,7 +50,7 @@ public class post_preview extends AppCompatActivity {
                 .setTodoColor(Color.DKGRAY)//default color
                 .setTodoDoneColor(Color.DKGRAY)//default color of done
                 .setUnOrderListColor(Color.BLACK)//default color of unorder list
-                .setLinkColor(Color.BLUE)//default color of link text
+                .setLinkColor(R.color.colorPrimaryDark)//default color of link text
                 .setLinkUnderline(true)//default value of whether displays link underline
                 .setRxMDImageLoader(new DefaultLoader(context))//default image loader
                 .setDebug(false)//default value of debug
@@ -70,7 +74,7 @@ public class post_preview extends AppCompatActivity {
                     @Override
                     public void onNext(CharSequence charSequence) {
                         TextView markdown = (TextView) findViewById(R.id.markdown_view);
-                        markdown.setMovementMethod(ScrollingMovementMethod.getInstance());
+                        markdown.setMovementMethod(LinkMovementMethod.getInstance());
                         markdown.setText(charSequence, TextView.BufferType.SPANNABLE);
                     }
                 });
