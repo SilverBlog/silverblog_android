@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -30,11 +29,30 @@ public class post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText nameview;
     RxMDEditText editTextview;
-    SharedPreferences sharedPreferences;
     int request_post_id;
     String action_name = "new";
     private Context context;
     private Boolean edit_menu;
+    RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
+            .setDefaultImageSize(100, 100)//default image width & height
+            .setBlockQuotesColor(Color.LTGRAY)//default color of block quotes
+            .setHeader1RelativeSize(1.6f)//default relative size of header1
+            .setHeader2RelativeSize(1.5f)//default relative size of header2
+            .setHeader3RelativeSize(1.4f)//default relative size of header3
+            .setHeader4RelativeSize(1.3f)//default relative size of header4
+            .setHeader5RelativeSize(1.2f)//default relative size of header5
+            .setHeader6RelativeSize(1.1f)//default relative size of header6
+            .setHorizontalRulesColor(Color.LTGRAY)//default color of horizontal rules's background
+            .setInlineCodeBgColor(Color.LTGRAY)//default color of inline code's background
+            .setCodeBgColor(Color.LTGRAY)//default color of code's background
+            .setTodoColor(Color.DKGRAY)//default color
+            .setTodoDoneColor(Color.DKGRAY)//default color of done
+            .setUnOrderListColor(Color.BLACK)//default color of unorder list
+            .setLinkColor(Color.RED)//default color of link text
+            .setLinkUnderline(true)//default value of whether displays link underline
+            .setRxMDImageLoader(new DefaultLoader(context))//default image loader
+            .setDebug(false)//default value of debug
+            .build();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,8 +78,7 @@ public class post_Activity extends AppCompatActivity {
                     startActivity(start_preview);
                     break;
                 case R.id.send_post_button:
-                    String password = sharedPreferences.getString("password", null);
-                    if (password != null) {
+                    if (public_value.password != null) {
                         Gson gson = new Gson();
                         content_json content = new content_json();
                         if (action_name.equals("edit")) {
@@ -70,7 +87,7 @@ public class post_Activity extends AppCompatActivity {
                         content.setName(nameview.getText().toString());
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
-                        content.setEncode(request.getMD5(titleview.getText().toString() + password));
+                        content.setEncode(request.getMD5(titleview.getText().toString() + public_value.password));
                         String json = gson.toJson(content);
                         new push_post().execute(json);
                     }
@@ -101,33 +118,12 @@ public class post_Activity extends AppCompatActivity {
         titleview = (EditText) findViewById(R.id.titleview);
         editTextview = (RxMDEditText) findViewById(R.id.mdcontent);
         nameview = (EditText) findViewById(R.id.nameview);
-        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
         titleview.setText(intent.getStringExtra("share_title"));
         editTextview.setText(intent.getStringExtra("share_text"));
         edit_menu = intent.getBooleanExtra("menu", false);
-        RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
-                .setDefaultImageSize(100, 100)//default image width & height
-                .setBlockQuotesColor(Color.LTGRAY)//default color of block quotes
-                .setHeader1RelativeSize(1.6f)//default relative size of header1
-                .setHeader2RelativeSize(1.5f)//default relative size of header2
-                .setHeader3RelativeSize(1.4f)//default relative size of header3
-                .setHeader4RelativeSize(1.3f)//default relative size of header4
-                .setHeader5RelativeSize(1.2f)//default relative size of header5
-                .setHeader6RelativeSize(1.1f)//default relative size of header6
-                .setHorizontalRulesColor(Color.LTGRAY)//default color of horizontal rules's background
-                .setInlineCodeBgColor(Color.LTGRAY)//default color of inline code's background
-                .setCodeBgColor(Color.LTGRAY)//default color of code's background
-                .setTodoColor(Color.DKGRAY)//default color
-                .setTodoDoneColor(Color.DKGRAY)//default color of done
-                .setUnOrderListColor(Color.BLACK)//default color of unorder list
-                .setLinkColor(Color.RED)//default color of link text
-                .setLinkUnderline(true)//default value of whether displays link underline
-                .setRxMDImageLoader(new DefaultLoader(context))//default image loader
-                .setDebug(true)//default value of debug
-                .build();
         RxMarkdown.live(editTextview)
                 .config(rxMDConfiguration)
                 .factory(EditFactory.create())
@@ -158,13 +154,12 @@ public class post_Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... args) {
-            String url = sharedPreferences.getString("host", null);
             String request_json = "{\"post_id\":" + args[0] + "}";
             String active_name = "get_post_content";
             if (edit_menu) {
                 active_name = "get_menu_content";
             }
-            return request.send_request(url, request_json, active_name);
+            return request.send_request(public_value.host, request_json, active_name);
         }
 
         @Override
@@ -179,6 +174,11 @@ public class post_Activity extends AppCompatActivity {
                     editTextview.setText(objects.get("content").getAsString());
                 }
                 nameview.setText(objects.get("name").getAsString());
+                RxMarkdown.live(editTextview)
+                        .config(rxMDConfiguration)
+                        .factory(EditFactory.create())
+                        .intoObservable()
+                        .subscribe();
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                 alertDialog.setTitle(R.string.submit_error);
@@ -235,14 +235,13 @@ public class post_Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... args) {
-            String url = sharedPreferences.getString("host", null);
             if (action_name.equals("edit")) {
                 action_name = "edit_post";
                 if (edit_menu) {
                     action_name = "edit_menu";
                 }
             }
-            return request.send_request(url, args[0], action_name);
+            return request.send_request(public_value.host, args[0], action_name);
         }
 
         @Override
@@ -261,6 +260,7 @@ public class post_Activity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
                         intent.setAction("com.reallct.qwe7002.smartblog_client");
+                        intent.putExtra("success", true);
                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                         finish();
                     }
@@ -271,11 +271,12 @@ public class post_Activity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (objects.get("status").getAsBoolean()) {
-                                Uri uri = Uri.parse(sharedPreferences.getString("host", null) + "/post/" + objects.get("name").getAsString());
+                                Uri uri = Uri.parse(public_value.host + "/post/" + objects.get("name").getAsString());
                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                             }
                             Intent intent = new Intent();
                             intent.setAction("com.reallct.qwe7002.smartblog_client");
+                            intent.putExtra("success", true);
                             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                             finish();
                         }

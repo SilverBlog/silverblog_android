@@ -40,4 +40,8 @@
     <string name="title_activity_post_preview">post_preview</string>
     <string name="preview">预览</string>
     <string name="preview_page">文章预览</string>
+    <string name="title_activity_post_list_card_">post_list_card_Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

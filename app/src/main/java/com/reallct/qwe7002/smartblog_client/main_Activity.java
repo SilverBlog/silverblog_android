@@ -72,7 +72,9 @@ public class main_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (host_save != null) {
-                    Intent edit_post_activity = new Intent(main_Activity.this, post_list_Activity.class);
+                    public_value.host = host_save;
+                    public_value.password = password_save;
+                    Intent edit_post_activity = new Intent(main_Activity.this, post_list_card_Activity.class);
                     startActivity(edit_post_activity);
                     return;
                 }
@@ -95,12 +97,13 @@ public class main_Activity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     return;
                 }
-                String host_url = String.valueOf(host.getText());
+                host_save = String.valueOf(host.getText());
+                password_save = request.getMD5(String.valueOf(password.getText()));
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("host", host_url);
-                editor.putString("password", request.getMD5(String.valueOf(password.getText())));
+                editor.putString("host", host_save);
+                editor.putString("password", password_save);
                 editor.apply();
-                host_save = String.valueOf(host_url);
+
                 password.setText("{\"password_seted\"}");
                 Snackbar.make(view, R.string.config_save, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
