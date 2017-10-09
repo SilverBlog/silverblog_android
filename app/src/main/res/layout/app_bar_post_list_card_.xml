@@ -20,17 +20,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <include layout="@layout/content_post_list_card_" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+        backgroundTint="#ffffff"
+        elevation="6dp"
+        pressedTranslationZ="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_white_24dp"
-        elevation="6dp"
-        pressedTranslationZ="12dp"
-        backgroundTint="#ffffff" />
+        app:layout_behavior="com.reallct.qwe7002.smartblog_client.FabScrollBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

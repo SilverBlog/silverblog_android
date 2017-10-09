@@ -351,7 +351,6 @@ public class post_list_card_Activity extends AppCompatActivity {
             }
 
         }
-
-
     }
 }
+
