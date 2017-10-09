@@ -315,9 +315,11 @@ public class post_list_card_Activity extends AppCompatActivity {
                 final JsonArray result_array = parser.parse(result).getAsJsonArray();
                 public_value.menu_list = result_array;
                 navigationView.getMenu().clear();
+                int id = 0;
                 for (JsonElement item : result_array) {
                     JsonObject sub_item = item.getAsJsonObject();
-                    navigationView.getMenu().add(sub_item.get("title").getAsString());
+                    navigationView.getMenu().add(Menu.NONE, id, Menu.NONE, sub_item.get("title").getAsString());
+                    id++;
                 }
                 navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -338,7 +340,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                         intent.putExtra("share_text", public_value.share_text);
                         public_value.share_text = null;
                         public_value.share_title = null;
-                        context.startActivity(intent);
+                        startActivity(intent);
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         drawer.closeDrawer(GravityCompat.START);
                         return false;
