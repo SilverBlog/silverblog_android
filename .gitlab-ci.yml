@@ -3,6 +3,8 @@ image: jangrewe/gitlab-ci-android
 stages:
 - build
 
+tags:
+ - docker-runner-1
 before_script:
 - echo systemProp.http.proxyHost=192.168.3.1 >> gradle.properties
 - echo systemProp.http.proxyPort=1080 >> gradle.properties
