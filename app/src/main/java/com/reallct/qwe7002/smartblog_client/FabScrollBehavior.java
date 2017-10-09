@@ -8,9 +8,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-/**
- * Created by qwe7002 on 2017/10/9.
- */
 public class FabScrollBehavior extends FloatingActionButton.Behavior {
 
     public FabScrollBehavior(Context context, AttributeSet attrs) {
