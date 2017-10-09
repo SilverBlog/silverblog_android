@@ -328,6 +328,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                         if (menu_item.has("absolute")) {
                             Uri uri = Uri.parse(menu_item.get("absolute").getAsString());
                             startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                            return false;
                         }
                         Intent intent = new Intent(context, post_Activity.class);
                         intent.putExtra("edit", true);

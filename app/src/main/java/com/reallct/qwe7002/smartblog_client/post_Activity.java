@@ -78,8 +78,7 @@ public class post_Activity extends AppCompatActivity {
                     startActivity(start_preview);
                     break;
                 case R.id.send_post_button:
-                    String password = public_value.password;
-                    if (password != null) {
+                    if (public_value.password != null) {
                         Gson gson = new Gson();
                         content_json content = new content_json();
                         if (action_name.equals("edit")) {
@@ -88,7 +87,7 @@ public class post_Activity extends AppCompatActivity {
                         content.setName(nameview.getText().toString());
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
-                        content.setEncode(request.getMD5(titleview.getText().toString() + password));
+                        content.setEncode(request.getMD5(titleview.getText().toString() + public_value.password));
                         String json = gson.toJson(content);
                         new push_post().execute(json);
                     }
