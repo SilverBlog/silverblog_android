@@ -48,7 +48,7 @@ public class post_Activity extends AppCompatActivity {
             .setTodoColor(Color.DKGRAY)//default color
             .setTodoDoneColor(Color.DKGRAY)//default color of done
             .setUnOrderListColor(Color.BLACK)//default color of unorder list
-            .setLinkColor(Color.RED)//default color of link text
+            .setLinkColor(Color.BLUE)//default color of link text
             .setLinkUnderline(true)//default value of whether displays link underline
             .setRxMDImageLoader(new DefaultLoader(context))//default image loader
             .setDebug(false)//default value of debug
