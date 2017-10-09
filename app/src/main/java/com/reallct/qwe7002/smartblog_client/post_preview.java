@@ -3,18 +3,14 @@ package com.reallct.qwe7002.smartblog_client;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
-import android.view.View;
 import android.widget.TextView;
 
 import com.yydcdut.rxmarkdown.RxMDConfiguration;
 import com.yydcdut.rxmarkdown.RxMarkdown;
-import com.yydcdut.rxmarkdown.callback.OnLinkClickCallback;
 import com.yydcdut.rxmarkdown.loader.DefaultLoader;
 import com.yydcdut.rxmarkdown.syntax.text.TextFactory;
 
@@ -74,10 +70,11 @@ public class post_preview extends AppCompatActivity {
                     @Override
                     public void onNext(CharSequence charSequence) {
                         TextView markdown = (TextView) findViewById(R.id.markdown_view);
-                        markdown.setMovementMethod(LinkMovementMethod.getInstance());
+                        markdown.setMovementMethod(ScrollingMovementMethod.getInstance());
                         markdown.setText(charSequence, TextView.BufferType.SPANNABLE);
                     }
                 });
     }
+
 
 }
