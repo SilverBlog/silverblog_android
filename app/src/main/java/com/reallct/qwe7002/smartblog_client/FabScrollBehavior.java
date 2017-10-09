@@ -41,8 +41,9 @@ public class FabScrollBehavior extends FloatingActionButton.Behavior {
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
         int bottomMargin = layoutParams.bottomMargin;
         fab.animate().translationY(fab.getHeight() + bottomMargin).setInterpolator(new LinearInterpolator()).start();
-    } // FAB移入屏幕动画（显示动画）
+    }
 
+    // FAB移入屏幕动画（显示动画）
     private void animateIn(FloatingActionButton fab) {
         fab.animate().translationY(0).setInterpolator(new LinearInterpolator()).start();
     }
