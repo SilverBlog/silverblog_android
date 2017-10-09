@@ -1,8 +1,5 @@
 package com.reallct.qwe7002.smartblog_client;
 
-/**
- * Created by qwe7002 on 2017/10/9.
- */
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,10 +11,6 @@ import android.graphics.Paint;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
-/**
- * 圆形的Transformation
- * Created by Raye on 2016/5/3.
- */
 public class CircleTransform extends BitmapTransformation {
     public CircleTransform(Context context) {
         super(context);

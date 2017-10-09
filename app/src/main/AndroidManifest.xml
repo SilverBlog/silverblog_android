@@ -35,8 +35,14 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".post_list_card_Activity"
-            android:label="@string/title_activity_post_list_card_"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
