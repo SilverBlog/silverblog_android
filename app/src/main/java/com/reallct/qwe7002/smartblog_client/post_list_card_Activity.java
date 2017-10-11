@@ -89,6 +89,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
+                Snackbar.make(findViewById(R.id.fab), R.string.share_recive, Snackbar.LENGTH_LONG).show();
                 handleSendText(intent);
             }
         }
