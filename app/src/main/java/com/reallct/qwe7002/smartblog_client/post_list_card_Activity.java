@@ -257,12 +257,11 @@ public class post_list_card_Activity extends AppCompatActivity {
                 if (result_array.size() == 0) {
                     Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
                 }
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
-                recyclerView.setAdapter(adapter);
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
-
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
+            recyclerView.setAdapter(adapter);
         }
     }
 
