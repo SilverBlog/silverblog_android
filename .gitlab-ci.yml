@@ -20,8 +20,6 @@ cache:
 
 build:
   stage: build
-  only:
-    - develop
   script:
   - ./gradlew assembleDebug
   artifacts:
