@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -255,7 +257,7 @@ public class post_Activity extends AppCompatActivity {
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle(R.string.submit_success);
                 ok_button = getString(R.string.visit_document);
-                alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
@@ -266,7 +268,7 @@ public class post_Activity extends AppCompatActivity {
                     }
                 });
             }
-            alertDialog.setPositiveButton(ok_button,
+            alertDialog.setNegativeButton(ok_button,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -283,5 +285,21 @@ public class post_Activity extends AppCompatActivity {
                     });
             alertDialog.create().show();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+        alertDialog.setTitle(R.string.notice);
+        alertDialog.setMessage(R.string.save_notice);
+        alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        alertDialog.setNegativeButton(R.string.cancel, null);
+        alertDialog.show();
+
     }
 }
