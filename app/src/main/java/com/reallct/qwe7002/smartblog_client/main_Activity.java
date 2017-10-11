@@ -67,7 +67,7 @@ public class main_Activity extends AppCompatActivity {
                 if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                     manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 }
-                if (host.getText().length() == 0 || password.getText().toString().equals("{\"password_seted\"}") || password.getText().length() == 0) {
+                if (host.getText().length() == 0 || password.getText().length() == 0) {
                     Snackbar.make(view, R.string.check_input, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     return;
