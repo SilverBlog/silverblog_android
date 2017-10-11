@@ -79,7 +79,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         public_value.password = password_save;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list_card);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
         setSupportActionBar(toolbar);
 
@@ -292,12 +292,11 @@ public class post_list_card_Activity extends AppCompatActivity {
                 }
 
                 Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
-
-
                 TextView username = headerView.findViewById(R.id.username);
                 TextView desc = headerView.findViewById(R.id.desc);
                 username.setText(result_object.get("author_name").getAsString());
                 desc.setText(result_object.get("project_description").getAsString());
+                toolbar.setTitle(result_object.get("project_name").getAsString());
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
