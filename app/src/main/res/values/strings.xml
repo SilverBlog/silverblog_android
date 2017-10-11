@@ -43,4 +43,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="logout">退出</string>
+    <string name="notice">提示</string>
+    <string name="save_notice">文章尚未保存，您真的要离开编辑页面？</string>
 </resources>
