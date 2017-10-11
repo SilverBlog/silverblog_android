@@ -24,7 +24,7 @@ push_to_github:
   - tags
   stage: deploy
   script:
-  - git push --set-upstream ${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git
+  - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master
   
 build:
   only:
