@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SliverBlog管理工具箱</string>
-    <string name="title_activity_receive">添加文章</string>
     <string name="send_button">发布</string>
     <string name="git_repo">发布到Git仓库</string>
     <string name="https_myblog_com">博客地址(例：https://myblog.com)</string>
