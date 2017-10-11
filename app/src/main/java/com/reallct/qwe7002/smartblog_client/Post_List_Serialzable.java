@@ -1,9 +1,5 @@
 package com.reallct.qwe7002.smartblog_client;
 
-/**
- * Created by qwe7002 on 2017/10/8.
- */
-
 public class Post_List_Serialzable {
     private String title;
     private String excerpt;

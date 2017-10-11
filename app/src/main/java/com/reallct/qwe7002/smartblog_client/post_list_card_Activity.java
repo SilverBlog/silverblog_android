@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
+
 public class post_list_card_Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     SwipeRefreshLayout mSwipeRefreshWidget;
@@ -56,11 +59,27 @@ public class post_list_card_Activity extends AppCompatActivity {
         public_value.share_text = intent.getStringExtra(Intent.EXTRA_TEXT);
     }
 
+    void start_login() {
+        Intent main_activity = new Intent(post_list_card_Activity.this, main_Activity.class);
+        startActivity(main_activity);
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String host_save;
+        String password_save;
+        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+        host_save = sharedPreferences.getString("host", null);
+        password_save = sharedPreferences.getString("password", null);
+        if (password_save == null || host_save == null) {
+            start_login();
+        }
+        public_value.host = host_save;
+        public_value.password = password_save;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list_card);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("文章列表");
         setSupportActionBar(toolbar);
 
@@ -70,6 +89,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
+                Snackbar.make(findViewById(R.id.fab), R.string.share_recive, Snackbar.LENGTH_LONG).show();
                 handleSendText(intent);
             }
         }
@@ -107,16 +127,18 @@ public class post_list_card_Activity extends AppCompatActivity {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
-        mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new get_post_list_content().execute();
-                new get_menu_list_content().execute();
-            }
-        });
-        new get_post_list_content().execute();
-        new get_menu_list_content().execute();
-        new get_system_info_content().execute();
+        if (password_save != null && host_save != null) {
+            mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new get_post_list_content().execute();
+                    new get_menu_list_content().execute();
+                }
+            });
+            new get_post_list_content().execute();
+            new get_menu_list_content().execute();
+            new get_system_info_content().execute();
+        }
     }
 
     class MyReceiver extends BroadcastReceiver {
@@ -157,7 +179,18 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        new push_to_git().execute();
+        switch (item.getItemId()) {
+            case R.id.send_to_git_button:
+                new push_to_git().execute();
+                break;
+            case R.id.logout:
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                start_login();
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -225,12 +258,11 @@ public class post_list_card_Activity extends AppCompatActivity {
                 if (result_array.size() == 0) {
                     Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
                 }
-                RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
-                recyclerView.setAdapter(adapter);
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
-
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
+            recyclerView.setAdapter(adapter);
         }
     }
 
@@ -261,12 +293,11 @@ public class post_list_card_Activity extends AppCompatActivity {
                 }
 
                 Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
-
-
                 TextView username = headerView.findViewById(R.id.username);
                 TextView desc = headerView.findViewById(R.id.desc);
                 username.setText(result_object.get("author_name").getAsString());
                 desc.setText(result_object.get("project_description").getAsString());
+                toolbar.setTitle(result_object.get("project_name").getAsString());
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
