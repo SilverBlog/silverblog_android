@@ -257,7 +257,7 @@ public class post_Activity extends AppCompatActivity {
             if (objects.get("status").getAsBoolean()) {
                 alertDialog.setTitle(R.string.submit_success);
                 ok_button = getString(R.string.visit_document);
-                alertDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent();
@@ -268,7 +268,7 @@ public class post_Activity extends AppCompatActivity {
                     }
                 });
             }
-            alertDialog.setPositiveButton(ok_button,
+            alertDialog.setNegativeButton(ok_button,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {

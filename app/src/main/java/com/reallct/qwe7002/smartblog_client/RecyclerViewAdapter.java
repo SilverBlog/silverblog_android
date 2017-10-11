@@ -84,7 +84,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 context.startActivity(intent);
                                 break;
                             case 1:
-                                new AlertDialog.Builder(context).setTitle(R.string.notice).setMessage(R.string.delete_notify).setPositiveButton(R.string.ok_button,
+                                new AlertDialog.Builder(context).setTitle(R.string.notice).setMessage(R.string.delete_notify).setNeutralButton(R.string.ok_button,
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
