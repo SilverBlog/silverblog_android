@@ -14,8 +14,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar"
-        android:fullBackupContent="@xml/backup_descriptor">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".main_Activity"
             android:windowSoftInputMode="adjustResize" />
