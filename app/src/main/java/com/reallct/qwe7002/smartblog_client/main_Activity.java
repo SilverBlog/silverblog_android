@@ -40,6 +40,7 @@ public class main_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.maintoolbar);
@@ -57,35 +58,9 @@ public class main_Activity extends AppCompatActivity {
             }
         });
         Button save_button = (Button) findViewById(R.id.save_button);
-        Button edit_post_button = (Button) findViewById(R.id.edit_button);
         host = (EditText) findViewById(R.id.host);
         password = (EditText) findViewById(R.id.password);
-        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        host_save = sharedPreferences.getString("host", null);
-        password_save = sharedPreferences.getString("password", null);
-        if (password_save != null) {
-            password.setText("{\"password_seted\"}");
-        }
-        host.setText(host_save);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        edit_post_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (host_save != null) {
-                    public_value.host = host_save;
-                    public_value.password = password_save;
-                    Intent edit_post_activity = new Intent(main_Activity.this, post_list_card_Activity.class);
-                    startActivity(edit_post_activity);
-                    return;
-                }
-                if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
-                    manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-                Snackbar.make(view, R.string.check_input, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-            }
-        });
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,13 +78,18 @@ public class main_Activity extends AppCompatActivity {
                 editor.putString("host", host_save);
                 editor.putString("password", password_save);
                 editor.apply();
-
-                password.setText("{\"password_seted\"}");
-                Snackbar.make(view, R.string.config_save, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                start_edit();
 
             }
         });
+    }
+
+    void start_edit() {
+        public_value.host = host_save;
+        public_value.password = password_save;
+        Intent edit_post_activity = new Intent(main_Activity.this, post_list_card_Activity.class);
+        startActivity(edit_post_activity);
+        finish();
     }
 
     @Override
@@ -154,11 +134,7 @@ public class main_Activity extends AppCompatActivity {
             editor.putString("host", host_save);
             editor.putString("password", password_save);
             editor.apply();
-            host.setText(host_save);
-            password.setText("{\"password_seted\"}");
-            Snackbar.make(host, R.string.config_save, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-
+            start_edit();
         }
     }
 }
