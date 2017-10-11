@@ -2,6 +2,7 @@ image: jangrewe/gitlab-ci-android
 
 stages:
 - build
+- deploy
 
 before_script:
 - echo systemProp.http.proxyHost=192.168.3.1 >> gradle.properties
@@ -18,6 +19,13 @@ cache:
   paths:
   - .gradle/
 
+push_to_github:
+  only:
+  - tags
+  stage: deploy
+  script:
+  - git push --set-upsteam ${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git
+  
 build:
   stage: build
   script:
