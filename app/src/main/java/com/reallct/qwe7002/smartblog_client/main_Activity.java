@@ -3,6 +3,7 @@ package com.reallct.qwe7002.smartblog_client;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -20,9 +22,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.zxing.activity.CaptureActivity;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 
 public class main_Activity extends AppCompatActivity {
@@ -57,6 +64,34 @@ public class main_Activity extends AppCompatActivity {
                 return true;
             }
         });
+
+        final JsonObject host_list = new JsonParser().parse(sharedPreferences.getString("host_list", "{}")).getAsJsonObject();
+        final ArrayList<String> host_name_list = new ArrayList<>();
+
+        for (Map.Entry<String, JsonElement> entry : host_list.entrySet()) {
+            host_name_list.add(entry.getKey());
+        }
+        Button old_button = (Button) findViewById(R.id.use_old);
+        old_button.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View view) {
+                                              new AlertDialog.Builder(view.getContext()).setTitle(R.string.select).setItems(host_name_list.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(DialogInterface dialogInterface, int i) {
+                                                      JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
+                                                      host_save = host_info.get("host").getAsString();
+                                                      password_save = host_info.get("password").getAsString();
+                                                      SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                      editor.putString("host", host_save);
+                                                      editor.putString("password", password_save);
+                                                      editor.apply();
+                                                      start_edit();
+
+                                                  }
+                                              }).show();
+                                          }
+                                      }
+        );
         Button save_button = (Button) findViewById(R.id.save_button);
         host = (EditText) findViewById(R.id.host);
         password = (EditText) findViewById(R.id.password);
@@ -75,6 +110,10 @@ public class main_Activity extends AppCompatActivity {
                 host_save = String.valueOf(host.getText());
                 password_save = request.getMD5(String.valueOf(password.getText()));
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (!host_list.has(host_save)) {
+                    host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
+                }
+                editor.putString("host_list", new Gson().toJson(host_list));
                 editor.putString("host", host_save);
                 editor.putString("password", password_save);
                 editor.apply();
