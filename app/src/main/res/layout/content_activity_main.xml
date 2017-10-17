@@ -59,11 +59,19 @@
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/password_group"
+        android:text="@string/save_button"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/eton_placeholder" />
+
+    <Button
+        android:id="@+id/use_old"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/password_group"
-        android:layout_toStartOf="@+id/eton_placeholder"
-        android:text="@string/save_button"
-        android:layout_alignParentEnd="true" />
+        android:text="@string/use_old"
+        android:layout_toStartOf="@+id/save_button" />
 
 
 </RelativeLayout>

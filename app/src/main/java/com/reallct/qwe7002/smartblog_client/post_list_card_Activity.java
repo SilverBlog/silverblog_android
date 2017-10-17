@@ -184,9 +184,6 @@ public class post_list_card_Activity extends AppCompatActivity {
                 new push_to_git().execute();
                 break;
             case R.id.logout:
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.clear();
-                editor.apply();
                 start_login();
                 break;
         }
@@ -283,8 +280,8 @@ public class post_list_card_Activity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             JsonParser parser = new JsonParser();
-            if (parser.parse(result).isJsonObject()) {
-                JsonObject result_object = parser.parse(result).getAsJsonObject();
+            JsonObject result_object = parser.parse(result).getAsJsonObject();
+            if (!result_object.has("status")) {
                 View headerView = navigationView.getHeaderView(0);
                 ImageView ivAvatar = headerView.findViewById(R.id.imageView);
                 String imageURL = result_object.get("author_image").getAsString();
