@@ -38,7 +38,8 @@ public class main_Activity extends AppCompatActivity {
     String password_save;
     EditText host;
     EditText password;
-
+    JsonObject host_list;
+    ArrayList<String> host_name_list;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
@@ -65,8 +66,8 @@ public class main_Activity extends AppCompatActivity {
             }
         });
 
-        final JsonObject host_list = new JsonParser().parse(sharedPreferences.getString("host_list", "{}")).getAsJsonObject();
-        final ArrayList<String> host_name_list = new ArrayList<>();
+        host_list = new JsonParser().parse(sharedPreferences.getString("host_list", "{}")).getAsJsonObject();
+        host_name_list = new ArrayList<>();
 
         for (Map.Entry<String, JsonElement> entry : host_list.entrySet()) {
             host_name_list.add(entry.getKey());
@@ -75,7 +76,7 @@ public class main_Activity extends AppCompatActivity {
         old_button.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
-                                              new AlertDialog.Builder(view.getContext()).setTitle(R.string.select).setItems(host_name_list.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                                              new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), new DialogInterface.OnClickListener() {
                                                   @Override
                                                   public void onClick(DialogInterface dialogInterface, int i) {
                                                       JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
@@ -170,6 +171,10 @@ public class main_Activity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (!host_list.has(host_save)) {
+                host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
+            }
+            editor.putString("host_list", new Gson().toJson(host_list));
             editor.putString("host", host_save);
             editor.putString("password", password_save);
             editor.apply();

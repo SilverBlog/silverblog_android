@@ -80,7 +80,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list_card);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("文章列表");
+        toolbar.setTitle("Loading...");
         setSupportActionBar(toolbar);
 
         context = getApplicationContext();
