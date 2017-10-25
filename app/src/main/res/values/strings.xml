@@ -45,4 +45,5 @@
     <string name="save_notice">文章尚未保存，您真的要离开编辑页面？</string>
     <string name="share_recive">接收到分享数据，请选择操作</string>
     <string name="use_old">使用之前的配置</string>
+    <string name="select_config">请选择配置文件</string>
 </resources>
