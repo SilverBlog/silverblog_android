@@ -1,5 +1,6 @@
 package com.reallct.qwe7002.smartblog_client;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,6 +24,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -42,6 +45,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
@@ -69,6 +73,9 @@ public class post_list_card_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         String host_save;
         String password_save;
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        //request.send_request("{\"token\":\""+refreshedToken+"\"}","sign_notify");
+        Log.d(TAG, "Refreshed token: " + refreshedToken);
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         host_save = sharedPreferences.getString("host", null);
         password_save = sharedPreferences.getString("password", null);
@@ -94,12 +101,12 @@ public class post_list_card_Activity extends AppCompatActivity {
             }
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView = findViewById(R.id.my_recycler_view);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +119,7 @@ public class post_list_card_Activity extends AppCompatActivity {
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -124,8 +131,8 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
+        navigationView = findViewById(R.id.nav_view);
+        mSwipeRefreshWidget = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
         if (password_save != null && host_save != null) {
             mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -156,7 +163,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -192,6 +199,7 @@ public class post_list_card_Activity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     private class push_to_git extends AsyncTask<Void, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
 
@@ -225,6 +233,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -263,6 +272,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class get_system_info_content extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -322,6 +332,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class get_menu_list_content extends AsyncTask<Void, Integer, String> {
 
         @Override
