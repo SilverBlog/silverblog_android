@@ -9,8 +9,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +32,6 @@ public class post_Activity extends AppCompatActivity {
     int request_post_id;
     String action_name = "new";
     private Context context;
-    private Boolean edit_menu;
     RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
             .setDefaultImageSize(100, 100)//default image width & height
             .setBlockQuotesColor(Color.LTGRAY)//default color of block quotes
@@ -55,13 +52,7 @@ public class post_Activity extends AppCompatActivity {
             .setRxMDImageLoader(new DefaultLoader(context))//default image loader
             .setDebug(false)//default value of debug
             .build();
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.new_post_toolbar_menu, menu);
-        return true;
-    }
-
+    private Boolean edit_menu;
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
@@ -111,15 +102,21 @@ public class post_Activity extends AppCompatActivity {
     };
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.new_post_toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
         context = getApplicationContext();
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        titleview = (EditText) findViewById(R.id.titleview);
-        editTextview = (RxMDEditText) findViewById(R.id.mdcontent);
-        nameview = (EditText) findViewById(R.id.nameview);
+        titleview = findViewById(R.id.titleview);
+        editTextview = findViewById(R.id.mdcontent);
+        nameview = findViewById(R.id.nameview);
         this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
@@ -139,6 +136,21 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+        alertDialog.setTitle(R.string.notice);
+        alertDialog.setMessage(R.string.save_notice);
+        alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        alertDialog.setNegativeButton(R.string.cancel, null);
+        alertDialog.show();
+
+    }
 
     private class get_post_content extends AsyncTask<String, Integer, String> {
 
@@ -285,21 +297,5 @@ public class post_Activity extends AppCompatActivity {
                     });
             alertDialog.create().show();
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-        alertDialog.setTitle(R.string.notice);
-        alertDialog.setMessage(R.string.save_notice);
-        alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        alertDialog.setNegativeButton(R.string.cancel, null);
-        alertDialog.show();
-
     }
 }

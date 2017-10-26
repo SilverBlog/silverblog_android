@@ -51,7 +51,7 @@ public class main_Activity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.maintoolbar);
+        Toolbar toolbar = findViewById(R.id.maintoolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -72,7 +72,7 @@ public class main_Activity extends AppCompatActivity {
         for (Map.Entry<String, JsonElement> entry : host_list.entrySet()) {
             host_name_list.add(entry.getKey());
         }
-        Button old_button = (Button) findViewById(R.id.use_old);
+        Button old_button = findViewById(R.id.use_old);
         old_button.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View view) {
@@ -93,9 +93,9 @@ public class main_Activity extends AppCompatActivity {
                                           }
                                       }
         );
-        Button save_button = (Button) findViewById(R.id.save_button);
-        host = (EditText) findViewById(R.id.host);
-        password = (EditText) findViewById(R.id.password);
+        Button save_button = findViewById(R.id.save_button);
+        host = findViewById(R.id.host);
+        password = findViewById(R.id.password);
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override

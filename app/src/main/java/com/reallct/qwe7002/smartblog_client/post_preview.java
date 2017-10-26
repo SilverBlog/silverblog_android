@@ -24,11 +24,11 @@ public class post_preview extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_preview);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         Context context = getApplicationContext();
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        TextView title = (TextView) findViewById(R.id.title);
+        TextView title = findViewById(R.id.title);
         title.setText(intent.getStringExtra(Intent.EXTRA_SUBJECT));
         //RichText.fromMarkdown().into((TextView) findViewById(R.id.markdown_view));
         RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
@@ -69,7 +69,7 @@ public class post_preview extends AppCompatActivity {
 
                     @Override
                     public void onNext(CharSequence charSequence) {
-                        TextView markdown = (TextView) findViewById(R.id.markdown_view);
+                        TextView markdown = findViewById(R.id.markdown_view);
                         markdown.setMovementMethod(ScrollingMovementMethod.getInstance());
                         markdown.setText(charSequence, TextView.BufferType.SPANNABLE);
                     }
