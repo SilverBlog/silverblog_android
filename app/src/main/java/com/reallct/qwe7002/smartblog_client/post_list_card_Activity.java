@@ -207,7 +207,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... args) {
-            return request.send_request(public_value.host, "{}", "git_page_publish");
+            return request.send_request("{}", "git_page_publish");
         }
 
         @Override
@@ -236,7 +236,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         protected String doInBackground(Void... args) {
             String mode = "{}";
             String active_name = "get_post_list";
-            return request.send_request(public_value.host, mode, active_name);
+            return request.send_request(mode, active_name);
         }
 
         @Override
@@ -274,7 +274,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         protected String doInBackground(Void... args) {
             String mode = "{}";
             String active_name = "system_info";
-            return request.send_request(public_value.host, mode, active_name);
+            return request.send_request(mode, active_name);
         }
 
         @Override
@@ -333,7 +333,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         protected String doInBackground(Void... args) {
             String mode = "{}";
             String active_name = "get_menu_list";
-            return request.send_request(public_value.host, mode, active_name);
+            return request.send_request(mode, active_name);
         }
 
         @Override

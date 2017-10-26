@@ -161,7 +161,7 @@ public class post_Activity extends AppCompatActivity {
             if (edit_menu) {
                 active_name = "get_menu_content";
             }
-            return request.send_request(public_value.host, request_json, active_name);
+            return request.send_request(request_json, active_name);
         }
 
         @Override
@@ -243,7 +243,7 @@ public class post_Activity extends AppCompatActivity {
                     action_name = "edit_menu";
                 }
             }
-            return request.send_request(public_value.host, args[0], action_name);
+            return request.send_request(args[0], action_name);
         }
 
         @Override

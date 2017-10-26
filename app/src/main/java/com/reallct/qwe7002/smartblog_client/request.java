@@ -56,10 +56,10 @@ class request {
         return s;
     }
 
-    static String send_request(String url, String json, String method) {
+    static String send_request(String json, String method) {
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
-                .url(url + "/control/" + method)
+                .url(public_value.host + "/control/" + method)
                 .post(body)
                 .build();
         OkHttpClient okHttpClient = new OkHttpClient.Builder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(120, TimeUnit.SECONDS).build();
