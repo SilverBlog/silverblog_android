@@ -1,5 +1,6 @@
 package com.reallct.qwe7002.smartblog_client;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,38 +21,16 @@ import com.google.gson.JsonParser;
 
 import java.util.List;
 
-
-/**
- * Created by qwe7002 on 2017/10/8.
- */
-
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder> {
 
+    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
+    static SharedPreferences sharedPreferences;
     private List<Post_List_Serialzable> post_list_serialzables;
     private Context context;
-    static SharedPreferences sharedPreferences;
-    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
 
     public RecyclerViewAdapter(List<Post_List_Serialzable> post_list_serialzables, Context context) {
         this.post_list_serialzables = post_list_serialzables;
         this.context = context;
-
-    }
-
-
-    //自定义ViewHolder类
-    static class NewsViewHolder extends RecyclerView.ViewHolder {
-
-        CardView cardView = (CardView) itemView.findViewById(R.id.card_view);
-        TextView title = (TextView) itemView.findViewById(R.id.title);
-        TextView excerpt = (TextView) itemView.findViewById(R.id.excerpt);
-
-        public NewsViewHolder(final View itemView) {
-            super(itemView);
-            //设置TextView背景为半透明
-            //news_title.setBackgroundColor(Color.argb(20, 0, 0, 0));
-        }
-
 
     }
 
@@ -107,6 +86,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return post_list_serialzables.size();
     }
 
+    //自定义ViewHolder类
+    static class NewsViewHolder extends RecyclerView.ViewHolder {
+
+        CardView cardView = (CardView) itemView.findViewById(R.id.card_view);
+        TextView title = (TextView) itemView.findViewById(R.id.title);
+        TextView excerpt = (TextView) itemView.findViewById(R.id.excerpt);
+
+        public NewsViewHolder(final View itemView) {
+            super(itemView);
+            //设置TextView背景为半透明
+            //news_title.setBackgroundColor(Color.argb(20, 0, 0, 0));
+        }
+
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
     private class delete_post extends AsyncTask<String, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(context);
 

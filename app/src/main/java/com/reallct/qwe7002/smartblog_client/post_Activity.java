@@ -1,5 +1,6 @@
 package com.reallct.qwe7002.smartblog_client;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -152,6 +153,7 @@ public class post_Activity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class get_post_content extends AsyncTask<String, Integer, String> {
 
         ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
@@ -234,6 +236,7 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class push_post extends AsyncTask<String, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
 
