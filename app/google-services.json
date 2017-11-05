@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "472448430851",
+    "firebase_url": "https://silverblog-2aaba.firebaseio.com",
+    "project_id": "silverblog-2aaba",
+    "storage_bucket": "silverblog-2aaba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472448430851:android:6ff24b5a1e04ab62",
+        "android_client_info": {
+          "package_name": "com.reallct.qwe7002.SilverBlog_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472448430851-tej52io5pbi4b3fgt1ravsmgbiqnah52.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWFxYshLCse_SbwHzpmcZ6EA3cxrlf0yo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

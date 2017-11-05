@@ -1,5 +1,6 @@
 package com.reallct.qwe7002.smartblog_client;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -41,18 +43,39 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
-    private RecyclerView recyclerView;
+    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
     SwipeRefreshLayout mSwipeRefreshWidget;
+    ArrayList<Integer> list_position;
+    NavigationView navigationView;
+    private RecyclerView recyclerView;
     private MyReceiver receiver;
     private Context context;
-    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
-    ArrayList<Integer> list_position;
     private Toolbar toolbar;
-    NavigationView navigationView;
+
+    public static Boolean isAbsURL(String URL) {
+        try {
+            URI u = new URI(URL);
+            return u.isAbsolute();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public static String getAbsUrl(String absolutePath, String relativePath) {
+        try {
+            URL absoluteUrl = new URL(absolutePath);
+            URL parseUrl = new URL(absoluteUrl, relativePath);
+            return parseUrl.toString();
+        } catch (MalformedURLException e) {
+            return "";
+        }
+    }
 
     void handleSendText(Intent intent) {
         public_value.share_title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
@@ -79,9 +102,16 @@ public class post_list_card_Activity extends AppCompatActivity {
         public_value.password = password_save;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list_card);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Loading...");
         setSupportActionBar(toolbar);
+        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        if (!Objects.equals(sharedPreferences.getString("fcm_token", null), refreshedToken)) {
+            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("fcm_token", refreshedToken);
+            editor.apply();
+            //request.send_request("{\"fcm_token\":\""+refreshedToken+"\"}","reg_token");
+        }
 
         context = getApplicationContext();
         Intent intent = getIntent();
@@ -94,12 +124,12 @@ public class post_list_card_Activity extends AppCompatActivity {
             }
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView = findViewById(R.id.my_recycler_view);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,7 +142,7 @@ public class post_list_card_Activity extends AppCompatActivity {
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -124,8 +154,8 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mSwipeRefreshWidget = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_widget);
+        navigationView = findViewById(R.id.nav_view);
+        mSwipeRefreshWidget = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
         if (password_save != null && host_save != null) {
             mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -141,22 +171,9 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
     }
 
-    class MyReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            if (arg1.hasExtra("result")) {
-                Snackbar.make(findViewById(R.id.fab), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
-            }
-            if (arg1.getBooleanExtra("success", false)) {
-                new get_post_list_content().execute();
-                new get_menu_list_content().execute();
-            }
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -191,7 +208,20 @@ public class post_list_card_Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            if (arg1.hasExtra("result")) {
+                Snackbar.make(findViewById(R.id.fab), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
+            }
+            if (arg1.getBooleanExtra("success", false)) {
+                new get_post_list_content().execute();
+                new get_menu_list_content().execute();
+            }
+        }
+    }
 
+    @SuppressLint("StaticFieldLeak")
     private class push_to_git extends AsyncTask<Void, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
 
@@ -207,7 +237,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... args) {
-            return request.send_request(public_value.host, "{}", "git_page_publish");
+            return request.send_request("{}", "git_page_publish");
         }
 
         @Override
@@ -225,6 +255,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class get_post_list_content extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -236,7 +267,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         protected String doInBackground(Void... args) {
             String mode = "{}";
             String active_name = "get_post_list";
-            return request.send_request(public_value.host, mode, active_name);
+            return request.send_request(mode, active_name);
         }
 
         @Override
@@ -263,6 +294,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class get_system_info_content extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -274,7 +306,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         protected String doInBackground(Void... args) {
             String mode = "{}";
             String active_name = "system_info";
-            return request.send_request(public_value.host, mode, active_name);
+            return request.send_request(mode, active_name);
         }
 
         @Override
@@ -302,26 +334,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
     }
 
-    public static Boolean isAbsURL(String URL) {
-        try {
-            URI u = new URI(URL);
-            return u.isAbsolute();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    public static String getAbsUrl(String absolutePath, String relativePath) {
-        try {
-            URL absoluteUrl = new URL(absolutePath);
-            URL parseUrl = new URL(absoluteUrl, relativePath);
-            return parseUrl.toString();
-        } catch (MalformedURLException e) {
-            return "";
-        }
-    }
-
+    @SuppressLint("StaticFieldLeak")
     private class get_menu_list_content extends AsyncTask<Void, Integer, String> {
 
         @Override
@@ -333,7 +346,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         protected String doInBackground(Void... args) {
             String mode = "{}";
             String active_name = "get_menu_list";
-            return request.send_request(public_value.host, mode, active_name);
+            return request.send_request(mode, active_name);
         }
 
         @Override
@@ -369,7 +382,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                         public_value.share_text = null;
                         public_value.share_title = null;
                         startActivity(intent);
-                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
                         drawer.closeDrawer(GravityCompat.START);
                         return false;
                     }
