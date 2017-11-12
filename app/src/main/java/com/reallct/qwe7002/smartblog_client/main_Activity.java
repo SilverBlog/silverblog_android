@@ -136,8 +136,7 @@ public class main_Activity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 1:
+        if(requestCode ==1){
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
                     startActivityForResult(intent, 0);
@@ -145,7 +144,6 @@ public class main_Activity extends AppCompatActivity {
                 }
                 Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                break;
         }
     }
 
