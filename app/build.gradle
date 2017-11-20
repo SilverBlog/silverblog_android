@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.1'
     defaultConfig {
         applicationId 'com.reallct.qwe7002.SilverBlog_client'
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 27
         versionCode 1
         versionName "1.2"
@@ -25,6 +25,8 @@ android {
             signingConfig signingConfigs.releaseConfig
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -40,6 +42,5 @@ dependencies {
     compile 'com.yydcdut:rxmarkdown:0.1.1-beta'
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'io.reactivex:rxjava:1.1.5'
-
 }
 apply plugin: 'com.google.gms.google-services'
