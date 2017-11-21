@@ -47,7 +47,6 @@ import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPre
 public class post_list_card_Activity extends AppCompatActivity {
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
     SwipeRefreshLayout mSwipeRefreshWidget;
-    ArrayList<Integer> list_position;
     NavigationView navigationView;
     private RecyclerView recyclerView;
     private MyReceiver receiver;
@@ -135,7 +134,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         receiver = new MyReceiver();
