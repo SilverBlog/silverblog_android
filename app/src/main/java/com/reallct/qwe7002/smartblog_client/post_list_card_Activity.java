@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,7 +41,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
 
@@ -105,13 +102,6 @@ public class post_list_card_Activity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Loading...");
         setSupportActionBar(toolbar);
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        if (!Objects.equals(sharedPreferences.getString("fcm_token", null), refreshedToken)) {
-            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("fcm_token", refreshedToken);
-            editor.apply();
-            //request.send_request("{\"fcm_token\":\""+refreshedToken+"\"}","reg_token");
-        }
 
         context = getApplicationContext();
         Intent intent = getIntent();
