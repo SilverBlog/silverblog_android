@@ -1,4 +1,4 @@
-image: jangrewe/gitlab-ci-android
+image: docker.reallserver.cn/gitlab-ci-android:latest
 
 stages:
 - build
