@@ -303,19 +303,24 @@ public class post_list_card_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             JsonObject result_object = parser.parse(result).getAsJsonObject();
             if (!result_object.has("status")) {
-                View headerView = navigationView.getHeaderView(0);
-                ImageView ivAvatar = headerView.findViewById(R.id.imageView);
-                String imageURL = result_object.get("author_image").getAsString();
-                if (!isAbsURL(imageURL)) {
-                    imageURL = getAbsUrl(public_value.host, imageURL);
-                }
+                try {
+                    View headerView = navigationView.getHeaderView(0);
+                    ImageView ivAvatar = headerView.findViewById(R.id.imageView);
+                    String imageURL = result_object.get("author_image").getAsString();
+                    if (!isAbsURL(imageURL)) {
+                        imageURL = getAbsUrl(public_value.host, imageURL);
+                    }
 
-                Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
-                TextView username = headerView.findViewById(R.id.username);
-                TextView desc = headerView.findViewById(R.id.desc);
-                username.setText(result_object.get("author_name").getAsString());
-                desc.setText(result_object.get("project_description").getAsString());
-                toolbar.setTitle(result_object.get("project_name").getAsString());
+                    Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
+                    TextView username = headerView.findViewById(R.id.username);
+                    TextView desc = headerView.findViewById(R.id.desc);
+                    username.setText(result_object.get("author_name").getAsString());
+                    desc.setText(result_object.get("project_description").getAsString());
+                    toolbar.setTitle(result_object.get("project_name").getAsString());
+                } catch (Exception ex) {
+                    return;
+                    //跳过
+                }
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
