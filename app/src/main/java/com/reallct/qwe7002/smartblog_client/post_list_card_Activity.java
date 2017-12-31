@@ -339,7 +339,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String mode = "{}";
-            String active_name = "get_menu_list";
+            String active_name = "get_list/menu";
             return request.send_request(mode, active_name);
         }
 
