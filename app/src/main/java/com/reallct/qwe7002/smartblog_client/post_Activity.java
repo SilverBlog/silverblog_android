@@ -171,9 +171,9 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             String request_json = "{\"post_id\":" + args[0] + "}";
-            String active_name = "get_post_content";
+            String active_name = "get_content/post";
             if (edit_menu) {
-                active_name = "get_menu_content";
+                active_name = "get_content/menu";
             }
             return request.send_request(request_json, active_name);
         }

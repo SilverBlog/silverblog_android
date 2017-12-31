@@ -255,7 +255,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String mode = "{}";
-            String active_name = "get_post_list";
+            String active_name = "get_list/post";
             return request.send_request(mode, active_name);
         }
 
