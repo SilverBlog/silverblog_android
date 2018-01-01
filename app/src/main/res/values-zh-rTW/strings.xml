@@ -70,18 +70,18 @@
         
     <string name="QRcode_error">二維碼格式錯誤！ </string>
         
-    <string name="check_config">請檢查您的System.json配置文件。 </string>
+    <string name="check_config">請檢查您的System.json配置文件。 </string><![CDATA[
         
-    <string name="title_activity_post_preview">post_preview</string>
         
+    ]]>
     <string name="preview">預覽</string>
         
-    <string name="preview_page">文章預覽</string>
+    <string name="preview_page">文章預覽</string><![CDATA[
         
-    <string name="navigation_drawer_open">Open navigation drawer</string>
         
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+
         
+    ]]>
     <string name="logout">退出</string>
         
     <string name="notice">提示</string>

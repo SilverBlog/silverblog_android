@@ -1,93 +1,93 @@
 <resources>
         
-    <string name="app_name">SliverBlog Management Toolbox</ string>
+    <string name="app_name">SliverBlog Management Toolbox</string>
         
-    <string name="send_button">publish</ string>
+    <string name="send_button">publish</string>
         
-    <string name="git_repo">publish to Git repository</ string>
+    <string name="git_repo">publish to Git repository</string>
         
-    <string name="https_myblog_com">blog address (example: https://demo.silverblog.org)</ string>
+    <string name="https_myblog_com">blog address (example: https://demo.silverblog.org)</string>
         
-    <string name="admin_password">admin password</ string>
+    <string name="admin_password">admin password</string>
         
-    <string name="save_button">Save Configuration</ string>
+    <string name="save_button">Save Configuration</string>
         
-    <string name="scanner_notify">Please execute [./control_server.py] and scan the output of the two-dimensional code</ string>
+    <string name="scanner_notify">Please execute [./control_server.py] and scan the output of the two-dimensional code</string>
         
-    <string name="document">article</ string>
+    <string name="document">article</string>
         
-    <string name="menu">menu</ string>
+    <string name="menu">menu</string>
         
-    <string name="document_title">article title</ string>
+    <string name="document_title">article title</string>
         
-    <string name="document_url">article URL (leave blank for Pinyin)</ string>
+    <string name="document_url">article URL (leave blank for Pinyin)</string>
         
-    <string name="document_content">Article Content</ string>
+    <string name="document_content">Article Content</string>
         
-    <string name="submit_error">operation failed! Please check the server address and API password.</ string>
+    <string name="submit_error">operation failed! Please check the server address and API password.</string>
         
-    <string name="ok_button">OK</ string>
+    <string name="ok_button">OK</string>
         
-    <string name="submit_success">The operation is completed!</ string>
+    <string name="submit_success">The operation is completed!</string>
         
-    <string name="visit_document">Visit new blog</ string>
+    <string name="visit_document">Visit new blog</string>
         
-    <string name="cancel">cancel</ string>
+    <string name="cancel">cancel</string>
         
-    <string name="loading">connecting to server...</ string>
+    <string name="loading">connecting to server...</string>
         
-    <string name="loading_message">submitting data, please wait...</ string>
+    <string name="loading_message">submitting data, please wait...</string>
         
-    <string name="list_is_none">The current article list is empty</ string>
+    <string name="list_is_none">The current article list is empty</string>
         
-    <string name="network_error">Failed to get article list, please check network status!</ string>
+    <string name="network_error">Failed to get article list, please check network status!</string>
         
-    <string name="git_push_error">operation failed! Please check the API server output!</ string>
+    <string name="git_push_error">operation failed! Please check the API server output!</string>
         
-    <string name="delete_notify">Delete this article? (Warning! This operation is irreversible, please exercise caution!)</ String>
+    <string name="delete_notify">Delete this article? (Warning! This operation is irreversible, please exercise caution!)</string>
         
-    <string name="modify">modify</ string>
+    <string name="modify">modify</string>
         
-    <string name="delete">delete</ string>
+    <string name="delete">delete</string>
         
-    <string name="scan_button">Scan QR code</ string>
+    <string name="scan_button">Scan QR code</string>
         
-    <string name="share_menu_button">share</ string>
+    <string name="share_menu_button">share</string>
         
-    <string name="edit_title">edit article</ string>
+    <string name="edit_title">edit article</string>
         
-    <string name="content_not_none">title and content can not be empty!</ string>
+    <string name="content_not_none">title and content can not be empty!</string>
         
-    <string name="post_title">post article</ string>
-        <string name="check_input">Please configure server information</ string>first
+    <string name="post_title">post article</string>
+        <string name="check_input">Please configure server information</string>first
         
-    <string name="config_save">Configuration Saved</ string>
+    <string name="config_save">Configuration Saved</string>
         
-    <string name="scan_qr">Please authorize the camera so that the QR code can be scanned normally.</ string>
+    <string name="scan_qr">Please authorize the camera so that the QR code can be scanned normally.</string>
         
-    <string name="QRcode_error">Wrong QR code format!</ string>
+    <string name="QRcode_error">Wrong QR code format!</string>
         
-    <string name="check_config">Please check your System.json configuration file.</ string>
+    <string name="check_config">Please check your System.json configuration file.</string>
         
-    <string name="title_activity_post_preview">post_preview</ string>
+    <string name="title_activity_post_preview" translatable="false">post_preview</string>
         
-    <string name="preview">preview</ string>
+    <string name="preview">preview</string>
         
-    <string name="preview_page">article preview</ string>
+    <string name="preview_page">article preview</string>
         
-    <string name="navigation_drawer_open">Open navigation drawer</ string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
         
-    <string name="navigation_drawer_close">Close navigation drawer</ string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
         
-    <string name="logout">exit</ string>
+    <string name="logout">exit</string>
         
-    <string name="notice">Tip</ string>
+    <string name="notice">Tip</string>
         
-    <string name="save_notice">The article has not been saved, do you really want to leave the edit page?</ string>
+    <string name="save_notice">The article has not been saved, do you really want to leave the edit page?</string>
         
-    <string name="share_recive">To receive the share data, select the action</ string>
+    <string name="share_recive">To receive the share data, select the action</string>
         
-    <string name="use_old">using the previous configuration</ string>
+    <string name="use_old">using the previous configuration</string>
         
-    <string name="select_config">Please select the configuration file</ string>
-</ resources>
+    <string name="select_config">Please select the configuration file</string>
+</resources>
