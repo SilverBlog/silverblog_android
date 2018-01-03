@@ -43,4 +43,5 @@
     <string name="share_recive">接收到分享数据，请选择操作</string>
     <string name="use_old">使用之前的配置</string>
     <string name="select_config">请选择配置文件</string>
+    <string name="api_too_low">当前服务器API版本太低，请升级后重试。</string>
 </resources>

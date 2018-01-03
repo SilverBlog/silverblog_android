@@ -2,11 +2,11 @@
         
     <string name="app_name">SliverBlog Management Toolbox</string>
         
-    <string name="send_button">publish</string>
+    <string name="send_button">Publish</string>
         
-    <string name="git_repo">publish to Git repository</string>
+    <string name="git_repo">Publish to git repository</string>
         
-    <string name="https_myblog_com">blog address (example: https://demo.silverblog.org)</string>
+    <string name="https_myblog_com">Blog address (example: https://demo.silverblog.org)</string>
         
     <string name="admin_password">admin password</string>
         
@@ -90,4 +90,6 @@
     <string name="use_old">using the previous configuration</string>
         
     <string name="select_config">Please select the configuration file</string>
+    <string name="api_too_low">The current server API version is too low. Please try again after upgrading.</string>
+    <string name="select">Select</string>
 </resources>

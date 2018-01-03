@@ -70,18 +70,10 @@
         
     <string name="QRcode_error">二維碼格式錯誤！ </string>
         
-    <string name="check_config">請檢查您的System.json配置文件。 </string><![CDATA[
-        
-        
-    ]]>
+    <string name="check_config">請檢查您的System.json配置文件。 </string>
     <string name="preview">預覽</string>
         
-    <string name="preview_page">文章預覽</string><![CDATA[
-        
-        
-
-        
-    ]]>
+    <string name="preview_page">文章預覽</string>
     <string name="logout">退出</string>
         
     <string name="notice">提示</string>
@@ -93,4 +85,5 @@
     <string name="use_old">使用之前的配置</string>
         
     <string name="select_config">請選擇配置文件</string>
+    <string name="api_too_low">當前服務器API版本太低，請升級後重試。</string>
 </resources>

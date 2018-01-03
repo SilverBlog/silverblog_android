@@ -304,6 +304,10 @@ public class post_list_card_Activity extends AppCompatActivity {
             JsonObject result_object = parser.parse(result).getAsJsonObject();
             if (!result_object.has("status")) {
                 try {
+                    if (result_object.get("api_version").getAsInt() < 2) {
+                        ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
+                        mpDialog.setTitle(getString(R.string.api_too_low));
+                    }
                     View headerView = navigationView.getHeaderView(0);
                     ImageView ivAvatar = headerView.findViewById(R.id.imageView);
                     String imageURL = result_object.get("author_image").getAsString();
@@ -319,7 +323,6 @@ public class post_list_card_Activity extends AppCompatActivity {
                     toolbar.setTitle(result_object.get("project_name").getAsString());
                 } catch (Exception ex) {
                     return;
-                    //跳过
                 }
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
