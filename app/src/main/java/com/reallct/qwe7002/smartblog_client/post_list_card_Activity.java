@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -305,8 +306,9 @@ public class post_list_card_Activity extends AppCompatActivity {
             if (!result_object.has("status")) {
                 try {
                     if (result_object.get("api_version").getAsInt() < 2) {
-                        ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
-                        mpDialog.setTitle(getString(R.string.api_too_low));
+                        new AlertDialog.Builder(post_list_card_Activity.this)
+                                .setMessage(getString(R.string.api_too_low))
+                                .show();
                     }
                     View headerView = navigationView.getHeaderView(0);
                     ImageView ivAvatar = headerView.findViewById(R.id.imageView);
