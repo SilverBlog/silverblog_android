@@ -89,11 +89,8 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     public boolean isip(String addr) {
         String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
-
         Pattern pat = Pattern.compile(rexp);
-
         Matcher mat = pat.matcher(addr);
-
         return mat.find();
     }
 
