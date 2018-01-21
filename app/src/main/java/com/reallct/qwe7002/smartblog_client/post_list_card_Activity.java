@@ -42,6 +42,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
 
@@ -85,6 +87,16 @@ public class post_list_card_Activity extends AppCompatActivity {
         finish();
     }
 
+    public boolean isip(String addr) {
+        String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
+
+        Pattern pat = Pattern.compile(rexp);
+
+        Matcher mat = pat.matcher(addr);
+
+        return mat.find();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String host_save;
@@ -97,7 +109,13 @@ public class post_list_card_Activity extends AppCompatActivity {
             return;
         }
         if (host_save.contains("http://")) {
-            host_save = host_save.replace("http://", "https://");
+            String testip = host_save.replace("http://", "");
+            if (testip.endsWith("/")) {
+                testip = testip.replace("/", "");
+            }
+            if (!isip(testip)) {
+                host_save = host_save.replace("http://", "https://");
+            }
         }
         public_value.host = host_save;
         public_value.password = password_save;
