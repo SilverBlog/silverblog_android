@@ -38,5 +38,3 @@ build:
     paths:
     - app/build/outputs/apk/debug/app-debug.apk
     expire_in: 1 week
-  tags:
-    - docker-runner-1
