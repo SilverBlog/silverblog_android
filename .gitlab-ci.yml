@@ -32,7 +32,6 @@ push_to_github:
   - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master --tags
   - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=${CI_COMMIT_TAG} filename=${app_location}
 
-
 build:
   only:
   - tags
