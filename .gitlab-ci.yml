@@ -32,6 +32,8 @@ push_to_github:
   - bash upload-github-release-asset.sh silverblogteam SilverBlog_Android ${CI_COMMIT_TAG} ${app_location} ${github_key}
 
 build:
+  only:
+   - develop
   stage: build
   script:
   - ./gradlew assembleRelease
