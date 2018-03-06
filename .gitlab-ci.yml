@@ -30,7 +30,6 @@ push_to_github:
   stage: deploy
   script:
   - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master --tags
-  - curl -o upload-github-release-asset.sh https://gist.githubusercontent.com/stefanbuck/ce788fee19ab6eb0b4447a85fc99f447/raw/dbadd7d310ce8446de89c4ffdf1db0b400d0f6c3/upload-github-release-asset.sh
   - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=${CI_COMMIT_TAG} filename=${app_location}
 
 
