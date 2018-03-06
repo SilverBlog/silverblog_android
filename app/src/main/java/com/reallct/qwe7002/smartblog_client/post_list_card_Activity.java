@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,13 +42,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
     SwipeRefreshLayout mSwipeRefreshWidget;
-    ArrayList<Integer> list_position;
     NavigationView navigationView;
     private RecyclerView recyclerView;
     private MyReceiver receiver;
@@ -85,6 +87,16 @@ public class post_list_card_Activity extends AppCompatActivity {
         finish();
     }
 
+    public boolean isip(String addr) {
+        String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
+
+        Pattern pat = Pattern.compile(rexp);
+
+        Matcher mat = pat.matcher(addr);
+
+        return mat.find();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         String host_save;
@@ -94,6 +106,16 @@ public class post_list_card_Activity extends AppCompatActivity {
         password_save = sharedPreferences.getString("password", null);
         if (password_save == null || host_save == null) {
             start_login();
+            return;
+        }
+        if (host_save.contains("http://")) {
+            String testip = host_save.replace("http://", "");
+            if (testip.endsWith("/")) {
+                testip = testip.replace("/", "");
+            }
+            if (!isip(testip)) {
+                host_save = host_save.replace("http://", "https://");
+            }
         }
         public_value.host = host_save;
         public_value.password = password_save;
@@ -135,7 +157,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         receiver = new MyReceiver();
@@ -256,7 +278,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String mode = "{}";
-            String active_name = "get_post_list";
+            String active_name = "get_list/post";
             return request.send_request(mode, active_name);
         }
 
@@ -304,19 +326,28 @@ public class post_list_card_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             JsonObject result_object = parser.parse(result).getAsJsonObject();
             if (!result_object.has("status")) {
-                View headerView = navigationView.getHeaderView(0);
-                ImageView ivAvatar = headerView.findViewById(R.id.imageView);
-                String imageURL = result_object.get("author_image").getAsString();
-                if (!isAbsURL(imageURL)) {
-                    imageURL = getAbsUrl(public_value.host, imageURL);
-                }
+                try {
+                    if (result_object.get("api_version").getAsInt() < 2) {
+                        new AlertDialog.Builder(post_list_card_Activity.this)
+                                .setMessage(getString(R.string.api_too_low))
+                                .show();
+                    }
+                    View headerView = navigationView.getHeaderView(0);
+                    ImageView ivAvatar = headerView.findViewById(R.id.imageView);
+                    String imageURL = result_object.get("author_image").getAsString();
+                    if (!isAbsURL(imageURL)) {
+                        imageURL = getAbsUrl(public_value.host, imageURL);
+                    }
 
-                Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
-                TextView username = headerView.findViewById(R.id.username);
-                TextView desc = headerView.findViewById(R.id.desc);
-                username.setText(result_object.get("author_name").getAsString());
-                desc.setText(result_object.get("project_description").getAsString());
-                toolbar.setTitle(result_object.get("project_name").getAsString());
+                    Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
+                    TextView username = headerView.findViewById(R.id.username);
+                    TextView desc = headerView.findViewById(R.id.desc);
+                    username.setText(result_object.get("author_name").getAsString());
+                    desc.setText(result_object.get("project_description").getAsString());
+                    toolbar.setTitle(result_object.get("project_name").getAsString());
+                } catch (Exception ex) {
+                    return;
+                }
             } else {
                 Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
@@ -335,7 +366,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... args) {
             String mode = "{}";
-            String active_name = "get_menu_list";
+            String active_name = "get_list/menu";
             return request.send_request(mode, active_name);
         }
 
