@@ -33,8 +33,6 @@ push_to_github:
 
 
 build:
-  only:
-   - develop
   stage: build
   script:
   - ./gradlew assembleRelease
