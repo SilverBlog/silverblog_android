@@ -8,9 +8,6 @@ variables:
   app_location: app/build/outputs/apk/release/app-release.apk
 
 before_script:
-- export ALL_PROXY=socks5://192.168.3.8:1086
-- echo systemProp.socks.proxyHost=192.168.3.8 >> gradle.properties
-- echo systemProp.socks.proxyPort=1086 >> gradle.properties
 - echo org.gradle.jvmargs=-Xmx1536m >> gradle.properties
 - echo org.gradle.parallel=true >> gradle.properties
 - export GRADLE_USER_HOME=$(pwd)/.gradle
