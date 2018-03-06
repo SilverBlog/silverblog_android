@@ -23,7 +23,8 @@ cache:
   - .gradle/
 
 push_to_github:
-  dependencies: build
+  dependencies:
+  - build
   only:
   - tags
   stage: deploy
