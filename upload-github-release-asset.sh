@@ -41,8 +41,7 @@ AUTH="Authorization: token $github_api_token"
 WGET_ARGS="--content-disposition --auth-no-challenge --no-cookie"
 CURL_ARGS="-LJO#"
 
-body=$(echo $(git log --pretty=format:'%s'))
-curl -H "Authorization: token $github_api_token" -X POST -d '{"tag_name":"'$tag'","body":"'$body'"}' "$GH_REPO/releases"
+curl -H "Authorization: token $github_api_token" -X POST -d '{"tag_name":"'$tag'"}' "$GH_REPO/releases"
 
 if [[ "$tag" == 'LATEST' ]]; then
   GH_TAGS="$GH_REPO/releases/latest"
