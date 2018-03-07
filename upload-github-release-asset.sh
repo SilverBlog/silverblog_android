@@ -40,7 +40,7 @@ GH_TAGS="$GH_REPO/releases/tags/$tag"
 AUTH="Authorization: token $github_api_token"
 WGET_ARGS="--content-disposition --auth-no-challenge --no-cookie"
 CURL_ARGS="-LJO#"
-
+body=$(git log --pretty=format:'%s' --abbrev-commit --date=short -1)
 curl -H "Authorization: token $github_api_token" -X POST -d '{"tag_name":"'$tag'","body":"'$body'"}' "$GH_REPO/releases"
 
 if [[ "$tag" == 'LATEST' ]]; then
