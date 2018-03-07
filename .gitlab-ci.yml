@@ -22,7 +22,7 @@ cache:
   paths:
   - .gradle/
 
-push_to_github:
+release_github:
   dependencies:
   - build
   only:
