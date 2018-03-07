@@ -30,7 +30,9 @@ push_to_github:
   stage: deploy
   script:
   - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master --tags
-  - commit=$(git log --pretty=format:'%s' --abbrev-commit --date=short -1) && tag=$(date "+%Y%m%d%H%M%S") && bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android body=${commit} tag=${tag} filename=${app_location}
+  - commit_log=$(git log --pretty=format:'%s' --abbrev-commit --date=short -1)
+  - tag=$(date "+%Y%m%d%H%M%S")
+  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android body=${commit_log} tag=${tag} filename=${app_location}
 
 build:
   stage: build
