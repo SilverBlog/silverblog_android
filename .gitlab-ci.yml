@@ -29,9 +29,8 @@ push_to_github:
   - master
   stage: deploy
   script:
-  - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master --tags
-  - tag=$(date "+%Y%m%d%H%M%S")
-  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=${tag} filename=${app_location}
+  - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master
+  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename=${app_location}
 
 build:
   stage: build
