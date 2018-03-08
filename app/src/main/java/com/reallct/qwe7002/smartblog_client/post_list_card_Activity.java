@@ -96,6 +96,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         String host_save;
         String password_save;
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
@@ -116,7 +117,6 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
         public_value.host = host_save;
         public_value.password = password_save;
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list_card);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Loading...");
@@ -193,7 +193,6 @@ public class post_list_card_Activity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
     }
 
     @Override
