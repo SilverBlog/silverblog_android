@@ -52,7 +52,6 @@ public class post_list_card_Activity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshWidget;
     NavigationView navigationView;
     private RecyclerView recyclerView;
-    private MyReceiver receiver;
     private Context context;
     private Toolbar toolbar;
 
@@ -157,7 +156,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        receiver = new MyReceiver();
+        result_receiver receiver = new result_receiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MY_BROADCAST_TAG);
 
@@ -216,7 +215,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class MyReceiver extends BroadcastReceiver {
+    class result_receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
             if (arg1.hasExtra("result")) {
