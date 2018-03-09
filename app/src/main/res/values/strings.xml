@@ -54,11 +54,11 @@
         
     <string name="share_menu_button">share</string>
         
-    <string name="edit_title">edit article</string>
+    <string name="edit_title">Edit article</string>
         
     <string name="content_not_none">title and content can not be empty!</string>
         
-    <string name="post_title">post article</string>
+    <string name="post_title">Post article</string>
         <string name="check_input">Please configure server information</string>first
         
     <string name="config_save">Configuration Saved</string>
@@ -79,9 +79,9 @@
         
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
         
-    <string name="logout">exit</string>
+    <string name="logout">logout</string>
         
-    <string name="notice">Tip</string>
+    <string name="notice">notice</string>
         
     <string name="save_notice">The article has not been saved, do you really want to leave the edit page?</string>
         
