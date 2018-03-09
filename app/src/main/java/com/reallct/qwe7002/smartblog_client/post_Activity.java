@@ -81,7 +81,7 @@ public class post_Activity extends AppCompatActivity {
                         content.setName(nameview.getText().toString());
                         content.setTitle(titleview.getText().toString());
                         content.setContent(editTextview.getText().toString());
-                        content.setEncode(request.getMD5(titleview.getText().toString() + public_value.password));
+                        content.setsign(request.getMD5(titleview.getText().toString() + public_value.password));
                         String json = gson.toJson(content);
                         new push_post().execute(json);
                     }
@@ -231,8 +231,8 @@ public class post_Activity extends AppCompatActivity {
             this.content = Content;
         }
 
-        void setEncode(String Encode) {
-            this.sign = Encode;
+        void setsign(String sign) {
+            this.sign = sign;
         }
     }
 
@@ -253,9 +253,9 @@ public class post_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... args) {
             if (action_name.equals("edit")) {
-                action_name = "edit_post";
+                action_name = "edit/post";
                 if (edit_menu) {
-                    action_name = "edit_menu";
+                    action_name = "edit/menu";
                 }
             }
             return request.send_request(args[0], action_name);
