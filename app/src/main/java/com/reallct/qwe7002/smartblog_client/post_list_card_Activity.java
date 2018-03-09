@@ -165,7 +165,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         mSwipeRefreshWidget = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
-        if (password_save != null && host_save != null) {
+        if (host_save != null) {
             mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
