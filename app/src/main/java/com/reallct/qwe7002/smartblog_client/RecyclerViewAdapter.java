@@ -119,7 +119,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         protected String doInBackground(String... args) {
 
-            return request.send_request("{\"post_id\":" + args[0] + ",\"encode\":\"" + request.getMD5(args[0] + args[1] + public_value.password) + "\"}", "delete");
+            return request.send_request("{\"post_id\":" + args[0] + ",\"sign\":\"" + request.getMD5(args[0] + args[1] + public_value.password) + "\"}", "delete");
         }
 
         @Override

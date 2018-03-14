@@ -211,7 +211,7 @@ public class post_Activity extends AppCompatActivity {
     private class content_json {
         private int post_id;
         private String content;
-        private String encode;
+        private String sign;
         private String title;
         private String name;
 
@@ -232,7 +232,7 @@ public class post_Activity extends AppCompatActivity {
         }
 
         void setEncode(String Encode) {
-            this.encode = Encode;
+            this.sign = Encode;
         }
     }
 
