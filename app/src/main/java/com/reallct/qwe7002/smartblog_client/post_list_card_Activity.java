@@ -52,7 +52,6 @@ public class post_list_card_Activity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshWidget;
     NavigationView navigationView;
     private RecyclerView recyclerView;
-    private MyReceiver receiver;
     private Context context;
     private Toolbar toolbar;
 
@@ -96,6 +95,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         String host_save;
         String password_save;
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
@@ -116,7 +116,6 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
         public_value.host = host_save;
         public_value.password = password_save;
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_list_card);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Loading...");
@@ -157,7 +156,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        receiver = new MyReceiver();
+        result_receiver receiver = new result_receiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MY_BROADCAST_TAG);
 
@@ -166,7 +165,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
         mSwipeRefreshWidget = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
-        if (password_save != null && host_save != null) {
+        if (host_save != null) {
             mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -193,7 +192,6 @@ public class post_list_card_Activity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver);
     }
 
     @Override
@@ -217,7 +215,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class MyReceiver extends BroadcastReceiver {
+    class result_receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
             if (arg1.hasExtra("result")) {
