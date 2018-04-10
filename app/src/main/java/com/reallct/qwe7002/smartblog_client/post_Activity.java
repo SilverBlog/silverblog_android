@@ -275,11 +275,13 @@ public class post_Activity extends AppCompatActivity {
                 alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent();
-                        intent.setAction("com.reallct.qwe7002.smartblog_client");
-                        intent.putExtra("success", true);
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                        finish();
+                        if (objects.get("status").getAsBoolean()) {
+                            Intent intent = new Intent();
+                            intent.setAction("com.reallct.qwe7002.smartblog_client");
+                            intent.putExtra("success", true);
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                            finish();
+                        }
                     }
                 });
             }
@@ -290,12 +292,12 @@ public class post_Activity extends AppCompatActivity {
                             if (objects.get("status").getAsBoolean()) {
                                 Uri uri = Uri.parse(public_value.host + "/post/" + objects.get("name").getAsString());
                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                Intent intent = new Intent();
+                                intent.setAction("com.reallct.qwe7002.smartblog_client");
+                                intent.putExtra("success", true);
+                                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                                finish();
                             }
-                            Intent intent = new Intent();
-                            intent.setAction("com.reallct.qwe7002.smartblog_client");
-                            intent.putExtra("success", true);
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                            finish();
                         }
                     });
             alertDialog.create().show();
