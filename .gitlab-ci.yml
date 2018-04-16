@@ -24,8 +24,6 @@ release_github:
 
 build:
   stage: build
-  only:
-    - master
   script:
   - echo org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 >> gradle.properties
   - echo org.gradle.parallel=true >> gradle.properties
