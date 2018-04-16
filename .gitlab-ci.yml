@@ -24,6 +24,8 @@ release_github:
 
 build:
   stage: build
+  only:
+    - master
   script:
   - echo org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 >> gradle.properties
   - echo org.gradle.parallel=true >> gradle.properties
@@ -34,3 +36,14 @@ build:
     paths:
     - ${app_location}
     expire_in: 1 week
+
+build_test:
+  stage: build
+  only:
+    - develop
+  script:
+  - echo org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 >> gradle.properties
+  - echo org.gradle.parallel=true >> gradle.properties
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - chmod +x ./gradlew
+  - ./gradlew assembleDebug
