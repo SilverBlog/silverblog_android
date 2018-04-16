@@ -8,7 +8,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode appVersionCode
-        versionName appVersionName
     }
     signingConfigs {
         releaseConfig {
