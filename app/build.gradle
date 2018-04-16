@@ -8,7 +8,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 27
         versionCode appVersionCode
-        versionName appVersionName
+        versionName "1.0.0"
     }
     signingConfigs {
         releaseConfig {
