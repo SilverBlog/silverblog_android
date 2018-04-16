@@ -1,7 +1,6 @@
 package com.reallct.qwe7002.smartblog_client;
 
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.TimeUnit;
 
@@ -57,22 +56,24 @@ class request {
     }
 
     static String send_request(String json, String method) {
-        RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
-                .url(public_value.host + "/control/" + method)
-                .post(body)
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(120, TimeUnit.SECONDS).build();
         String result = "{\"status\":false}";
         try {
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(public_value.host + "/control/" + method)
+                    .post(body)
+                    .build();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(120, TimeUnit.SECONDS).build();
+
+
             Response response = okHttpClient.newCall(request).execute();
             if (response.code() == 200) {
                 result = response.body().string();
             }
 
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         return result;
     }
