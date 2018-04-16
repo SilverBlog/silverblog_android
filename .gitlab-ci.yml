@@ -30,6 +30,8 @@ release_github:
 
 build:
   stage: build
+  only:
+    - master
   script:
   - ./gradlew assembleRelease
   artifacts:
