@@ -44,3 +44,4 @@ captures/
 
 # Keystore files
 .idea
+app/version.gradle
