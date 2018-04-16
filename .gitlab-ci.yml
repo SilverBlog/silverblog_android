@@ -7,12 +7,6 @@ stages:
 variables:
   app_location: app/build/outputs/apk/release/app-release.apk
 
-before_script:
-- echo org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 >> gradle.properties
-- echo org.gradle.parallel=true >> gradle.properties
-- export GRADLE_USER_HOME=$(pwd)/.gradle
-- chmod +x ./gradlew
-
 cache:
   key: ${CI_PROJECT_ID}
   paths:
@@ -33,6 +27,10 @@ build:
   only:
     - master
   script:
+  - echo org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 >> gradle.properties
+  - echo org.gradle.parallel=true >> gradle.properties
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - chmod +x ./gradlew
   - ./gradlew assembleRelease
   artifacts:
     paths:
