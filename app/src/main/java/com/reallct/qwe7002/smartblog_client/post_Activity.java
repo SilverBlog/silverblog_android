@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,39 +19,14 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.yydcdut.rxmarkdown.RxMDConfiguration;
-import com.yydcdut.rxmarkdown.RxMDEditText;
-import com.yydcdut.rxmarkdown.RxMarkdown;
-import com.yydcdut.rxmarkdown.loader.DefaultLoader;
-import com.yydcdut.rxmarkdown.syntax.edit.EditFactory;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText nameview;
-    RxMDEditText editTextview;
+    EditText editTextview;
     int request_post_id;
     String action_name = "new";
     private Context context;
-    RxMDConfiguration rxMDConfiguration = new RxMDConfiguration.Builder(context)
-            .setDefaultImageSize(100, 100)//default image width & height
-            .setBlockQuotesColor(Color.LTGRAY)//default color of block quotes
-            .setHeader1RelativeSize(1.6f)//default relative size of header1
-            .setHeader2RelativeSize(1.5f)//default relative size of header2
-            .setHeader3RelativeSize(1.4f)//default relative size of header3
-            .setHeader4RelativeSize(1.3f)//default relative size of header4
-            .setHeader5RelativeSize(1.2f)//default relative size of header5
-            .setHeader6RelativeSize(1.1f)//default relative size of header6
-            .setHorizontalRulesColor(Color.LTGRAY)//default color of horizontal rules's background
-            .setInlineCodeBgColor(Color.LTGRAY)//default color of inline code's background
-            .setCodeBgColor(Color.LTGRAY)//default color of code's background
-            .setTodoColor(Color.DKGRAY)//default color
-            .setTodoDoneColor(Color.DKGRAY)//default color of done
-            .setUnOrderListColor(Color.BLACK)//default color of unorder list
-            .setLinkColor(Color.BLUE)//default color of link text
-            .setLinkUnderline(true)//default value of whether displays link underline
-            .setRxMDImageLoader(new DefaultLoader(context))//default image loader
-            .setDebug(false)//default value of debug
-            .build();
     private Boolean edit_menu;
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
@@ -65,12 +39,6 @@ public class post_Activity extends AppCompatActivity {
                 return false;
             }
             switch (menuItem.getItemId()) {
-                case R.id.preview_button:
-                    Intent start_preview = new Intent(post_Activity.this, post_preview.class);
-                    start_preview.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
-                    start_preview.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
-                    startActivity(start_preview);
-                    break;
                 case R.id.send_post_button:
                     if (public_value.password != null) {
                         Gson gson = new Gson();
@@ -124,11 +92,6 @@ public class post_Activity extends AppCompatActivity {
         titleview.setText(intent.getStringExtra("share_title"));
         editTextview.setText(intent.getStringExtra("share_text"));
         edit_menu = intent.getBooleanExtra("menu", false);
-        RxMarkdown.live(editTextview)
-                .config(rxMDConfiguration)
-                .factory(EditFactory.create())
-                .intoObservable()
-                .subscribe();
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
             this.setTitle(getString(R.string.edit_title));
@@ -190,11 +153,6 @@ public class post_Activity extends AppCompatActivity {
                     editTextview.setText(objects.get("content").getAsString());
                 }
                 nameview.setText(objects.get("name").getAsString());
-                RxMarkdown.live(editTextview)
-                        .config(rxMDConfiguration)
-                        .factory(EditFactory.create())
-                        .intoObservable()
-                        .subscribe();
             } else {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                 alertDialog.setTitle(R.string.submit_error);

@@ -24,10 +24,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
         <activity
-            android:name=".post_preview"
-            android:label="@string/preview_page"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".post_list_card_Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">

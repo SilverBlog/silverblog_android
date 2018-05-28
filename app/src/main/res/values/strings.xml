@@ -69,11 +69,6 @@
         
     <string name="check_config">Please check your System.json configuration file.</string>
         
-    <string name="title_activity_post_preview" translatable="false">post_preview</string>
-        
-    <string name="preview">preview</string>
-        
-    <string name="preview_page">article preview</string>
         
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
         
