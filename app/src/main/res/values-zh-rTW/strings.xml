@@ -1,7 +1,5 @@
 <resources>
-        
-    <string name="app_name">SliverBlog</string>
-        
+     
     <string name="send_button">發布</string>
         
     <string name="git_repo">發佈到Git倉庫</string>
