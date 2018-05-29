@@ -46,13 +46,13 @@
         
     <string name="delete_notify">Delete this article? (Warning! This operation is irreversible, please exercise caution!)</string>
         
-    <string name="modify">modify</string>
+    <string name="modify">Modify</string>
         
-    <string name="delete">delete</string>
+    <string name="delete">Delete</string>
         
     <string name="scan_button">Scan QR code</string>
         
-    <string name="share_menu_button">share</string>
+    <string name="share_menu_button">are</string>
         
     <string name="edit_title">Edit article</string>
         
@@ -74,9 +74,9 @@
         
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
         
-    <string name="logout">logout</string>
+    <string name="logout">Logout</string>
         
-    <string name="notice">notice</string>
+    <string name="notice">Notice</string>
         
     <string name="save_notice">The article has not been saved, do you really want to leave the edit page?</string>
         
