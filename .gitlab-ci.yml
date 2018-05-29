@@ -1,5 +1,3 @@
-image: jangrewe/gitlab-ci-android:latest
-
 stages:
 - build
 - deploy
@@ -23,11 +21,13 @@ release_github:
   - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename=${app_location} proxy=${proxy}
 
 build:
+  image: preventis/docker-android-alpine
   stage: build
   only:
     - master
   script:
   - echo -e "ext { \n appVersionCode = $CI_JOB_ID \n }" > ./app/version.gradle
+  - echo -e "systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n org.gradle.parallel=true" >> gradle.properties
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleRelease
@@ -37,11 +37,13 @@ build:
     expire_in: 1 week
 
 build_test:
+  image: preventis/docker-android-alpine
   stage: build
   only:
     - develop
   script:
   - echo -e "ext { \n appVersionCode = $CI_JOB_ID \n }" > ./app/version.gradle
+  - echo -e "systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n org.gradle.parallel=true" >> gradle.properties
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleDebug
