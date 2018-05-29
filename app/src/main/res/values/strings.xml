@@ -10,9 +10,9 @@
         
     <string name="admin_password">admin password</string>
         
-    <string name="save_button">Save Configuration</string>
+    <string name="save_button">Save</string>
         
-    <string name="scanner_notify">Please execute [./control_server.py] and scan the output of the two-dimensional code</string>
+    <string name="scanner_notify">Please execute [./manage.py qrcode] and scan the QRcode</string>
         
     <string name="document">article</string>
         
@@ -82,7 +82,7 @@
         
     <string name="share_recive">To receive the share data, select the action</string>
         
-    <string name="use_old">using the previous configuration</string>
+    <string name="use_old">use the previous configuration</string>
         
     <string name="select_config">Please select the configuration file</string>
     <string name="api_too_low">The current server API version is too low. Please try again after upgrading.</string>
