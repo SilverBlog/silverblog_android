@@ -42,5 +42,5 @@ captures/
 *.iml
 
 # Keystore files
-.idea
 app/version.gradle
+gradle.properties

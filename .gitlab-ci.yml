@@ -28,6 +28,7 @@ build:
     - master
   script:
   - echo -e "ext { \n appVersionCode = $CI_JOB_ID \n }" > ./app/version.gradle
+  - echo -e "org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 \n org.gradle.parallel=true" > gradle.properties
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleRelease
@@ -42,6 +43,7 @@ build_test:
     - develop
   script:
   - echo -e "ext { \n appVersionCode = $CI_JOB_ID \n }" > ./app/version.gradle
+  - echo -e "org.gradle.jvmargs=-Xmx1536m -DsocksProxyHost=192.168.3.8 -DsocksProxyPort=1086 \n org.gradle.parallel=true" > gradle.properties
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleDebug
