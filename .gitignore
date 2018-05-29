@@ -43,4 +43,4 @@ captures/
 
 # Keystore files
 app/version.gradle
-gradle.properties
+/gradle.properties
