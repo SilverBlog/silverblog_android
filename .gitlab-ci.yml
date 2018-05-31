@@ -39,8 +39,8 @@ build-beta:
   script:
   - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"_${CI_JOB_ID}\"}" > ./app/version.gradle
   - echo -e "systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n org.gradle.parallel=true" >> gradle.properties
-  - sed -i ''“s/buildToolsVersion '27.0.3'/buildToolsVersion '28.0.0-rc2'/g" ./app/build.gradle
-  - sed -i ''"s/compileSdkVersion 27/compileSdkVersion 'android-p'/g" ./app/build.gradle
+  - sed -i ''"s/buildToolsVersion '27.0.3'/buildToolsVersion '28.0.0-rc2'/g" ./app/build.gradle
+  - sed -i ''"s/compileSdkVersion 27/compileSdkVersion 'android-P'/g" ./app/build.gradle
   - sed -i ''"s/27/28/g" ./app/build.gradle
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
