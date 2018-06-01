@@ -46,7 +46,7 @@ build-beta:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleRelease
-    - mv ./app/build/outputs/apk/release/app-release.apk ./app/build/outputs/apk/release/app-release-beta.apk
+  - mv ./app/build/outputs/apk/release/app-release.apk ./app/build/outputs/apk/release/app-release-beta.apk
   artifacts:
     paths:
     - ./app/build/outputs/apk/release/app-release-beta.apk
