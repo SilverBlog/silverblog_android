@@ -10,12 +10,13 @@ cache:
 release_github:
   dependencies:
   - build
+  - build-beta
   only:
   - master
   stage: deploy
   script:
   - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master
-  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename=${app_location} proxy=${proxy}
+  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk" beta_filename="./app/build/outputs/apk/release/app-release-beta.apk" proxy=${proxy}
 
 
 build:
@@ -45,8 +46,8 @@ build-beta:
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleRelease
-  - mv ./app/build/outputs/apk/release/app-release.apk ./app-release-bata.apk
+    - mv ./app/build/outputs/apk/release/app-release.apk ./app/build/outputs/apk/release/app-release-beta.apk
   artifacts:
     paths:
-    - ./app-release-beta.apk
+    - ./app/build/outputs/apk/release/app-release-beta.apk
     expire_in: 1 week
