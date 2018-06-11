@@ -6,7 +6,7 @@
         
     <string name="git_repo">Publish to git repository</string>
         
-    <string name="https_myblog_com">Blog address (example: https://demo.silverblog.org)</string>
+    <string name="https_myblog_com">Blog address (example: demo.silverblog.org)</string>
         
     <string name="admin_password">Password</string>
         
@@ -61,7 +61,7 @@
     <string name="post_title">New article</string>
     <string name="check_input">Please configure server information first!</string>
         
-    <string name="config_save">Configuration Saved</string>
+    <string name="config_save">Config Saved</string>
         
     <string name="scan_qr">Please authorize the camera so that the QR code can be scanned normally.</string>
         
@@ -83,7 +83,7 @@
         
     <string name="use_old">use the previous config</string>
         
-    <string name="select_config">Please select the configuration file</string>
+    <string name="select_config">Please select the config</string>
     <string name="api_too_low">The current server API version is too low. Please try again after upgrading.</string>
     <string name="select">Please select operation</string>
 </resources>

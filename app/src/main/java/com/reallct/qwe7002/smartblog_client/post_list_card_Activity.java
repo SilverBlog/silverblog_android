@@ -86,12 +86,6 @@ public class post_list_card_Activity extends AppCompatActivity {
         finish();
     }
 
-    public boolean isip(String addr) {
-        String rexp = "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}";
-        Pattern pat = Pattern.compile(rexp);
-        Matcher mat = pat.matcher(addr);
-        return mat.find();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,13 +100,10 @@ public class post_list_card_Activity extends AppCompatActivity {
             return;
         }
         if (host_save.contains("http://")) {
-            String testip = host_save.replace("http://", "");
-            if (testip.endsWith("/")) {
-                testip = testip.replace("/", "");
-            }
-            if (!isip(testip)) {
-                host_save = host_save.replace("http://", "https://");
-            }
+            host_save = host_save.replace("http://", "");
+        }
+        if (host_save.contains("https://")) {
+            host_save = host_save.replace("https://", "");
         }
         public_value.host = host_save;
         public_value.password = password_save;

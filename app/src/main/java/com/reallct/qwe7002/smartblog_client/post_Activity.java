@@ -248,7 +248,7 @@ public class post_Activity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (objects.get("status").getAsBoolean()) {
-                                Uri uri = Uri.parse(public_value.host + "/post/" + objects.get("name").getAsString());
+                                Uri uri = Uri.parse("https://" + public_value.host + "/post/" + objects.get("name").getAsString());
                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                                 Intent intent = new Intent();
                                 intent.setAction("com.reallct.qwe7002.smartblog_client");
