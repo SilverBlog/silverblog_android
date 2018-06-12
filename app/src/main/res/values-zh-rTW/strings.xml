@@ -3,7 +3,7 @@
         
     <string name="git_repo">發佈到Git倉庫</string>
         
-    <string name="https_myblog_com">博客地址(例：https://demo.silverblog.org)</string>
+    <string name="https_myblog_com">博客地址(例：demo.silverblog.org)</string>
         
     <string name="admin_password">管理員密碼</string>
         
@@ -78,7 +78,7 @@
         
     <string name="use_old">使用之前的配置</string>
         
-    <string name="select_config">請選擇配置文件</string>
+    <string name="select_config">請選擇配置</string>
     <string name="api_too_low">當前服務器API版本太低，請升級後重試。</string>
     <string name="app_name">SilverBlog</string>
 </resources>

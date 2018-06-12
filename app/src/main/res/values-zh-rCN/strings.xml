@@ -2,7 +2,7 @@
     <string name="app_name">SliverBlog</string>
     <string name="send_button">发布</string>
     <string name="git_repo">发布到Git仓库</string>
-    <string name="https_myblog_com">博客地址(例：https://demo.silverblog.org)</string>
+    <string name="https_myblog_com">博客地址(例：demo.silverblog.org)</string>
     <string name="admin_password">管理员密码</string>
     <string name="save_button">保存配置</string>
     <string name="scanner_notify">请执行[./manage.py qrcode]并扫描输出的二维码</string>
@@ -40,6 +40,6 @@
     <string name="save_notice">文章尚未保存，您真的要离开编辑页面？</string>
     <string name="share_recive">接收到分享数据，请选择操作</string>
     <string name="use_old">使用之前的配置</string>
-    <string name="select_config">请选择配置文件</string>
+    <string name="select_config">请选择配置</string>
     <string name="api_too_low">当前服务器API版本太低，请升级后重试。</string>
 </resources>
