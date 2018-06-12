@@ -99,12 +99,7 @@ public class post_list_card_Activity extends AppCompatActivity {
             start_login();
             return;
         }
-        if (host_save.contains("http://")) {
-            host_save = host_save.replace("http://", "");
-        }
-        if (host_save.contains("https://")) {
-            host_save = host_save.replace("https://", "");
-        }
+        host_save = host_save.replace("http://", "").replace("https://", "");
         public_value.host = host_save;
         public_value.password = password_save;
         setContentView(R.layout.activity_post_list_card);
