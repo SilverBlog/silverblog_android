@@ -60,7 +60,7 @@ class request {
         try {
             RequestBody body = RequestBody.create(JSON, json);
             Request request = new Request.Builder()
-                    .url("https://"+public_value.host + "/control/" + method)
+                    .url("https://"+ public_value.host + "/control/" + method)
                     .post(body)
                     .build();
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
