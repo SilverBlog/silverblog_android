@@ -10,13 +10,12 @@ cache:
 release_github:
   dependencies:
   - build
-  - build-beta
   only:
   - master
   stage: deploy
   script:
   - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master
-  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk" beta_filename="./app/build/outputs/apk/release/app-release-beta.apk" proxy=${proxy}
+  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk" proxy=${proxy}
 
 
 build:
@@ -26,27 +25,11 @@ build:
   - master
   script:
   - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"_${CI_JOB_ID}\"}" > ./app/version.gradle
-  - echo -e "systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n org.gradle.parallel=true" >> gradle.properties
+  - echo -e "systemProp.http.nonProxyHosts=dl.google.com\n systemProp.https.nonProxyHosts=dl.google.com\n systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n org.gradle.parallel=true" >> gradle.properties
   - export GRADLE_USER_HOME=$(pwd)/.gradle
   - chmod +x ./gradlew
   - ./gradlew assembleRelease
   artifacts:
     paths:
     - app/build/outputs/apk/release/app-release.apk
-    expire_in: 1 week
-build-beta:
-  image: preventis/docker-android-alpine
-  stage: build
-  script:
-  - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"_${CI_JOB_ID}\"}" > ./app/version.gradle
-  - echo -e "systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n org.gradle.parallel=true" >> gradle.properties
-  - sed -i ''"s/buildToolsVersion '27.0.3'/buildToolsVersion '28.0.0 rc2'/g" ./app/build.gradle
-  - sed -i ''"s/compileSdkVersion 27/compileSdkVersion 'android-P'/g" ./app/build.gradle
-  - export GRADLE_USER_HOME=$(pwd)/.gradle
-  - chmod +x ./gradlew
-  - ./gradlew assembleRelease
-  - mv ./app/build/outputs/apk/release/app-release.apk ./app/build/outputs/apk/release/app-release-beta.apk
-  artifacts:
-    paths:
-    - ./app/build/outputs/apk/release/app-release-beta.apk
     expire_in: 1 week
