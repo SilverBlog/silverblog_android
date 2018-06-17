@@ -24,7 +24,7 @@
         
     <string name="document_content">Article Content</string>
         
-    <string name="submit_error">operation failed! Please check the server address and API password.</string>
+    <string name="submit_error">Operation failed! Please check the server address and API password.</string>
         
     <string name="ok_button">OK</string>
         
@@ -34,9 +34,9 @@
         
     <string name="cancel">Cancel</string>
         
-    <string name="loading">connecting to server…</string>
+    <string name="loading">Connecting to server…</string>
         
-    <string name="loading_message">submitting data, please wait…</string>
+    <string name="loading_message">Please wait…</string>
         
     <string name="list_is_none">The current article list is empty</string>
         
@@ -56,7 +56,7 @@
         
     <string name="edit_title">Edit article</string>
         
-    <string name="content_not_none">title and content can not be empty!</string>
+    <string name="content_not_none">Title and content can not be empty!</string>
         
     <string name="post_title">New article</string>
     <string name="check_input">Please configure server information first!</string>
@@ -81,7 +81,7 @@
         
     <string name="share_recive">To receive the share data, select the action</string>
         
-    <string name="use_old">use the previous config</string>
+    <string name="use_old">Use the previous config</string>
         
     <string name="select_config">Please select the config</string>
     <string name="api_too_low">The current server API version is too low. Please try again after upgrading.</string>

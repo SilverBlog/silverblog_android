@@ -33,7 +33,7 @@
         
     <string name="loading">正在連接服務器…</string>
         
-    <string name="loading_message">正在提交數據，請稍後…</string>
+    <string name="loading_message">請稍後…</string>
         
     <string name="list_is_none">當前文章列表為空</string>
         
