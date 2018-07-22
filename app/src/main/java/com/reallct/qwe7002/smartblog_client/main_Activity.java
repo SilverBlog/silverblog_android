@@ -161,6 +161,7 @@ public class main_Activity extends AppCompatActivity {
             JsonParser parser = new JsonParser();
             JsonObject objects;
             try {
+                assert scanResult != null;
                 objects = parser.parse(scanResult).getAsJsonObject();
             } catch (IllegalStateException e) {
                 Snackbar.make(host, R.string.QRcode_error, Snackbar.LENGTH_LONG)
