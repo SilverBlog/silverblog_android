@@ -1,4 +1,4 @@
-package com.reallct.qwe7002.smartblog_client;
+package org.SilverBlog.client;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -31,13 +31,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.reallct.qwe7002.smartblog_client.R;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -45,10 +44,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static com.reallct.qwe7002.smartblog_client.RecyclerViewAdapter.sharedPreferences;
+import static org.SilverBlog.client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
     private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";

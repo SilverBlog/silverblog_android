@@ -1,4 +1,4 @@
-package com.reallct.qwe7002.smartblog_client;
+package org.SilverBlog.client;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

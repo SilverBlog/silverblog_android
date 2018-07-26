@@ -1,4 +1,4 @@
-package com.reallct.qwe7002.smartblog_client;
+package org.SilverBlog.client;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.reallct.qwe7002.smartblog_client.R;
 
 import java.util.List;
 
@@ -34,14 +36,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+    @NonNull
     @Override
-    public RecyclerViewAdapter.NewsViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerViewAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.cardview, viewGroup, false);
         return new NewsViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.NewsViewHolder personViewHolder, final int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewAdapter.NewsViewHolder personViewHolder, @SuppressLint("RecyclerView") final int position) {
 
         personViewHolder.title.setText(post_list_serialzables.get(position).getTitle());
         personViewHolder.excerpt.setText(post_list_serialzables.get(position).getExcerpt());
