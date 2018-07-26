@@ -16,15 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".main_Activity"
+            android:name="org.SilverBlog.client.main_Activity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".post_Activity"
+            android:name="org.SilverBlog.client.post_Activity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name="com.google.zxing.activity.CaptureActivity" />
         <activity
-            android:name=".post_list_card_Activity"
+            android:name="org.SilverBlog.client.post_list_card_Activity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

@@ -1,4 +1,4 @@
-package com.reallct.qwe7002.smartblog_client;
+package org.SilverBlog.client;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -27,6 +27,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.zxing.activity.CaptureActivity;
+import com.reallct.qwe7002.smartblog_client.R;
 
 import java.util.ArrayList;
 import java.util.Map;

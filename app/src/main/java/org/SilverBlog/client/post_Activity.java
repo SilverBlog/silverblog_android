@@ -1,4 +1,4 @@
-package com.reallct.qwe7002.smartblog_client;
+package org.SilverBlog.client;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -19,6 +19,7 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.reallct.qwe7002.smartblog_client.R;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
