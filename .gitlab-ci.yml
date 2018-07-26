@@ -19,7 +19,7 @@ release_github:
 
 
 build:
-  image: preventis/docker-android-alpine
+  image: preventis/docker-android-alpine:latest
   stage: build
   only:
   - master
