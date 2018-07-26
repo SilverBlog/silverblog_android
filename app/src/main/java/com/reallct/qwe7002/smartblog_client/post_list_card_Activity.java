@@ -31,6 +31,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -320,7 +323,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                         imageURL = getAbsUrl(public_value.host, imageURL);
                     }
 
-                    Glide.with(post_list_card_Activity.this).load(imageURL).error(R.mipmap.ic_launcher).transform(new CircleTransform(post_list_card_Activity.this)).into(ivAvatar);
+                    Glide.with(post_list_card_Activity.this).load(imageURL).apply(RequestOptions.circleCropTransform()).into(ivAvatar);
                     TextView username = headerView.findViewById(R.id.username);
                     TextView desc = headerView.findViewById(R.id.desc);
                     username.setText(result_object.get("author_name").getAsString());
