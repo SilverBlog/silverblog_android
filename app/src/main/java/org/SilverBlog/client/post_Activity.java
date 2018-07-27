@@ -20,8 +20,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.silverblog.client.R;
-
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
     EditText nameview;

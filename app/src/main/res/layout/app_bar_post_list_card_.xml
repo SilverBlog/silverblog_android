@@ -33,6 +33,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_white_24dp"
-        app:layout_behavior="com.reallct.qwe7002.smartblog_client.FabScrollBehavior" />
+        app:layout_behavior="org.SilverBlog.client.FabScrollBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

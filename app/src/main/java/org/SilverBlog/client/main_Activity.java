@@ -28,8 +28,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.zxing.activity.CaptureActivity;
 
-import org.silverblog.client.R;
-
 import java.util.ArrayList;
 import java.util.Map;
 
