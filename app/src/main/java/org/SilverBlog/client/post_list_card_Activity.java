@@ -36,7 +36,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.reallct.qwe7002.smartblog_client.R;
+
+import org.silverblog.client.R;
 
 import java.net.MalformedURLException;
 import java.net.URI;
