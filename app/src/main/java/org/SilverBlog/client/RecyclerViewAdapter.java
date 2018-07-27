@@ -20,8 +20,6 @@ import android.widget.TextView;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.silverblog.client.R;
-
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder> {
