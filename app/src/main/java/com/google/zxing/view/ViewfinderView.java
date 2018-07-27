@@ -32,9 +32,10 @@ import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.reallct.qwe7002.smartblog_client.R;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.camera.CameraManager;
+
+import org.SilverBlog.client.R;
 
 import java.util.Collection;
 import java.util.HashSet;

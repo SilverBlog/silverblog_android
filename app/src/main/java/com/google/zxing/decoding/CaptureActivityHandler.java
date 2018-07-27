@@ -25,12 +25,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.reallct.qwe7002.smartblog_client.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.activity.CaptureActivity;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.view.ViewfinderResultPointCallback;
+
+import org.SilverBlog.client.R;
 
 import java.util.Vector;
 

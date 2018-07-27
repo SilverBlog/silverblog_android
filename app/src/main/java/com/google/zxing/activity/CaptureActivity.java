@@ -23,7 +23,8 @@ import com.google.zxing.camera.CameraManager;
 import com.google.zxing.decoding.CaptureActivityHandler;
 import com.google.zxing.decoding.InactivityTimer;
 import com.google.zxing.view.ViewfinderView;
-import com.reallct.qwe7002.smartblog_client.R;
+
+import org.SilverBlog.client.R;
 
 import java.io.IOException;
 import java.util.Vector;
