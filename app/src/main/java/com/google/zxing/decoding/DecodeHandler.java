@@ -22,7 +22,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.reallct.qwe7002.smartblog_client.R;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
@@ -32,6 +31,8 @@ import com.google.zxing.activity.CaptureActivity;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.camera.PlanarYUVLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+
+import org.SilverBlog.client.R;
 
 import java.util.Hashtable;
 
