@@ -19,7 +19,8 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.reallct.qwe7002.smartblog_client.R;
+
+import org.silverblog.client.R;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
