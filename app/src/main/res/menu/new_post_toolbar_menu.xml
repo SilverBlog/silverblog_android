@@ -3,7 +3,4 @@
     <item
         android:id="@+id/send_post_button"
         android:title="@string/send_button" />
-    <item
-        android:id="@+id/send_edit_app_button"
-        android:title="@string/share_menu_button" />
 </menu>

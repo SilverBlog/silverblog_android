@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -74,11 +73,6 @@ public class post_list_card_Activity extends AppCompatActivity {
         }
     }
 
-    void handleSendText(Intent intent) {
-        public_value.share_title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        public_value.share_text = intent.getStringExtra(Intent.EXTRA_TEXT);
-    }
-
     void start_login() {
         Intent main_activity = new Intent(post_list_card_Activity.this, main_Activity.class);
         startActivity(main_activity);
@@ -105,36 +99,11 @@ public class post_list_card_Activity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Loading...");
         setSupportActionBar(toolbar);
-
-        context = getApplicationContext();
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
-            if ("text/plain".equals(type)) {
-                Snackbar.make(findViewById(R.id.fab), R.string.share_recive, Snackbar.LENGTH_LONG).show();
-                handleSendText(intent);
-            }
-        }
-
         recyclerView = findViewById(R.id.my_recycler_view);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent new_post_activity = new Intent(post_list_card_Activity.this, post_Activity.class);
-                new_post_activity.putExtra("share_title", public_value.share_title);
-                new_post_activity.putExtra("share_text", public_value.share_text);
-                public_value.share_text = null;
-                public_value.share_title = null;
-                startActivity(new_post_activity);
-            }
-        });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -144,24 +113,22 @@ public class post_list_card_Activity extends AppCompatActivity {
         result_receiver receiver = new result_receiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(MY_BROADCAST_TAG);
-
+        context = getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 
         navigationView = findViewById(R.id.nav_view);
         mSwipeRefreshWidget = findViewById(R.id.swipe_refresh_widget);
         mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
-        if (host_save != null) {
-            mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new get_post_list_content().execute();
-                    new get_menu_list_content().execute();
-                }
-            });
-            new get_post_list_content().execute();
-            new get_menu_list_content().execute();
-            new get_system_info_content().execute();
-        }
+        mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new get_post_list_content().execute();
+                new get_menu_list_content().execute();
+            }
+        });
+        new get_post_list_content().execute();
+        new get_menu_list_content().execute();
+        new get_system_info_content().execute();
     }
 
     @Override
@@ -204,7 +171,7 @@ public class post_list_card_Activity extends AppCompatActivity {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
             if (arg1.hasExtra("result")) {
-                Snackbar.make(findViewById(R.id.fab), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.toolbar), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
             }
             if (arg1.getBooleanExtra("success", false)) {
                 new get_post_list_content().execute();
@@ -241,7 +208,7 @@ public class post_list_card_Activity extends AppCompatActivity {
             if (objects.get("status").getAsBoolean()) {
                 result_message = getString(R.string.submit_success);
             }
-            Snackbar.make(findViewById(R.id.fab), result_message, Snackbar.LENGTH_LONG)
+            Snackbar.make(findViewById(R.id.toolbar), result_message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
 
@@ -279,7 +246,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                     Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
                 }
             } else {
-                Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
             RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
             recyclerView.setAdapter(adapter);
@@ -325,11 +292,11 @@ public class post_list_card_Activity extends AppCompatActivity {
                     username.setText(result_object.get("author_name").getAsString());
                     desc.setText(result_object.get("project_description").getAsString());
                     toolbar.setTitle(result_object.get("project_name").getAsString());
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                     return;
                 }
             } else {
-                Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
 
         }
@@ -389,7 +356,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                     }
                 });
             } else {
-                Snackbar.make(findViewById(R.id.fab), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
             }
 
         }
