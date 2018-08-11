@@ -72,13 +72,15 @@
         
     <string name="notice">提示</string>
         
-    <string name="save_notice">文章尚未保存，您真的要離開編輯頁面？</string>
+    <string name="save_notice">文章尚未保存，您真的要離開編輯頁面？</string><![CDATA[
         
-    <string name="share_recive">接收到分享數據，請選擇操作</string>
         
+    ]]>
     <string name="use_old">使用之前的配置</string>
         
     <string name="select_config">請選擇配置</string>
     <string name="api_too_low">當前服務器API版本太低，請升級後重試。</string>
     <string name="app_name">SilverBlog</string>
+    <string name="navigation_drawer_open">打開選單</string>
+    <string name="navigation_drawer_close">關閉選單</string>
 </resources>

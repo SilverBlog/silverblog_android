@@ -54,15 +54,6 @@ public class post_Activity extends AppCompatActivity {
                         new push_post().execute(json);
                     }
                     break;
-                case R.id.send_edit_app_button:
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_TEXT, editTextview.getText().toString());
-                    intent.putExtra(Intent.EXTRA_SUBJECT, titleview.getText().toString());
-                    intent.putExtra(Intent.EXTRA_TITLE, titleview.getText().toString());
-                    intent.setType("text/plain");
-                    startActivity(intent);
-                    break;
                 default:
                     break;
             }
@@ -89,9 +80,16 @@ public class post_Activity extends AppCompatActivity {
         this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
-        titleview.setText(intent.getStringExtra("share_title"));
-        editTextview.setText(intent.getStringExtra("share_text"));
         edit_menu = intent.getBooleanExtra("menu", false);
+
+        context = getApplicationContext();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            }
+        }
         if (intent.getBooleanExtra("edit", false)) {
             action_name = "edit";
             this.setTitle(getString(R.string.edit_title));
@@ -100,6 +98,10 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
+    void handleSendText(Intent intent) {
+        titleview.setText(intent.getStringExtra(Intent.EXTRA_SUBJECT));
+        editTextview.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+    }
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
