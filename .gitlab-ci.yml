@@ -16,7 +16,7 @@ release_github:
   script:
   - git config --global http.https://github.com.proxy ${proxy}
   - git push --set-upstream https://${github_key}@github.com/SilverBlogTeam/SilverBlog_Android.git HEAD:master
-  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk" proxy=${proxy}
+  - bash upload-github-release-asset.sh github_api_token=${github_key} owner=silverblogteam repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk"
 
 
 build:
