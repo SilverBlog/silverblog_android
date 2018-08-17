@@ -105,7 +105,7 @@ public class post_Activity extends AppCompatActivity {
             final String[] content_split = content.split("\n");
             if (content_split[0].startsWith("# ")) {
                 final String title_final = content_split[0].replace("# ", "");
-                final String content_replace = content.replace(content_split[0], "");
+                final String content_replace = content.replace(content_split[0] + "\n", "");
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                 alertDialog.setTitle(R.string.notice);
                 alertDialog.setMessage(R.string.notice_remove_title);
