@@ -5,9 +5,8 @@ android {
     buildToolsVersion '28.0.1'
     defaultConfig {
         applicationId 'org.SilverBlog.client'
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
-        versionCode appVersionCode
         versionName appVersionName
     }
     signingConfigs {
