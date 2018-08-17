@@ -24,7 +24,7 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder> {
 
-    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
+    private static final String MY_BROADCAST_TAG = "org.silverblog.client";
     static SharedPreferences sharedPreferences;
     private List<Post_List_Serialzable> post_list_serialzables;
     private Context context;

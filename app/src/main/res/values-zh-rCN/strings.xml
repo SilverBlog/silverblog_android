@@ -43,4 +43,5 @@
     <string name="api_too_low">当前服务器API版本太低，请升级后重试。</string>
     <string name="navigation_drawer_open" translatable="false">打开菜单</string>
     <string name="navigation_drawer_close" translatable="false">关闭菜单</string>
+    <string name="notice_remove_title">标题已在内容中找到。 你想删除标题吗？</string>
 </resources>

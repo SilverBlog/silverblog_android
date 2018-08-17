@@ -99,8 +99,30 @@ public class post_Activity extends AppCompatActivity {
     }
 
     void handleSendText(Intent intent) {
-        titleview.setText(intent.getStringExtra(Intent.EXTRA_SUBJECT));
-        editTextview.setText(intent.getStringExtra(Intent.EXTRA_TEXT));
+        final String title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+        final String content = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (title == null) {
+            final String[] content_split = content.split("\n");
+            if (content_split[0].startsWith("# ")) {
+                final String title_final = content_split[0].replace("# ", "");
+                final String content_replace = content.replace(content_split[0], "");
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                alertDialog.setTitle(R.string.notice);
+                alertDialog.setMessage(R.string.notice_remove_title);
+                alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        titleview.setText(title_final);
+                        editTextview.setText(content_replace);
+                    }
+                });
+                alertDialog.setNegativeButton(R.string.cancel, null);
+                alertDialog.show();
+            }
+        }
+        titleview.setText(title);
+        editTextview.setText(content);
+
     }
     @Override
     public void onBackPressed() {
@@ -237,7 +259,7 @@ public class post_Activity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (objects.get("status").getAsBoolean()) {
                             Intent intent = new Intent();
-                            intent.setAction("com.reallct.qwe7002.smartblog_client");
+                            intent.setAction("org.silverblog.client");
                             intent.putExtra("success", true);
                             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                             finish();
@@ -253,7 +275,7 @@ public class post_Activity extends AppCompatActivity {
                                 Uri uri = Uri.parse("https://" + public_value.host + "/post/" + objects.get("name").getAsString());
                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                                 Intent intent = new Intent();
-                                intent.setAction("com.reallct.qwe7002.smartblog_client");
+                                intent.setAction("org.silverblog.client");
                                 intent.putExtra("success", true);
                                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                 finish();

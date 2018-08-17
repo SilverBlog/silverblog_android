@@ -46,7 +46,7 @@ import java.util.List;
 import static org.SilverBlog.client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
-    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
+    private static final String MY_BROADCAST_TAG = "org.silverblog.client";
     SwipeRefreshLayout mSwipeRefreshWidget;
     NavigationView navigationView;
     private RecyclerView recyclerView;
