@@ -190,34 +190,6 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
-    private class content_json {
-        private int post_id;
-        private String content;
-        private String sign;
-        private String title;
-        private String name;
-
-        void setName(String name) {
-            this.name = name;
-        }
-
-        void setPost_id(int post_id) {
-            this.post_id = post_id;
-        }
-
-        void setTitle(String title) {
-            this.title = title;
-        }
-
-        void setContent(String Content) {
-            this.content = Content;
-        }
-
-        void setsign(String sign) {
-            this.sign = sign;
-        }
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class push_post extends AsyncTask<String, Integer, String> {
         ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
