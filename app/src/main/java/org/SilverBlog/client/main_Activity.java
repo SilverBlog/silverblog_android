@@ -40,6 +40,7 @@ public class main_Activity extends AppCompatActivity {
     EditText password;
     JsonObject host_list;
     ArrayList<String> host_name_list;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
@@ -89,7 +90,16 @@ public class main_Activity extends AppCompatActivity {
                                                       start_edit();
 
                                                   }
-                                              }).show();
+                                              }).setNegativeButton(R.string.clean, new DialogInterface.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(DialogInterface dialogInterface, int i) {
+                                                      SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                      editor.remove("host_list");
+                                                      editor.apply();
+                                                      host_list = new JsonParser().parse("{}").getAsJsonObject();
+                                                      host_name_list = new ArrayList<>();
+                                                  }
+                                              }).setPositiveButton(R.string.cancel, null).show();
                                           }
                                       }
         );
@@ -136,14 +146,14 @@ public class main_Activity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode ==1){
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
-                    startActivityForResult(intent, 0);
-                    return;
-                }
-                Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
+                startActivityForResult(intent, 0);
+                return;
+            }
+            Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     }
 
