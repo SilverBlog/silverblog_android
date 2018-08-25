@@ -89,4 +89,5 @@
     <string name="select">Please select operation</string>
     <string name="notice_remove_title">The title has been found in the content. Do you want to remove the title?</string>
     <string name="clean">Clean</string>
+    <string name="cannot_connect">Unable to connect to server.</string>
 </resources>

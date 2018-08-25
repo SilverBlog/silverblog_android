@@ -2,6 +2,7 @@ package org.SilverBlog.client;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,8 +29,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.zxing.activity.CaptureActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class main_Activity extends AppCompatActivity {
@@ -109,7 +117,7 @@ public class main_Activity extends AppCompatActivity {
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                     if (manager != null) {
                         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -120,17 +128,48 @@ public class main_Activity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     return;
                 }
+
                 host_save = String.valueOf(host.getText());
                 password_save = request.getMD5(String.valueOf(password.getText()));
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (!host_list.has(host_save)) {
-                    host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
-                }
-                editor.putString("host_list", new Gson().toJson(host_list));
-                editor.putString("host", host_save);
-                editor.putString("password", password_save);
-                editor.apply();
-                start_edit();
+                final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
+                mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mpDialog.setTitle(getString(R.string.loading));
+                mpDialog.setMessage(getString(R.string.loading_message));
+                mpDialog.setIndeterminate(false);
+                mpDialog.setCancelable(false);
+                mpDialog.show();
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request request = new Request.Builder().url("https://" + host_save + "/control").method("OPTIONS", null).build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        mpDialog.cancel();
+                        Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) {
+                        if (response.code() != 204) {
+                            mpDialog.cancel();
+                            Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                        }
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        if (!host_list.has(host_save)) {
+                            host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
+                        }
+                        editor.putString("host_list", new Gson().toJson(host_list));
+                        editor.putString("host", host_save);
+                        editor.putString("password", password_save);
+                        editor.apply();
+                        start_edit();
+
+                    }
+                });
+
+
 
             }
         });
