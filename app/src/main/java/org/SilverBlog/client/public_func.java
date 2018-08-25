@@ -2,19 +2,9 @@ package org.SilverBlog.client;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 
-class request {
-
-    private static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+class public_func {
 
     static String getMD5(String source) {
         String mdString = null;
@@ -53,28 +43,5 @@ class request {
             e.printStackTrace();
         }
         return s;
-    }
-
-    static String send_request(String json, String method) {
-        String result = "{\"status\":false}";
-        try {
-            RequestBody body = RequestBody.create(JSON, json);
-            Request request = new Request.Builder()
-                    .url("https://"+ public_value.host + "/control/" + method)
-                    .post(body)
-                    .build();
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(120, TimeUnit.SECONDS).build();
-
-
-            Response response = okHttpClient.newCall(request).execute();
-            if (response.code() == 200) {
-                result = response.body().string();
-            }
-
-        } catch (Exception ignored) {
-        }
-        return result;
     }
 }

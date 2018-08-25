@@ -130,7 +130,7 @@ public class main_Activity extends AppCompatActivity {
                 }
 
                 host_save = String.valueOf(host.getText());
-                password_save = request.getMD5(String.valueOf(password.getText()));
+                password_save = public_func.getMD5(String.valueOf(password.getText()));
                 final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
                 mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mpDialog.setTitle(getString(R.string.loading));
@@ -151,8 +151,8 @@ public class main_Activity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call call, Response response) {
+                        mpDialog.cancel();
                         if (response.code() != 204) {
-                            mpDialog.cancel();
                             Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
                             return;

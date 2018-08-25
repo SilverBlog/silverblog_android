@@ -37,7 +37,7 @@
         
     <string name="list_is_none">當前文章列表為空</string>
         
-    <string name="network_error">獲取文章列表失敗，請檢查網絡狀態！ </string>
+    <string name="network_error">獲取失敗，請檢查網絡狀態！</string>
         
     <string name="git_push_error">操作失敗！請查看API服務器輸出！ </string>
         

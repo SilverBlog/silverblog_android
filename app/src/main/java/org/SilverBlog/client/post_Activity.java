@@ -1,12 +1,10 @@
 package org.SilverBlog.client;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +17,18 @@ import android.widget.EditText;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import java.io.IOException;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static org.SilverBlog.client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_Activity extends AppCompatActivity {
     EditText titleview;
@@ -38,25 +48,107 @@ public class post_Activity extends AppCompatActivity {
                 alertDialog.show();
                 return false;
             }
-            switch (menuItem.getItemId()) {
-                case R.id.send_post_button:
-                    if (public_value.password != null) {
-                        Gson gson = new Gson();
-                        content_json content = new content_json();
-                        if (action_name.equals("edit")) {
-                            content.setPost_id(request_post_id);
-                        }
-                        content.setName(nameview.getText().toString());
-                        content.setTitle(titleview.getText().toString());
-                        content.setContent(editTextview.getText().toString());
-                        content.setsign(request.getMD5(titleview.getText().toString() + public_value.password));
-                        String json = gson.toJson(content);
-                        new push_post().execute(json);
-                    }
-                    break;
-                default:
-                    break;
+            if (public_value.password == null) {
+                String host_save;
+                String password_save;
+                sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+                host_save = sharedPreferences.getString("host", null);
+                password_save = sharedPreferences.getString("password", null);
+                if (password_save == null || host_save == null) {
+                    Intent main_activity = new Intent(post_Activity.this, main_Activity.class);
+                    startActivity(main_activity);
+                    finish();
+                    return false;
+                }
+                host_save = host_save.replace("http://", "").replace("https://", "");
+                public_value.host = host_save;
+                public_value.password = password_save;
             }
+            Gson gson = new Gson();
+            content_json content = new content_json();
+            if (action_name.equals("edit")) {
+                content.setPost_id(request_post_id);
+            }
+            content.setName(nameview.getText().toString());
+            content.setTitle(titleview.getText().toString());
+            content.setContent(editTextview.getText().toString());
+            content.setsign(public_func.getMD5(titleview.getText().toString() + public_value.password));
+            String json = gson.toJson(content);
+            final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
+            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
+            mpDialog.setIndeterminate(false);
+            mpDialog.setCancelable(false);
+            mpDialog.show();
+            if (action_name.equals("edit")) {
+                action_name = "edit/post";
+                if (edit_menu) {
+                    action_name = "edit/menu";
+                }
+            }
+            RequestBody body = RequestBody.create(public_value.JSON, json);
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + action_name).method("POST", body).build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    mpDialog.cancel();
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                    alertDialog.setTitle(R.string.submit_error);
+                    alertDialog.setNegativeButton(getString(R.string.ok_button), null);
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    mpDialog.cancel();
+                    JsonParser parser = new JsonParser();
+                    final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                    post_Activity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                            alertDialog.setTitle(R.string.submit_error);
+                            String ok_button = getString(R.string.ok_button);
+                            if (objects.get("status").getAsBoolean()) {
+                                alertDialog.setTitle(R.string.submit_success);
+                                ok_button = getString(R.string.visit_document);
+                                alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        if (objects.get("status").getAsBoolean()) {
+                                            Intent intent = new Intent();
+                                            intent.setAction("org.silverblog.client");
+                                            intent.putExtra("success", true);
+                                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                                            finish();
+                                        }
+                                    }
+                                });
+                            }
+                            alertDialog.setNegativeButton(ok_button,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            if (objects.get("status").getAsBoolean()) {
+                                                Uri uri = Uri.parse("https://" + public_value.host + "/post/" + objects.get("name").getAsString());
+                                                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                                Intent intent = new Intent();
+                                                intent.setAction("org.silverblog.client");
+                                                intent.putExtra("success", true);
+                                                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                                                finish();
+                                            }
+                                        }
+                                    });
+                            alertDialog.create().show();
+                        }
+                    });
+                }
+            });
+
+
             return true;
         }
     };
@@ -82,7 +174,6 @@ public class post_Activity extends AppCompatActivity {
         Intent intent = getIntent();
         edit_menu = intent.getBooleanExtra("menu", false);
 
-        context = getApplicationContext();
         String action = intent.getAction();
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
@@ -94,7 +185,56 @@ public class post_Activity extends AppCompatActivity {
             action_name = "edit";
             this.setTitle(getString(R.string.edit_title));
             request_post_id = intent.getIntExtra("position", -1);
-            new get_post_content().execute(Integer.toString(request_post_id));
+            final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
+            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
+            mpDialog.setIndeterminate(false);
+            mpDialog.setCancelable(false);
+            mpDialog.show();
+            String active_name = "get_content/post";
+            if (edit_menu) {
+                active_name = "get_content/menu";
+            }
+            RequestBody body = RequestBody.create(public_value.JSON, "{\"post_id\":" + Integer.toString(request_post_id) + "}");
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + active_name).method("POST", body).build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    mpDialog.cancel();
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                    alertDialog.setTitle(R.string.submit_error);
+                    alertDialog.setNegativeButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    JsonParser parser = new JsonParser();
+                    final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                    post_Activity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (editTextview.getText().length() == 0) {
+
+                                titleview.setText(objects.get("title").getAsString());
+                                editTextview.setText(objects.get("content").getAsString());
+                            }
+                            nameview.setText(objects.get("name").getAsString());
+
+                        }
+                    });
+                    mpDialog.cancel();
+                }
+
+            });
         }
     }
 
@@ -124,6 +264,7 @@ public class post_Activity extends AppCompatActivity {
         editTextview.setText(content);
 
     }
+
     @Override
     public void onBackPressed() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
@@ -138,123 +279,5 @@ public class post_Activity extends AppCompatActivity {
         alertDialog.setNegativeButton(R.string.cancel, null);
         alertDialog.show();
 
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class get_post_content extends AsyncTask<String, Integer, String> {
-
-        ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
-
-        @Override
-        protected void onPreExecute() {
-            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle(getString(R.string.loading));
-            mpDialog.setMessage(getString(R.string.loading_message));
-            mpDialog.setIndeterminate(false);
-            mpDialog.setCancelable(false);
-            mpDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-            String request_json = "{\"post_id\":" + args[0] + "}";
-            String active_name = "get_content/post";
-            if (edit_menu) {
-                active_name = "get_content/menu";
-            }
-            return request.send_request(request_json, active_name);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mpDialog.cancel();
-            JsonParser parser = new JsonParser();
-            final JsonObject objects = parser.parse(result).getAsJsonObject();
-            if (objects.get("status").getAsBoolean()) {
-                if (editTextview.getText().length() == 0) {
-
-                    titleview.setText(objects.get("title").getAsString());
-                    editTextview.setText(objects.get("content").getAsString());
-                }
-                nameview.setText(objects.get("name").getAsString());
-            } else {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                alertDialog.setTitle(R.string.submit_error);
-                alertDialog.setNegativeButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        finish();
-                    }
-                });
-            }
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class push_post extends AsyncTask<String, Integer, String> {
-        ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
-
-        @Override
-        protected void onPreExecute() {
-            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle(getString(R.string.loading));
-            mpDialog.setMessage(getString(R.string.loading_message));
-            mpDialog.setIndeterminate(false);
-            mpDialog.setCancelable(false);
-            mpDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... args) {
-            if (action_name.equals("edit")) {
-                action_name = "edit/post";
-                if (edit_menu) {
-                    action_name = "edit/menu";
-                }
-            }
-            return request.send_request(args[0], action_name);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mpDialog.cancel();
-            JsonParser parser = new JsonParser();
-            final JsonObject objects = parser.parse(result).getAsJsonObject();
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-            alertDialog.setTitle(R.string.submit_error);
-            String ok_button = getString(R.string.ok_button);
-            if (objects.get("status").getAsBoolean()) {
-                alertDialog.setTitle(R.string.submit_success);
-                ok_button = getString(R.string.visit_document);
-                alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (objects.get("status").getAsBoolean()) {
-                            Intent intent = new Intent();
-                            intent.setAction("org.silverblog.client");
-                            intent.putExtra("success", true);
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                            finish();
-                        }
-                    }
-                });
-            }
-            alertDialog.setNegativeButton(ok_button,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (objects.get("status").getAsBoolean()) {
-                                Uri uri = Uri.parse("https://" + public_value.host + "/post/" + objects.get("name").getAsString());
-                                startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                                Intent intent = new Intent();
-                                intent.setAction("org.silverblog.client");
-                                intent.putExtra("success", true);
-                                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                                finish();
-                            }
-                        }
-                    });
-            alertDialog.create().show();
-        }
     }
 }

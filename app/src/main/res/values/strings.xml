@@ -40,7 +40,7 @@
         
     <string name="list_is_none">The current article list is empty</string>
         
-    <string name="network_error">Failed to get article list, please check network status!</string>
+    <string name="network_error">Failed to get, please check network status!</string>
         
     <string name="git_push_error">Operation failed! Please check the API server output!</string>
         
