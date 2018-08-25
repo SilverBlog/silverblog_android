@@ -24,7 +24,7 @@
         
     <string name="document_content">Article Content</string>
         
-    <string name="submit_error">Operation failed! Please check the server address and API password.</string>
+    <string name="submit_error">Operation failed! Please check the password.</string>
         
     <string name="ok_button">OK</string>
         

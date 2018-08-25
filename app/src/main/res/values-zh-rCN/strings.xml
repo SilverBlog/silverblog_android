@@ -11,7 +11,7 @@
     <string name="document_title">文章标题</string>
     <string name="document_url">文章URL(留空将使用拼音)</string>
     <string name="document_content">文章内容</string>
-    <string name="submit_error">操作失败！请检查服务器地址以及API密码。</string>
+    <string name="submit_error">操作失败！请检查密码。</string>
     <string name="ok_button">确定</string>
     <string name="submit_success">操作完成！</string>
     <string name="visit_document">访问新博文</string>
@@ -45,4 +45,5 @@
     <string name="navigation_drawer_close" translatable="false">关闭菜单</string>
     <string name="notice_remove_title">标题已在内容中找到。 你想删除标题吗？</string>
     <string name="clean">清空</string>
+    <string name="cannot_connect">无法连接到服务器</string>
 </resources>
