@@ -155,6 +155,7 @@ public class main_Activity extends AppCompatActivity {
                             mpDialog.cancel();
                             Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
                                     .setAction("Action", null).show();
+                            return;
                         }
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         if (!host_list.has(host_save)) {
