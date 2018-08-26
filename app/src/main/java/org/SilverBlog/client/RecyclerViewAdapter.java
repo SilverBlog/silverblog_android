@@ -93,6 +93,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                                 call.enqueue(new Callback() {
                                                     @Override
                                                     public void onFailure(Call call, IOException e) {
+                                                        mpDialog.cancel();
                                                         Intent intent = new Intent();
                                                         intent.putExtra("result", context.getString(R.string.submit_error));
                                                         intent.putExtra("success", false);

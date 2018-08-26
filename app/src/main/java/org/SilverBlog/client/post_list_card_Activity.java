@@ -177,6 +177,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        mpDialog.cancel();
                         Snackbar.make(findViewById(R.id.toolbar), R.string.git_push_error, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
