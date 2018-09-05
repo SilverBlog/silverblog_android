@@ -52,7 +52,6 @@ import okhttp3.Response;
 import static org.SilverBlog.client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
-    private static final String MY_BROADCAST_TAG = "org.silverblog.client";
     SwipeRefreshLayout mSwipeRefreshWidget;
     NavigationView navigationView;
     private RecyclerView recyclerView;
@@ -118,7 +117,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         result_receiver receiver = new result_receiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(MY_BROADCAST_TAG);
+        filter.addAction(public_value.MY_BROADCAST_TAG);
         context = getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 

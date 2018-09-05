@@ -14,5 +14,6 @@ class public_value {
     static JsonArray menu_list;
     static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
+    static final String MY_BROADCAST_TAG = "org.silverblog.client";
     static final RequestBody nullbody = RequestBody.create(null, new byte[0]);
 }

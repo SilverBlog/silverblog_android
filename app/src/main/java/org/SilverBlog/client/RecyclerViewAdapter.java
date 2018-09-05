@@ -32,7 +32,6 @@ import okhttp3.Response;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder> {
 
-    private static final String MY_BROADCAST_TAG = "org.silverblog.client";
     static SharedPreferences sharedPreferences;
     private List<Post_List_Serialzable> post_list_serialzables;
     private Context context;
@@ -40,7 +39,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     RecyclerViewAdapter(List<Post_List_Serialzable> post_list_serialzables, Context context) {
         this.post_list_serialzables = post_list_serialzables;
         this.context = context;
-
     }
 
     @NonNull
@@ -97,7 +95,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                                         Intent intent = new Intent();
                                                         intent.putExtra("result", context.getString(R.string.submit_error));
                                                         intent.putExtra("success", false);
-                                                        intent.setAction(MY_BROADCAST_TAG);
+                                                        intent.setAction(public_value.MY_BROADCAST_TAG);
                                                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                                     }
 
@@ -113,7 +111,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                                         Intent intent = new Intent();
                                                         intent.putExtra("result", result_message);
                                                         intent.putExtra("success", true);
-                                                        intent.setAction(MY_BROADCAST_TAG);
+                                                        intent.setAction(public_value.MY_BROADCAST_TAG);
                                                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                                     }
                                                 });
