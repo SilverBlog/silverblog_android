@@ -2,6 +2,7 @@ package org.SilverBlog.client;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,8 +29,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.zxing.activity.CaptureActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class main_Activity extends AppCompatActivity {
@@ -40,6 +48,7 @@ public class main_Activity extends AppCompatActivity {
     EditText password;
     JsonObject host_list;
     ArrayList<String> host_name_list;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
@@ -89,7 +98,16 @@ public class main_Activity extends AppCompatActivity {
                                                       start_edit();
 
                                                   }
-                                              }).show();
+                                              }).setNegativeButton(R.string.clean, new DialogInterface.OnClickListener() {
+                                                  @Override
+                                                  public void onClick(DialogInterface dialogInterface, int i) {
+                                                      SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                      editor.remove("host_list");
+                                                      editor.apply();
+                                                      host_list = new JsonParser().parse("{}").getAsJsonObject();
+                                                      host_name_list = new ArrayList<>();
+                                                  }
+                                              }).setPositiveButton(R.string.cancel, null).show();
                                           }
                                       }
         );
@@ -99,7 +117,7 @@ public class main_Activity extends AppCompatActivity {
         final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
                     if (manager != null) {
                         manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -110,17 +128,49 @@ public class main_Activity extends AppCompatActivity {
                             .setAction("Action", null).show();
                     return;
                 }
+
                 host_save = String.valueOf(host.getText());
-                password_save = request.getMD5(String.valueOf(password.getText()));
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (!host_list.has(host_save)) {
-                    host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
-                }
-                editor.putString("host_list", new Gson().toJson(host_list));
-                editor.putString("host", host_save);
-                editor.putString("password", password_save);
-                editor.apply();
-                start_edit();
+                password_save = public_func.getMD5(String.valueOf(password.getText()));
+                final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
+                mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mpDialog.setTitle(getString(R.string.loading));
+                mpDialog.setMessage(getString(R.string.loading_message));
+                mpDialog.setIndeterminate(false);
+                mpDialog.setCancelable(false);
+                mpDialog.show();
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request request = new Request.Builder().url("https://" + host_save + "/control").method("OPTIONS", null).build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        mpDialog.cancel();
+                        Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) {
+                        mpDialog.cancel();
+                        if (response.code() != 204) {
+                            Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
+                                    .setAction("Action", null).show();
+                            return;
+                        }
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        if (!host_list.has(host_save)) {
+                            host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
+                        }
+                        editor.putString("host_list", new Gson().toJson(host_list));
+                        editor.putString("host", host_save);
+                        editor.putString("password", password_save);
+                        editor.apply();
+                        start_edit();
+
+                    }
+                });
+
+
 
             }
         });
@@ -136,14 +186,14 @@ public class main_Activity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode ==1){
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
-                    startActivityForResult(intent, 0);
-                    return;
-                }
-                Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
+                startActivityForResult(intent, 0);
+                return;
+            }
+            Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
         }
     }
 

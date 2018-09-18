@@ -1,13 +1,11 @@
 package org.SilverBlog.client;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -36,17 +34,24 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static org.SilverBlog.client.RecyclerViewAdapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
-    private static final String MY_BROADCAST_TAG = "com.reallct.qwe7002.smartblog_client";
     SwipeRefreshLayout mSwipeRefreshWidget;
     NavigationView navigationView;
     private RecyclerView recyclerView;
@@ -112,7 +117,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         result_receiver receiver = new result_receiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(MY_BROADCAST_TAG);
+        filter.addAction(public_value.MY_BROADCAST_TAG);
         context = getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 
@@ -122,13 +127,14 @@ public class post_list_card_Activity extends AppCompatActivity {
         mSwipeRefreshWidget.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new get_post_list_content().execute();
-                new get_menu_list_content().execute();
+                get_post_list_content();
+                get_menu_list_content();
             }
         });
-        new get_post_list_content().execute();
-        new get_menu_list_content().execute();
-        new get_system_info_content().execute();
+
+        get_post_list_content();
+        get_menu_list_content();
+        get_system_info_content();
     }
 
     @Override
@@ -157,7 +163,37 @@ public class post_list_card_Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.send_to_git_button:
-                new push_to_git().execute();
+                final ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
+                mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mpDialog.setTitle(getString(R.string.loading));
+                mpDialog.setMessage(getString(R.string.loading_message));
+                mpDialog.setIndeterminate(false);
+                mpDialog.setCancelable(false);
+                mpDialog.show();
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request request = new Request.Builder().url("https://" + public_value.host + "/control/git_page_publish").method("POST", public_value.nullbody).build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        mpDialog.cancel();
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.git_push_error, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        mpDialog.cancel();
+                        JsonParser parser = new JsonParser();
+                        final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                        int result_message = R.string.git_push_error;
+                        if (objects.get("status").getAsBoolean()) {
+                            result_message = R.string.submit_success;
+                        }
+                        Snackbar.make(findViewById(R.id.toolbar), result_message, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                });
                 break;
             case R.id.logout:
                 start_login();
@@ -167,6 +203,162 @@ public class post_list_card_Activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    void get_post_list_content() {
+        mSwipeRefreshWidget.setRefreshing(true);
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/get_list/post").method("POST", public_value.nullbody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                post_list_card_Activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                JsonParser parser = new JsonParser();
+                final List<Post_List_Serialzable> post_list = new ArrayList<>();
+                final JsonArray result_array = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonArray();
+                public_value.post_list = result_array;
+                post_list_card_Activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshWidget.setRefreshing(false);
+
+                        for (JsonElement item : result_array) {
+                            JsonObject sub_item = item.getAsJsonObject();
+                            post_list.add(new Post_List_Serialzable(sub_item.get("title").getAsString(), sub_item.get("excerpt").getAsString()));
+                        }
+                        if (result_array.size() == 0) {
+                            Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
+                        }
+                        RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+
+            }
+        });
+
+    }
+
+    void get_system_info_content() {
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/system_info").method("POST", public_value.nullbody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                post_list_card_Activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                JsonParser parser = new JsonParser();
+                final JsonObject result_object = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                if (result_object.get("api_version").getAsInt() < 2) {
+                    new AlertDialog.Builder(post_list_card_Activity.this)
+                            .setMessage(getString(R.string.api_too_low))
+                            .show();
+                    return;
+                }
+                post_list_card_Activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        View headerView = navigationView.getHeaderView(0);
+                        ImageView ivAvatar = headerView.findViewById(R.id.imageView);
+                        String imageURL = result_object.get("author_image").getAsString();
+                        if (!isAbsURL(imageURL)) {
+                            imageURL = getAbsUrl(public_value.host, imageURL);
+                        }
+
+                        Glide.with(post_list_card_Activity.this).load(imageURL).apply(RequestOptions.circleCropTransform()).into(ivAvatar);
+                        TextView username = headerView.findViewById(R.id.username);
+                        TextView desc = headerView.findViewById(R.id.desc);
+                        username.setText(result_object.get("author_name").getAsString());
+                        desc.setText(result_object.get("project_description").getAsString());
+                        toolbar.setTitle(result_object.get("project_name").getAsString());
+                    }
+                });
+
+            }
+        });
+
+    }
+
+    void get_menu_list_content() {
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/get_list/menu").method("POST", public_value.nullbody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                post_list_card_Activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                JsonParser parser = new JsonParser();
+                final JsonArray result_array = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonArray();
+                public_value.menu_list = result_array;
+                post_list_card_Activity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        navigationView.getMenu().clear();
+                        int id = 0;
+                        for (JsonElement item : result_array) {
+                            JsonObject sub_item = item.getAsJsonObject();
+                            navigationView.getMenu().add(Menu.NONE, id, Menu.NONE, sub_item.get("title").getAsString());
+                            id++;
+                        }
+                        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                            @Override
+                            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                                int id = item.getItemId();
+                                JsonArray menu_list = public_value.menu_list;
+                                JsonObject menu_item = menu_list.get(id).getAsJsonObject();
+                                if (menu_item.has("absolute")) {
+                                    Uri uri = Uri.parse(menu_item.get("absolute").getAsString());
+                                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                    return false;
+                                }
+                                Intent intent = new Intent(context, post_Activity.class);
+                                intent.putExtra("edit", true);
+                                intent.putExtra("position", id);
+                                intent.putExtra("menu", true);
+                                intent.putExtra("share_title", public_value.share_title);
+                                intent.putExtra("share_text", public_value.share_text);
+                                public_value.share_text = null;
+                                public_value.share_title = null;
+                                startActivity(intent);
+                                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                                drawer.closeDrawer(GravityCompat.START);
+                                return false;
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+    }
+
     class result_receiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context arg0, Intent arg1) {
@@ -174,191 +366,9 @@ public class post_list_card_Activity extends AppCompatActivity {
                 Snackbar.make(findViewById(R.id.toolbar), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
             }
             if (arg1.getBooleanExtra("success", false)) {
-                new get_post_list_content().execute();
-                new get_menu_list_content().execute();
+                get_post_list_content();
+                get_menu_list_content();
             }
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class push_to_git extends AsyncTask<Void, Integer, String> {
-        ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
-
-        @Override
-        protected void onPreExecute() {
-            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle(getString(R.string.loading));
-            mpDialog.setMessage(getString(R.string.loading_message));
-            mpDialog.setIndeterminate(false);
-            mpDialog.setCancelable(false);
-            mpDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(Void... args) {
-            return request.send_request("{}", "git_page_publish");
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mpDialog.cancel();
-            JsonParser parser = new JsonParser();
-            final JsonObject objects = parser.parse(result).getAsJsonObject();
-            String result_message = getString(R.string.git_push_error);
-            if (objects.get("status").getAsBoolean()) {
-                result_message = getString(R.string.submit_success);
-            }
-            Snackbar.make(findViewById(R.id.toolbar), result_message, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class get_post_list_content extends AsyncTask<Void, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-            mSwipeRefreshWidget.setRefreshing(true);
-        }
-
-        @Override
-        protected String doInBackground(Void... args) {
-            String mode = "{}";
-            String active_name = "get_list/post";
-            return request.send_request(mode, active_name);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            mSwipeRefreshWidget.setRefreshing(false);
-            JsonParser parser = new JsonParser();
-            List<Post_List_Serialzable> post_list = new ArrayList<>();
-            if (parser.parse(result).isJsonArray()) {
-                final JsonArray result_array = parser.parse(result).getAsJsonArray();
-                public_value.post_list = result_array;
-
-                for (JsonElement item : result_array) {
-                    JsonObject sub_item = item.getAsJsonObject();
-                    post_list.add(new Post_List_Serialzable(sub_item.get("title").getAsString(), sub_item.get("excerpt").getAsString()));
-                }
-                if (result_array.size() == 0) {
-                    Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
-                }
-            } else {
-                Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
-            }
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
-            recyclerView.setAdapter(adapter);
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class get_system_info_content extends AsyncTask<Void, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected String doInBackground(Void... args) {
-            String mode = "{}";
-            String active_name = "system_info";
-            return request.send_request(mode, active_name);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            JsonParser parser = new JsonParser();
-            JsonObject result_object = parser.parse(result).getAsJsonObject();
-            if (!result_object.has("status")) {
-                try {
-                    if (result_object.get("api_version").getAsInt() < 2) {
-                        new AlertDialog.Builder(post_list_card_Activity.this)
-                                .setMessage(getString(R.string.api_too_low))
-                                .show();
-                    }
-                    View headerView = navigationView.getHeaderView(0);
-                    ImageView ivAvatar = headerView.findViewById(R.id.imageView);
-                    String imageURL = result_object.get("author_image").getAsString();
-                    if (!isAbsURL(imageURL)) {
-                        imageURL = getAbsUrl(public_value.host, imageURL);
-                    }
-
-                    Glide.with(post_list_card_Activity.this).load(imageURL).apply(RequestOptions.circleCropTransform()).into(ivAvatar);
-                    TextView username = headerView.findViewById(R.id.username);
-                    TextView desc = headerView.findViewById(R.id.desc);
-                    username.setText(result_object.get("author_name").getAsString());
-                    desc.setText(result_object.get("project_description").getAsString());
-                    toolbar.setTitle(result_object.get("project_name").getAsString());
-                } catch (Exception ignored) {
-                    return;
-                }
-            } else {
-                Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
-            }
-
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class get_menu_list_content extends AsyncTask<Void, Integer, String> {
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected String doInBackground(Void... args) {
-            String mode = "{}";
-            String active_name = "get_list/menu";
-            return request.send_request(mode, active_name);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            JsonParser parser = new JsonParser();
-            if (parser.parse(result).isJsonArray()) {
-                final JsonArray result_array = parser.parse(result).getAsJsonArray();
-                public_value.menu_list = result_array;
-                navigationView.getMenu().clear();
-                int id = 0;
-                for (JsonElement item : result_array) {
-                    JsonObject sub_item = item.getAsJsonObject();
-                    navigationView.getMenu().add(Menu.NONE, id, Menu.NONE, sub_item.get("title").getAsString());
-                    id++;
-                }
-                navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        int id = item.getItemId();
-                        JsonArray menu_list = public_value.menu_list;
-                        JsonObject menu_item = menu_list.get(id).getAsJsonObject();
-                        if (menu_item.has("absolute")) {
-                            Uri uri = Uri.parse(menu_item.get("absolute").getAsString());
-                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                            return false;
-                        }
-                        Intent intent = new Intent(context, post_Activity.class);
-                        intent.putExtra("edit", true);
-                        intent.putExtra("position", id);
-                        intent.putExtra("menu", true);
-                        intent.putExtra("share_title", public_value.share_title);
-                        intent.putExtra("share_text", public_value.share_text);
-                        public_value.share_text = null;
-                        public_value.share_title = null;
-                        startActivity(intent);
-                        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-                        drawer.closeDrawer(GravityCompat.START);
-                        return false;
-                    }
-                });
-            } else {
-                Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
-            }
-
         }
     }
 }

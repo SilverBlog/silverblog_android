@@ -24,7 +24,7 @@
         
     <string name="document_content">Article Content</string>
         
-    <string name="submit_error">Operation failed! Please check the server address and API password.</string>
+    <string name="submit_error">Operation failed! Please check the password.</string>
         
     <string name="ok_button">OK</string>
         
@@ -40,7 +40,7 @@
         
     <string name="list_is_none">The current article list is empty</string>
         
-    <string name="network_error">Failed to get article list, please check network status!</string>
+    <string name="network_error">Failed to get, please check network status!</string>
         
     <string name="git_push_error">Operation failed! Please check the API server output!</string>
         
@@ -87,4 +87,7 @@
     <string name="select_config">Please select the config</string>
     <string name="api_too_low">The current server API version is too low. Please try again after upgrading.</string>
     <string name="select">Please select operation</string>
+    <string name="notice_remove_title">The title has been found in the content. Do you want to remove the title?</string>
+    <string name="clean">Clean</string>
+    <string name="cannot_connect">Unable to connect to server.</string>
 </resources>

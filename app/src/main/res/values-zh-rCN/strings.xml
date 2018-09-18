@@ -11,7 +11,7 @@
     <string name="document_title">文章标题</string>
     <string name="document_url">文章URL(留空将使用拼音)</string>
     <string name="document_content">文章内容</string>
-    <string name="submit_error">操作失败！请检查服务器地址以及API密码。</string>
+    <string name="submit_error">操作失败！请检查密码。</string>
     <string name="ok_button">确定</string>
     <string name="submit_success">操作完成！</string>
     <string name="visit_document">访问新博文</string>
@@ -19,7 +19,7 @@
     <string name="loading">正在连接服务器…</string>
     <string name="loading_message">请稍后…</string>
     <string name="list_is_none">当前文章列表为空</string>
-    <string name="network_error">获取文章列表失败，请检查网络状态！</string>
+    <string name="network_error">获取失败，请检查网络状态！</string>
     <string name="git_push_error">操作失败！请查看API服务器输出！</string>
     <string name="delete_notify">删除这篇文章？(警告！本操作不可逆，请谨慎操作！）</string>
     <string name="modify">修改</string>
@@ -43,4 +43,7 @@
     <string name="api_too_low">当前服务器API版本太低，请升级后重试。</string>
     <string name="navigation_drawer_open" translatable="false">打开菜单</string>
     <string name="navigation_drawer_close" translatable="false">关闭菜单</string>
+    <string name="notice_remove_title">标题已在内容中找到。 你想删除标题吗？</string>
+    <string name="clean">清空</string>
+    <string name="cannot_connect">无法连接到服务器</string>
 </resources>
