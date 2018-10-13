@@ -1,7 +1,7 @@
 package org.SilverBlog.client;
 
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 
 class public_func {
@@ -9,11 +9,7 @@ class public_func {
     static String getMD5(String source) {
         String mdString = null;
         if (source != null) {
-            try {
-                mdString = getBytes(source.getBytes("UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            mdString = getBytes(source.getBytes(StandardCharsets.UTF_8));
         }
         return mdString;
     }
