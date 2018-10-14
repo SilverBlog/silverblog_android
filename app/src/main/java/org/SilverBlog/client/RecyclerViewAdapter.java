@@ -133,9 +133,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     static class NewsViewHolder extends RecyclerView.ViewHolder {
 
-        CardView cardView = (CardView) itemView.findViewById(R.id.card_view);
-        TextView title = (TextView) itemView.findViewById(R.id.title);
-        TextView excerpt = (TextView) itemView.findViewById(R.id.excerpt);
+        CardView cardView = itemView.findViewById(R.id.card_view);
+        TextView title = itemView.findViewById(R.id.title);
+        TextView excerpt = itemView.findViewById(R.id.excerpt);
 
         NewsViewHolder(final View itemView) {
             super(itemView);

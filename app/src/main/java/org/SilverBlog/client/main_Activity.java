@@ -32,6 +32,7 @@ import com.google.zxing.activity.CaptureActivity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -75,7 +76,7 @@ public class main_Activity extends AppCompatActivity {
             }
         });
 
-        host_list = new JsonParser().parse(sharedPreferences.getString("host_list", "{}")).getAsJsonObject();
+        host_list = new JsonParser().parse(Objects.requireNonNull(sharedPreferences.getString("host_list", "{}"))).getAsJsonObject();
         host_name_list = new ArrayList<>();
 
         for (Map.Entry<String, JsonElement> entry : host_list.entrySet()) {

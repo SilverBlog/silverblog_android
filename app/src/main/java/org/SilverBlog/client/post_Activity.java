@@ -67,12 +67,12 @@ public class post_Activity extends AppCompatActivity {
             Gson gson = new Gson();
             content_json content = new content_json();
             if (action_name.equals("edit")) {
-                content.setPost_id(request_post_id);
+                content.post_id=request_post_id;
             }
-            content.setName(nameview.getText().toString());
-            content.setTitle(titleview.getText().toString());
-            content.setContent(editTextview.getText().toString());
-            content.setsign(public_func.getMD5(titleview.getText().toString() + public_value.password));
+            content.name=nameview.getText().toString();
+            content.title=titleview.getText().toString();
+            content.content=editTextview.getText().toString();
+            content.sign=public_func.getMD5(titleview.getText().toString() + public_value.password);
             String json = gson.toJson(content);
             final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
