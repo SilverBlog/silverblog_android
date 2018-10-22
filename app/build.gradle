@@ -18,8 +18,11 @@ android {
         }
     }
     buildTypes {
+        debug {
+            minifyEnabled true
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
             signingConfig signingConfigs.releaseConfig
         }
     }

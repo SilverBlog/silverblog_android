@@ -49,7 +49,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static org.SilverBlog.client.RecyclerViewAdapter.sharedPreferences;
+import static org.SilverBlog.client.recycler_view_adapter.sharedPreferences;
 
 public class post_list_card_Activity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeRefreshWidget;
@@ -222,7 +222,7 @@ public class post_list_card_Activity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 JsonParser parser = new JsonParser();
-                final List<Post_List_Serialzable> post_list = new ArrayList<>();
+                final List<post_list_serialzable> post_list = new ArrayList<>();
                 final JsonArray result_array = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonArray();
                 public_value.post_list = result_array;
                 post_list_card_Activity.this.runOnUiThread(new Runnable() {
@@ -232,12 +232,12 @@ public class post_list_card_Activity extends AppCompatActivity {
 
                         for (JsonElement item : result_array) {
                             JsonObject sub_item = item.getAsJsonObject();
-                            post_list.add(new Post_List_Serialzable(sub_item.get("title").getAsString(), sub_item.get("excerpt").getAsString()));
+                            post_list.add(new post_list_serialzable(sub_item.get("title").getAsString(), sub_item.get("excerpt").getAsString()));
                         }
                         if (result_array.size() == 0) {
                             Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
                         }
-                        RecyclerViewAdapter adapter = new RecyclerViewAdapter(post_list, post_list_card_Activity.this);
+                        recycler_view_adapter adapter = new recycler_view_adapter(post_list, post_list_card_Activity.this);
                         recyclerView.setAdapter(adapter);
                     }
                 });

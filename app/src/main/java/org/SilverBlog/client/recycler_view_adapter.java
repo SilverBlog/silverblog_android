@@ -30,29 +30,29 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder> {
+public class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.NewsViewHolder> {
 
     static SharedPreferences sharedPreferences;
-    private List<Post_List_Serialzable> post_list_serialzables;
+    private List<post_list_serialzable> postlistserialzables;
     private Context context;
 
-    RecyclerViewAdapter(List<Post_List_Serialzable> post_list_serialzables, Context context) {
-        this.post_list_serialzables = post_list_serialzables;
+    recycler_view_adapter(List<post_list_serialzable> postlistserialzables, Context context) {
+        this.postlistserialzables = postlistserialzables;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public RecyclerViewAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public recycler_view_adapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.cardview, viewGroup, false);
         return new NewsViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerViewAdapter.NewsViewHolder personViewHolder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull recycler_view_adapter.NewsViewHolder personViewHolder, @SuppressLint("RecyclerView") final int position) {
 
-        personViewHolder.title.setText(post_list_serialzables.get(position).getTitle());
-        personViewHolder.excerpt.setText(post_list_serialzables.get(position).getExcerpt());
+        personViewHolder.title.setText(postlistserialzables.get(position).title);
+        personViewHolder.excerpt.setText(postlistserialzables.get(position).excerpt);
         personViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return post_list_serialzables.size();
+        return postlistserialzables.size();
     }
 
     static class NewsViewHolder extends RecyclerView.ViewHolder {
