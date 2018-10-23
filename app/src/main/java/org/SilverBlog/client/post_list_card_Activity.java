@@ -232,7 +232,10 @@ public class post_list_card_Activity extends AppCompatActivity {
 
                         for (JsonElement item : result_array) {
                             JsonObject sub_item = item.getAsJsonObject();
-                            post_list.add(new post_list_serialzable(sub_item.get("title").getAsString(), sub_item.get("excerpt").getAsString()));
+                            post_list_serialzable list_obj=new post_list_serialzable();
+                            list_obj.title=sub_item.get("title").getAsString();
+                            list_obj.excerpt=sub_item.get("excerpt").getAsString();
+                            post_list.add(list_obj);
                         }
                         if (result_array.size() == 0) {
                             Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
