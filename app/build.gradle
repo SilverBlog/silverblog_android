@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply from: 'version.gradle'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -9,6 +10,7 @@ android {
         versionName appVersionName
         versionCode appVersionCode
     }
+
     signingConfigs {
         releaseConfig {
             storeFile file("keys.jks")
@@ -17,14 +19,14 @@ android {
             keyPassword project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             signingConfig signingConfigs.releaseConfig
         }
     }
-    productFlavors {
-    }
+
 }
 
 dependencies {
