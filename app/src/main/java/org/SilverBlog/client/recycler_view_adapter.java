@@ -30,7 +30,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.NewsViewHolder> {
+public class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.card_view_holder> {
 
     static SharedPreferences sharedPreferences;
     private List<post_list_serialzable> postlistserialzables;
@@ -43,13 +43,13 @@ public class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_ad
 
     @NonNull
     @Override
-    public recycler_view_adapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public card_view_holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.cardview, viewGroup, false);
-        return new NewsViewHolder(v);
+        return new card_view_holder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull recycler_view_adapter.NewsViewHolder personViewHolder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull card_view_holder personViewHolder, @SuppressLint("RecyclerView") final int position) {
 
         personViewHolder.title.setText(postlistserialzables.get(position).title);
         personViewHolder.excerpt.setText(postlistserialzables.get(position).excerpt);
@@ -131,13 +131,13 @@ public class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_ad
         return postlistserialzables.size();
     }
 
-    static class NewsViewHolder extends RecyclerView.ViewHolder {
+    static class card_view_holder extends RecyclerView.ViewHolder {
 
         CardView cardView = itemView.findViewById(R.id.card_view);
         TextView title = itemView.findViewById(R.id.title);
         TextView excerpt = itemView.findViewById(R.id.excerpt);
 
-        NewsViewHolder(final View itemView) {
+        card_view_holder(final View itemView) {
             super(itemView);
         }
 
