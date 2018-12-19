@@ -101,7 +101,7 @@ public class post_Activity extends AppCompatActivity {
                 public void onFailure(Call call, IOException e) {
                     mpDialog.cancel();
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                    alertDialog.setTitle(R.string.submit_error);
+                    alertDialog.setTitle(R.string.network_error);
                     alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 }
 

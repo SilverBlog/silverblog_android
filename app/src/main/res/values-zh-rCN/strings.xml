@@ -19,7 +19,7 @@
     <string name="loading">正在连接服务器…</string>
     <string name="loading_message">请稍后…</string>
     <string name="list_is_none">当前文章列表为空</string>
-    <string name="network_error">获取失败，请检查网络状态！</string>
+    <string name="network_error">请检查网络状态！</string>
     <string name="git_push_error">操作失败！请查看API服务器输出！</string>
     <string name="delete_notify">删除这篇文章？(警告！本操作不可逆，请谨慎操作！）</string>
     <string name="modify">修改</string>

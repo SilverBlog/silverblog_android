@@ -40,7 +40,7 @@
 
     <string name="list_is_none">現在の記事リストが空です。</string>
 
-    <string name="network_error">取得に失敗しました。ネットワークステータスを確認してください！</string>
+    <string name="network_error">ネットワークステータスを確認してください！</string>
 
     <string name="git_push_error">操作が失敗しました！ APIサーバーの出力を確認してください！</string>
 
