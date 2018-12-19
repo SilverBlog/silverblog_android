@@ -20,7 +20,7 @@
         
     <string name="document_title">Article title</string>
         
-    <string name="document_url">Article URL (leave blank for Pinyin)</string>
+    <string name="document_url">Article URL</string>
         
     <string name="document_content">Article Content</string>
         
@@ -78,10 +78,6 @@
     <string name="notice">Notice</string>
         
     <string name="save_notice">The article has not been saved, do you really want to leave the edit page?</string>
-    <![CDATA[
-        
-        
-    ]]>
     <string name="use_old">Use the previous config</string>
         
     <string name="select_config">Please select the config</string>
@@ -90,4 +86,5 @@
     <string name="notice_remove_title">The title has been found in the content. Do you want to remove the title?</string>
     <string name="clean">Clean</string>
     <string name="cannot_connect">Unable to connect to server.</string>
+    <string name="api_too_high">The current client API version is too low. Please try again after upgrading.</string>
 </resources>

@@ -1,0 +1,91 @@
+<resources>
+
+    <string name="app_name">SliverBlog</string>
+
+    <string name="send_button">パブリッシュ</string>
+
+    <string name="git_repo">gitリポジトリに公開する</string>
+
+    <string name="https_myblog_com">ブログアドレス（例：demo.silverblog.org）</string>
+
+    <string name="admin_password">パスワード</string>
+
+    <string name="save_button">保存</string>
+
+    <string name="scanner_notify">[./manage.py qrcode]を実行し、出力QRコードをスキャンしてください</string>
+
+    <string name="document">記事</string>
+
+    <string name="menu">メニュー</string>
+
+    <string name="document_title">記事タイトル</string>
+
+    <string name="document_url">記事URL</string>
+
+    <string name="document_content">記事の内容</string>
+
+    <string name="submit_error">操作が失敗しました！パスワードを確認してください。</string>
+
+    <string name="ok_button">OK</string>
+
+    <string name="submit_success">操作が完了しました！</string>
+
+    <string name="visit_document">新しいブログをご覧ください</string>
+
+    <string name="cancel">キャンセル</string>
+
+    <string name="loading">サーバーに接続しています… </string>
+
+    <string name="loading_message">お待ちください… </string>
+
+    <string name="list_is_none">現在の記事リストが空です。</string>
+
+    <string name="network_error">取得に失敗しました。ネットワークステータスを確認してください！</string>
+
+    <string name="git_push_error">操作が失敗しました！ APIサーバーの出力を確認してください！</string>
+
+    <string name="delete_notify">この記事を削除しますか？ （警告！この操作は元に戻せませんので、注意してください！）</string>
+
+    <string name="modify">変更</string>
+
+    <string name="delete">削除</string>
+
+    <string name="scan_button"> QRコードをスキャンする</string>
+
+    <string name="share_menu_button">共有</string>
+
+    <string name="edit_title">記事を編集する</string>
+
+    <string name="content_not_none">タイトルとコンテンツは空にできません！</string>
+
+    <string name="post_title">新しい記事</string>
+    <string name="check_input">まずサーバー情報を設定してください！</string>
+
+    <string name="config_save">コンフィグレーション済み</string>
+
+    <string name="scan_qr"> QRコードを正常にスキャンできるようにカメラを認証してください。</string>
+
+    <string name="QRcode_error">間違ったQRコード形式！</string>
+
+    <string name="check_config"> System.json設定ファイルを確認してください。</string>
+
+    <string name="navigation_drawer_open">ナビゲーションを開く</string>
+
+    <string name="navigation_drawer_close">ナビゲーションを閉じる</string>
+
+    <string name="logout">ログアウト</string>
+
+    <string name="notice">通知</string>
+
+    <string name="save_notice">記事が保存されていません。本当に編集ページを終了しますか？</string>
+
+    <string name="use_old">以前の設定を使用します</string>
+
+    <string name="select_config">設定を選択してください</string>
+    <string name="api_too_low">現在のサーバーAPIのバージョンが低すぎます。アップグレード後にもう一度お試しください。</string>
+    <string name="select">操作を選択してください</string>
+    <string name="notice_remove_title">タイトルがコンテンツ内に見つかりました。タイトルを削除しますか？</string>
+    <string name="clean">クリーン</string>
+    <string name="cannot_connect">サーバーに接続できません。</string>
+    <string name="api_too_high">現在のクライアントAPIのバージョンが低すぎます。アップグレード後にもう一度お試しください。</string>
+</resources>

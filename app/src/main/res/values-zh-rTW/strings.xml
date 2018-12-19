@@ -86,4 +86,5 @@
     <string name="notice_remove_title">標題已在內容中找到。 你想刪除標題嗎？</string>
     <string name="clean">清空</string>
     <string name="cannot_connect">無法連接到伺服器</string>
+    <string name="api_too_high">當前客戶端API版本太低，請升級後重試。</string>
 </resources>

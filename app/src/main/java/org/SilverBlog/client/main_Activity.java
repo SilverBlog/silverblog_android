@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,6 +57,100 @@ public class main_Activity extends AppCompatActivity {
         return true;
     }
 
+    View.OnClickListener history_host = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    host_save = host_info.get("host").getAsString();
+                    if (host_info.has("password")) {
+                        String password_v2 = public_func.get_hash(host_info.get("password").getAsString() + "SiLvErBlOg", "SHA-256");
+                        host_list.remove(host_name_list.get(i));
+                        host_info = (JsonObject) new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password_v2\":\"" + password_v2 + "\"}");
+                        host_list.add(host_name_list.get(i), host_info);
+                        editor.putString("host_list", new Gson().toJson(host_list));
+                    }
+                    password_save = host_info.get("password_v2").getAsString();
+                    editor.putString("host", host_save);
+                    editor.putString("password_v2", password_save);
+                    editor.apply();
+                    start_edit();
+
+                }
+            }).setNegativeButton(R.string.clean, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("host_list");
+                    editor.apply();
+                    host_list = new JsonParser().parse("{}").getAsJsonObject();
+                    host_name_list = new ArrayList<>();
+                }
+            }).setPositiveButton(R.string.cancel, null).show();
+        }
+    };
+    View.OnClickListener save_host = new View.OnClickListener() {
+        @Override
+        public void onClick(final View view) {
+            InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
+                if (manager != null) {
+                    manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+            if (host.getText().length() == 0 || password.getText().length() == 0) {
+                Snackbar.make(view, R.string.check_input, Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                return;
+            }
+
+            host_save = String.valueOf(host.getText());
+            password_save = public_func.get_hash(public_func.get_hash(String.valueOf(password.getText()), "MD5") + "SiLvErBlOg", "SHA-256");
+            final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
+            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mpDialog.setTitle(getString(R.string.loading));
+            mpDialog.setMessage(getString(R.string.loading_message));
+            mpDialog.setIndeterminate(false);
+            mpDialog.setCancelable(false);
+            mpDialog.show();
+            OkHttpClient okHttpClient = new OkHttpClient();
+            Request request = new Request.Builder().url("https://" + host_save + "/control").method("OPTIONS", null).build();
+            Call call = okHttpClient.newCall(request);
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    mpDialog.cancel();
+                    Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) {
+                    mpDialog.cancel();
+                    if (response.code() != 204) {
+                        Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    if (!host_list.has(host_save)) {
+                        host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password_v2\":\"" + password_save + "\"}"));
+                    }
+                    editor.putString("host_list", new Gson().toJson(host_list));
+                    editor.putString("host", host_save);
+                    editor.putString("password_v2", password_save);
+                    Log.d("silverblog", "onActivityResult: " + password_save);
+                    editor.apply();
+                    start_edit();
+
+                }
+            });
+
+
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
@@ -75,106 +170,18 @@ public class main_Activity extends AppCompatActivity {
                 return true;
             }
         });
-
         host_list = new JsonParser().parse(Objects.requireNonNull(sharedPreferences.getString("host_list", "{}"))).getAsJsonObject();
         host_name_list = new ArrayList<>();
 
         for (Map.Entry<String, JsonElement> entry : host_list.entrySet()) {
             host_name_list.add(entry.getKey());
         }
-        Button old_button = findViewById(R.id.use_old);
-        old_button.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View view) {
-                                              new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                                                  @Override
-                                                  public void onClick(DialogInterface dialogInterface, int i) {
-                                                      JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
-                                                      host_save = host_info.get("host").getAsString();
-                                                      password_save = host_info.get("password").getAsString();
-                                                      SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                      editor.putString("host", host_save);
-                                                      editor.putString("password", password_save);
-                                                      editor.apply();
-                                                      start_edit();
-
-                                                  }
-                                              }).setNegativeButton(R.string.clean, new DialogInterface.OnClickListener() {
-                                                  @Override
-                                                  public void onClick(DialogInterface dialogInterface, int i) {
-                                                      SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                      editor.remove("host_list");
-                                                      editor.apply();
-                                                      host_list = new JsonParser().parse("{}").getAsJsonObject();
-                                                      host_name_list = new ArrayList<>();
-                                                  }
-                                              }).setPositiveButton(R.string.cancel, null).show();
-                                          }
-                                      }
-        );
+        Button history_host_button = findViewById(R.id.use_old);
+        history_host_button.setOnClickListener(history_host);
         Button save_button = findViewById(R.id.save_button);
         host = findViewById(R.id.host);
         password = findViewById(R.id.password);
-        final InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        save_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                if (getCurrentFocus() != null && getCurrentFocus().getWindowToken() != null) {
-                    if (manager != null) {
-                        manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    }
-                }
-                if (host.getText().length() == 0 || password.getText().length() == 0) {
-                    Snackbar.make(view, R.string.check_input, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    return;
-                }
-
-                host_save = String.valueOf(host.getText());
-                password_save = public_func.getMD5(String.valueOf(password.getText()));
-                final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
-                mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mpDialog.setTitle(getString(R.string.loading));
-                mpDialog.setMessage(getString(R.string.loading_message));
-                mpDialog.setIndeterminate(false);
-                mpDialog.setCancelable(false);
-                mpDialog.show();
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request request = new Request.Builder().url("https://" + host_save + "/control").method("OPTIONS", null).build();
-                Call call = okHttpClient.newCall(request);
-                call.enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        mpDialog.cancel();
-                        Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) {
-                        mpDialog.cancel();
-                        if (response.code() != 204) {
-                            Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG)
-                                    .setAction("Action", null).show();
-                            return;
-                        }
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        if (!host_list.has(host_save)) {
-                            host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
-                        }
-                        editor.putString("host_list", new Gson().toJson(host_list));
-                        editor.putString("host", host_save);
-                        editor.putString("password", password_save);
-                        editor.apply();
-                        start_edit();
-
-                    }
-                });
-
-
-
-            }
-        });
+        save_button.setOnClickListener(save_host);
     }
 
     void start_edit() {
@@ -193,8 +200,7 @@ public class main_Activity extends AppCompatActivity {
                 startActivityForResult(intent, 0);
                 return;
             }
-            Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -219,19 +225,18 @@ public class main_Activity extends AppCompatActivity {
                         .setAction("Action", null).show();
                 return;
             }
-            host_save = objects.get("url").getAsString();
-            password_save = objects.get("password").getAsString();
+            host_save = objects.get("H").getAsString();
+            password_save = objects.get("P").getAsString();
             if (password_save.length() == 0 || host_save.length() == 0) {
-                Snackbar.make(host, R.string.check_config, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(host, R.string.check_config, Snackbar.LENGTH_LONG).show();
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (!host_list.has(host_save)) {
-                host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password\":\"" + password_save + "\"}"));
+                host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password_v2\":\"" + password_save + "\"}"));
             }
             editor.putString("host_list", new Gson().toJson(host_list));
             editor.putString("host", host_save);
-            editor.putString("password", password_save);
+            editor.putString("password_v2", password_save);
             editor.apply();
             start_edit();
         }

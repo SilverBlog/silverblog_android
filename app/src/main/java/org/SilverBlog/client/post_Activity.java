@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,49 +33,58 @@ import okhttp3.Response;
 import static org.SilverBlog.client.recycler_view_adapter.sharedPreferences;
 
 public class post_Activity extends AppCompatActivity {
-    EditText titleview;
-    EditText nameview;
-    EditText editTextview;
-    int request_post_id;
+    EditText title_view;
+    EditText name_view;
+    EditText content_view;
+    String post_uuid;
     String action_name = "new";
+    Boolean edit_mode = false;
     private Context context;
     private Boolean edit_menu;
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
-            if (titleview.getText().length() == 0 || editTextview.getText().length() == 0) {
+            if (title_view.getText().length() == 0 || content_view.getText().length() == 0) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                 alertDialog.setTitle(R.string.content_not_none);
                 alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 alertDialog.show();
                 return false;
             }
-            if (public_value.password == null) {
+            if (!public_value.init) {
                 String host_save;
                 String password_save;
                 sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
                 host_save = sharedPreferences.getString("host", null);
-                password_save = sharedPreferences.getString("password", null);
+                password_save = sharedPreferences.getString("password_v2", null);
                 if (password_save == null || host_save == null) {
                     Intent main_activity = new Intent(post_Activity.this, main_Activity.class);
                     startActivity(main_activity);
                     finish();
                     return false;
                 }
+                public_value.init = true;
                 host_save = host_save.replace("http://", "").replace("https://", "");
                 public_value.host = host_save;
                 public_value.password = password_save;
             }
             Gson gson = new Gson();
-            content_json content = new content_json();
-            if (action_name.equals("edit")) {
-                content.post_id=request_post_id;
+            content_json json_obj = new content_json();
+            json_obj.post_uuid = "";
+            if (edit_mode) {
+                json_obj.post_uuid = post_uuid;
+                action_name = "edit/post";
+                if (edit_menu) {
+                    action_name = "edit/menu";
+                }
             }
-            content.name=nameview.getText().toString();
-            content.title=titleview.getText().toString();
-            content.content=editTextview.getText().toString();
-            content.sign=public_func.getMD5(titleview.getText().toString() + public_value.password);
-            String json = gson.toJson(content);
+            json_obj.name = name_view.getText().toString();
+            json_obj.title = title_view.getText().toString();
+            json_obj.content = content_view.getText().toString();
+            json_obj.send_time = System.currentTimeMillis();
+            String sign_message = json_obj.title + json_obj.name + public_func.get_hash(json_obj.content, "SHA-512");
+            json_obj.sign = public_func.get_hmac_sha512(sign_message, public_value.password + json_obj.send_time);
+            String json = gson.toJson(json_obj);
             final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
@@ -81,15 +92,9 @@ public class post_Activity extends AppCompatActivity {
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
-            if (action_name.equals("edit")) {
-                action_name = "edit/post";
-                if (edit_menu) {
-                    action_name = "edit/menu";
-                }
-            }
             RequestBody body = RequestBody.create(public_value.JSON, json);
             OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + action_name).method("POST", body).build();
+            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + action_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
                 @Override
@@ -101,25 +106,38 @@ public class post_Activity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(Call call, Response response) {
                     mpDialog.cancel();
+                    if (response.code() != 200) {
+                        Looper.prepare();
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                        Looper.loop();
+                        return;
+                    }
                     JsonParser parser = new JsonParser();
-                    final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                    JsonObject objects = null;
+                    try {
+                        objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    final JsonObject finalObjects = objects;
                     post_Activity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                             alertDialog.setTitle(R.string.submit_error);
                             String ok_button = getString(R.string.ok_button);
-                            if (objects.get("status").getAsBoolean()) {
+                            assert finalObjects != null;
+                            if (finalObjects.get("status").getAsBoolean()) {
                                 alertDialog.setTitle(R.string.submit_success);
                                 ok_button = getString(R.string.visit_document);
                                 alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (objects.get("status").getAsBoolean()) {
+                                        if (finalObjects.get("status").getAsBoolean()) {
                                             Intent intent = new Intent();
-                                            intent.setAction("org.silverblog.client");
+                                            intent.setAction(public_value.BROADCAST_TAG);
                                             intent.putExtra("success", true);
                                             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                             finish();
@@ -131,11 +149,11 @@ public class post_Activity extends AppCompatActivity {
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                            if (objects.get("status").getAsBoolean()) {
-                                                Uri uri = Uri.parse("https://" + public_value.host + "/post/" + objects.get("name").getAsString());
+                                            if (finalObjects.get("status").getAsBoolean()) {
+                                                Uri uri = Uri.parse("https://" + public_value.host + "/post/" + finalObjects.get("name").getAsString());
                                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                                                 Intent intent = new Intent();
-                                                intent.setAction("org.silverblog.client");
+                                                intent.setAction(public_value.BROADCAST_TAG);
                                                 intent.putExtra("success", true);
                                                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                                 finish();
@@ -166,9 +184,9 @@ public class post_Activity extends AppCompatActivity {
         context = getApplicationContext();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        titleview = findViewById(R.id.titleview);
-        editTextview = findViewById(R.id.mdcontent);
-        nameview = findViewById(R.id.nameview);
+        title_view = findViewById(R.id.titleview);
+        content_view = findViewById(R.id.mdcontent);
+        name_view = findViewById(R.id.nameview);
         this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
@@ -181,10 +199,10 @@ public class post_Activity extends AppCompatActivity {
                 handleSendText(intent);
             }
         }
-        if (intent.getBooleanExtra("edit", false)) {
-            action_name = "edit";
+        edit_mode = intent.getBooleanExtra("edit", false);
+        if (edit_mode) {
             this.setTitle(getString(R.string.edit_title));
-            request_post_id = intent.getIntExtra("position", -1);
+            post_uuid = intent.getStringExtra("uuid");
             final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
@@ -192,13 +210,13 @@ public class post_Activity extends AppCompatActivity {
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
-            String active_name = "get_content/post";
+            String active_name = "get/content/post";
             if (edit_menu) {
-                active_name = "get_content/menu";
+                active_name = "get/content/menu";
             }
-            RequestBody body = RequestBody.create(public_value.JSON, "{\"post_id\":" + Integer.toString(request_post_id) + "}");
+            RequestBody body = RequestBody.create(public_value.JSON, "{\"post_uuid\":\"" + post_uuid + "\"}");
             OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + active_name).method("POST", body).build();
+            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + active_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
 
@@ -216,22 +234,35 @@ public class post_Activity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    JsonParser parser = new JsonParser();
-                    final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
-                    post_Activity.this.runOnUiThread(new Runnable() {
+                public void onResponse(Call call, final Response response) {
+                    if (response.code() != 200) {
+                        Looper.prepare();
+                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                        Looper.loop();
+                        return;
+                    }
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (editTextview.getText().length() == 0) {
-
-                                titleview.setText(objects.get("title").getAsString());
-                                editTextview.setText(objects.get("content").getAsString());
+                            JsonParser parser = new JsonParser();
+                            JsonObject objects = null;
+                            try {
+                                assert response.body() != null;
+                                objects = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonObject();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                            nameview.setText(objects.get("name").getAsString());
-
+                            assert objects != null;
+                            if (title_view.getText().length() == 0) {
+                                title_view.setText(objects.get("title").getAsString());
+                            }
+                            if (content_view.getText().length() == 0) {
+                                content_view.setText(objects.get("content").getAsString());
+                            }
+                            name_view.setText(objects.get("name").getAsString());
+                            mpDialog.cancel();
                         }
                     });
-                    mpDialog.cancel();
                 }
 
             });
@@ -252,16 +283,16 @@ public class post_Activity extends AppCompatActivity {
                 alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        titleview.setText(title_final);
-                        editTextview.setText(content_replace);
+                        title_view.setText(title_final);
+                        content_view.setText(content_replace);
                     }
                 });
                 alertDialog.setNegativeButton(R.string.cancel, null);
                 alertDialog.show();
             }
         }
-        titleview.setText(title);
-        editTextview.setText(content);
+        title_view.setText(title);
+        content_view.setText(content);
 
     }
 
@@ -280,4 +311,13 @@ public class post_Activity extends AppCompatActivity {
         alertDialog.show();
 
     }
+}
+
+class content_json {
+    public String post_uuid;
+    public String content;
+    public String sign;
+    public String title;
+    public String name;
+    public long send_time;
 }
