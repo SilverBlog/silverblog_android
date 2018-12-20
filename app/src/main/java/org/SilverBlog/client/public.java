@@ -10,7 +10,6 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 
 class public_func {
@@ -63,7 +62,6 @@ class public_value {
             = MediaType.parse("application/json; charset=utf-8");
     static final String API_VERSION = "v2";
     static final String BROADCAST_TAG = "org.silverblog.client";
-    static final RequestBody NULL_BODY = RequestBody.create(null, new byte[0]);
     static String host;
     static String password;
     static Boolean init = false;

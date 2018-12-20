@@ -226,7 +226,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     void get_post_list_content() {
         mSwipeRefreshWidget.setRefreshing(true);
-        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/post").method("POST", public_value.NULL_BODY).build();
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/post").build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -283,7 +283,7 @@ public class post_list_card_Activity extends AppCompatActivity {
     }
 
     void get_system_info_content() {
-        Request request = new Request.Builder().url("https://" + public_value.host + "/control/system_info").method("POST", public_value.NULL_BODY).build();
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/system_info").build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -349,7 +349,7 @@ public class post_list_card_Activity extends AppCompatActivity {
     }
 
     void get_menu_list_content() {
-        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/menu").method("POST", public_value.NULL_BODY).build();
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/menu").build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -498,7 +498,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                                 Gson gson = new Gson();
                                                 request_json_obj.post_uuid = post_list.get(position).uuid;
                                                 request_json_obj.send_time = System.currentTimeMillis();
-                                                request_json_obj.sign = public_func.get_hmac_hash(post_obj.get("title").getAsString() + post_obj.get("name").getAsString(), public_value.password + request_json_obj.send_time, "HmacSHA512");
+                                                request_json_obj.sign = public_func.get_hmac_hash(post_obj.get("title").getAsString() + post_obj.get("name").getAsString() + request_json_obj.post_uuid, public_value.password + request_json_obj.send_time, "HmacSHA512");
                                                 RequestBody body = RequestBody.create(public_value.JSON, gson.toJson(request_json_obj));
                                                 Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/delete").method("POST", body).build();
                                                 OkHttpClient okHttpClient = new OkHttpClient();
