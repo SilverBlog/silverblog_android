@@ -15,8 +15,7 @@ import okhttp3.RequestBody;
 
 class public_func {
 
-    public static String get_hmac_sha512(String base, String key) {
-        String type = "HmacSHA512";
+    public static String get_hmac_hash(String base, String key, String type) {
         SecretKeySpec secret = new SecretKeySpec(key.getBytes(), type);
         Mac mac;
         try {

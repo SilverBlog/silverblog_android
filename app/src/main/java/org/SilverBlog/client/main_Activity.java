@@ -108,7 +108,7 @@ public class main_Activity extends AppCompatActivity {
             }
 
             host_save = String.valueOf(host.getText());
-            password_save = public_func.get_hash(public_func.get_hash(String.valueOf(password.getText()), "MD5") + "SiLvErBlOg", "SHA-256");
+            password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
             final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
