@@ -30,7 +30,7 @@ class public_func {
         return null;
     }
 
-    public static String byteArrayToHexString(byte[] b) {
+    private static String byteArrayToHexString(byte[] b) {
         StringBuilder sb = new StringBuilder(b.length * 2);
         for (byte aB : b) {
             int v = aB & 0xff;
