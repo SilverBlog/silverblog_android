@@ -21,7 +21,7 @@ class public_func {
             mac = Mac.getInstance(type);
             mac.init(secret);
             byte[] digest = mac.doFinal(base.getBytes());
-            return byteArrayToHexString(digest);
+            return byte2hex(digest);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
@@ -30,7 +30,7 @@ class public_func {
         return null;
     }
 
-    private static String byteArrayToHexString(byte[] b) {
+    private static String byte2hex(byte[] b) {
         StringBuilder sb = new StringBuilder(b.length * 2);
         for (byte aB : b) {
             int v = aB & 0xff;
@@ -48,7 +48,7 @@ class public_func {
         try {
             md = MessageDigest.getInstance(func);
             byte[] digest = md.digest(source.getBytes());
-            return byteArrayToHexString(digest);
+            return byte2hex(digest);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return null;

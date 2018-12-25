@@ -80,11 +80,11 @@
         
     <string name="select_config">請選擇配置</string>
     <string name="api_too_low">當前伺服器API版本太低，請升級後重試。</string>
-    <string name="app_name">SilverBlog</string>
     <string name="navigation_drawer_open">打開選單</string>
     <string name="navigation_drawer_close">關閉選單</string>
     <string name="notice_remove_title">標題已在內容中找到。 你想刪除標題嗎？</string>
     <string name="clean">清空</string>
     <string name="cannot_connect">無法連接到伺服器</string>
     <string name="api_too_high">當前客戶端API版本太低，請升級後重試。</string>
+    <string name="request_error">請求失敗，錯誤碼：</string>
 </resources>

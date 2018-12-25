@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">SliverBlog</string>
-
     <string name="send_button">パブリッシュ</string>
 
     <string name="git_repo">gitリポジトリに公開する</string>
@@ -88,4 +86,5 @@
     <string name="clean">クリーン</string>
     <string name="cannot_connect">サーバーに接続できません。</string>
     <string name="api_too_high">現在のクライアントAPIのバージョンが低すぎます。アップグレード後にもう一度お試しください。</string>
+    <string name="request_error">要求が失敗しました、エラーコード：</string>
 </resources>

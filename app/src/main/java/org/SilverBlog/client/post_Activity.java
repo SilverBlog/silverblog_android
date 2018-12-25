@@ -110,7 +110,7 @@ public class post_Activity extends AppCompatActivity {
                     mpDialog.cancel();
                     if (response.code() != 200) {
                         Looper.prepare();
-                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
                         Looper.loop();
                         return;
                     }
@@ -237,7 +237,7 @@ public class post_Activity extends AppCompatActivity {
                 public void onResponse(Call call, final Response response) {
                     if (response.code() != 200) {
                         Looper.prepare();
-                        Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
                         Looper.loop();
                         return;
                     }
