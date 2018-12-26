@@ -83,6 +83,9 @@ public class post_Activity extends AppCompatActivity {
             json_obj.content = content_view.getText().toString();
             json_obj.send_time = System.currentTimeMillis();
             String sign_message = json_obj.title + json_obj.name + public_func.get_hash(json_obj.content, "SHA-512");
+            if (edit_mode) {
+                sign_message += json_obj.post_uuid;
+            }
             json_obj.sign = public_func.get_hmac_hash(sign_message, public_value.password + json_obj.send_time, "HmacSHA512");
             String json = gson.toJson(json_obj);
             final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
