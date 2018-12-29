@@ -61,7 +61,6 @@ class public_value {
     static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
     static final String API_VERSION = "v2";
-    static final String BROADCAST_TAG = "org.silverblog.client";
     static String host;
     static String password;
     static Boolean init = false;

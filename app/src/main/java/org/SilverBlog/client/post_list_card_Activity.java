@@ -127,7 +127,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
         result_receiver receiver = new result_receiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(public_value.BROADCAST_TAG);
+        filter.addAction(context.getPackageName());
         context = getApplicationContext();
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
 
@@ -510,7 +510,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                                         Intent intent = new Intent();
                                                         intent.putExtra("result", context.getString(R.string.submit_error));
                                                         intent.putExtra("success", false);
-                                                        intent.setAction(public_value.BROADCAST_TAG);
+                                                        intent.setAction(context.getPackageName());
                                                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                                     }
 
@@ -526,7 +526,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                                         Intent intent = new Intent();
                                                         intent.putExtra("result", result_message);
                                                         intent.putExtra("success", true);
-                                                        intent.setAction(public_value.BROADCAST_TAG);
+                                                        intent.setAction(context.getPackageName());
                                                         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                                     }
                                                 });

@@ -140,7 +140,7 @@ public class post_Activity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         if (finalObjects.get("status").getAsBoolean()) {
                                             Intent intent = new Intent();
-                                            intent.setAction(public_value.BROADCAST_TAG);
+                                            intent.setAction(context.getPackageName());
                                             intent.putExtra("success", true);
                                             LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                             finish();
@@ -156,7 +156,7 @@ public class post_Activity extends AppCompatActivity {
                                                 Uri uri = Uri.parse("https://" + public_value.host + "/post/" + finalObjects.get("name").getAsString());
                                                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                                                 Intent intent = new Intent();
-                                                intent.setAction(public_value.BROADCAST_TAG);
+                                                intent.setAction(context.getPackageName());
                                                 intent.putExtra("success", true);
                                                 LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                                                 finish();
