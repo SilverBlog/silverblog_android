@@ -2,7 +2,6 @@ package org.SilverBlog.client;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -125,46 +124,37 @@ public class post_Activity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     final JsonObject finalObjects = objects;
-                    post_Activity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                            alertDialog.setTitle(R.string.submit_error);
-                            String ok_button = getString(R.string.ok_button);
-                            assert finalObjects != null;
-                            if (finalObjects.get("status").getAsBoolean()) {
-                                alertDialog.setTitle(R.string.submit_success);
-                                ok_button = getString(R.string.visit_document);
-                                alertDialog.setNeutralButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        if (finalObjects.get("status").getAsBoolean()) {
-                                            Intent intent = new Intent();
-                                            intent.setAction(context.getPackageName());
-                                            intent.putExtra("success", true);
-                                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                                            finish();
-                                        }
+                    post_Activity.this.runOnUiThread(() -> {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                        alertDialog.setTitle(R.string.submit_error);
+                        String ok_button = getString(R.string.ok_button);
+                        assert finalObjects != null;
+                        if (finalObjects.get("status").getAsBoolean()) {
+                            alertDialog.setTitle(R.string.submit_success);
+                            ok_button = getString(R.string.visit_document);
+                            alertDialog.setNeutralButton(R.string.cancel, (dialogInterface, i) -> {
+                                if (finalObjects.get("status").getAsBoolean()) {
+                                    Intent intent = new Intent();
+                                    intent.setAction(context.getPackageName());
+                                    intent.putExtra("success", true);
+                                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                                    finish();
+                                }
+                            });
+                        }
+                        alertDialog.setNegativeButton(ok_button,
+                                (dialogInterface, i) -> {
+                                    if (finalObjects.get("status").getAsBoolean()) {
+                                        Uri uri = Uri.parse("https://" + public_value.host + "/post/" + finalObjects.get("name").getAsString());
+                                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                        Intent intent = new Intent();
+                                        intent.setAction(context.getPackageName());
+                                        intent.putExtra("success", true);
+                                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                                        finish();
                                     }
                                 });
-                            }
-                            alertDialog.setNegativeButton(ok_button,
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            if (finalObjects.get("status").getAsBoolean()) {
-                                                Uri uri = Uri.parse("https://" + public_value.host + "/post/" + finalObjects.get("name").getAsString());
-                                                startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                                                Intent intent = new Intent();
-                                                intent.setAction(context.getPackageName());
-                                                intent.putExtra("success", true);
-                                                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                                                finish();
-                                            }
-                                        }
-                                    });
-                            alertDialog.create().show();
-                        }
+                        alertDialog.create().show();
                     });
                 }
             });
@@ -228,12 +218,7 @@ public class post_Activity extends AppCompatActivity {
                     mpDialog.cancel();
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                     alertDialog.setTitle(R.string.submit_error);
-                    alertDialog.setNegativeButton(getString(R.string.ok_button), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                        }
-                    });
+                    alertDialog.setNegativeButton(getString(R.string.ok_button), (dialogInterface, i) -> finish());
                 }
 
                 @Override
@@ -244,27 +229,24 @@ public class post_Activity extends AppCompatActivity {
                         Looper.loop();
                         return;
                     }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            JsonParser parser = new JsonParser();
-                            JsonObject objects = null;
-                            try {
-                                assert response.body() != null;
-                                objects = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonObject();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            assert objects != null;
-                            if (title_view.getText().length() == 0) {
-                                title_view.setText(objects.get("title").getAsString());
-                            }
-                            if (content_view.getText().length() == 0) {
-                                content_view.setText(objects.get("content").getAsString());
-                            }
-                            name_view.setText(objects.get("name").getAsString());
-                            mpDialog.cancel();
+                    runOnUiThread(() -> {
+                        JsonParser parser = new JsonParser();
+                        JsonObject objects = null;
+                        try {
+                            assert response.body() != null;
+                            objects = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonObject();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+                        assert objects != null;
+                        if (title_view.getText().length() == 0) {
+                            title_view.setText(objects.get("title").getAsString());
+                        }
+                        if (content_view.getText().length() == 0) {
+                            content_view.setText(objects.get("content").getAsString());
+                        }
+                        name_view.setText(objects.get("name").getAsString());
+                        mpDialog.cancel();
                     });
                 }
 
@@ -283,12 +265,9 @@ public class post_Activity extends AppCompatActivity {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
                 alertDialog.setTitle(R.string.notice);
                 alertDialog.setMessage(R.string.notice_remove_title);
-                alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        title_view.setText(title_final);
-                        content_view.setText(content_replace);
-                    }
+                alertDialog.setNeutralButton(R.string.ok_button, (dialogInterface, i) -> {
+                    title_view.setText(title_final);
+                    content_view.setText(content_replace);
                 });
                 alertDialog.setNegativeButton(R.string.cancel, null);
                 alertDialog.show();
@@ -304,12 +283,7 @@ public class post_Activity extends AppCompatActivity {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
         alertDialog.setTitle(R.string.notice);
         alertDialog.setMessage(R.string.save_notice);
-        alertDialog.setNeutralButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
+        alertDialog.setNeutralButton(R.string.ok_button, (dialogInterface, i) -> finish());
         alertDialog.setNegativeButton(R.string.cancel, null);
         alertDialog.show();
 

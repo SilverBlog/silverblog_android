@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -60,35 +58,31 @@ public class main_Activity extends AppCompatActivity {
     View.OnClickListener history_host = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    host_save = host_info.get("host").getAsString();
-                    if (host_info.has("password")) {
-                        String password_v2 = public_func.get_hash(host_info.get("password").getAsString() + "SiLvErBlOg", "SHA-256");
-                        host_list.remove(host_name_list.get(i));
-                        host_info = (JsonObject) new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password_v2\":\"" + password_v2 + "\"}");
-                        host_list.add(host_name_list.get(i), host_info);
-                        editor.putString("host_list", new Gson().toJson(host_list));
-                    }
-                    password_save = host_info.get("password_v2").getAsString();
-                    editor.putString("host", host_save);
-                    editor.putString("password_v2", password_save);
-                    editor.apply();
-                    start_edit();
+            new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), (dialogInterface, i) -> {
+                JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                host_save = host_info.get("host").getAsString();
+                if (host_info.has("password")) {
+                    String password_v2 = public_func.get_hash(host_info.get("password").getAsString() + "SiLvErBlOg", "SHA-256");
+                    host_list.remove(host_name_list.get(i));
+                    JsonObject object = new JsonObject();
+                    object.addProperty("host", host_save);
+                    object.addProperty("password_v2", password_v2);
+                    host_list.add(host_name_list.get(i), object);
+                    editor.putString("host_list", new Gson().toJson(host_list));
+                }
+                password_save = host_info.get("password_v2").getAsString();
+                editor.putString("host", host_save);
+                editor.putString("password_v2", password_save);
+                editor.apply();
+                start_edit();
 
-                }
-            }).setNegativeButton(R.string.clean, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.remove("host_list");
-                    editor.apply();
-                    host_list = new JsonParser().parse("{}").getAsJsonObject();
-                    host_name_list = new ArrayList<>();
-                }
+            }).setNegativeButton(R.string.clean, (dialogInterface, i) -> {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("host_list");
+                editor.apply();
+                host_list = new JsonParser().parse("{}").getAsJsonObject();
+                host_name_list = new ArrayList<>();
             }).setPositiveButton(R.string.cancel, null).show();
         }
     };
@@ -135,7 +129,10 @@ public class main_Activity extends AppCompatActivity {
                     }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     if (!host_list.has(host_save)) {
-                        host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password_v2\":\"" + password_save + "\"}"));
+                        JsonObject object = new JsonObject();
+                        object.addProperty("host", host_save);
+                        object.addProperty("password_v2", password_save);
+                        host_list.add(host_save, object);
                     }
                     editor.putString("host_list", new Gson().toJson(host_list));
                     editor.putString("host", host_save);
@@ -158,17 +155,14 @@ public class main_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.maintoolbar);
         setSupportActionBar(toolbar);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (ContextCompat.checkSelfPermission(main_Activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(main_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
-                    return false;
-                }
-                Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
-                startActivityForResult(intent, 0);
-                return true;
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (ContextCompat.checkSelfPermission(main_Activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(main_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
+                return false;
             }
+            Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
+            startActivityForResult(intent, 0);
+            return true;
         });
         host_list = new JsonParser().parse(Objects.requireNonNull(sharedPreferences.getString("host_list", "{}"))).getAsJsonObject();
         host_name_list = new ArrayList<>();
@@ -232,7 +226,10 @@ public class main_Activity extends AppCompatActivity {
             }
             SharedPreferences.Editor editor = sharedPreferences.edit();
             if (!host_list.has(host_save)) {
-                host_list.add(host_save, new JsonParser().parse("{\"host\":\"" + host_save + "\",\"password_v2\":\"" + password_save + "\"}"));
+                JsonObject object = new JsonObject();
+                object.addProperty("host", host_save);
+                object.addProperty("password_v2", password_save);
+                host_list.add(host_save, object);
             }
             editor.putString("host_list", new Gson().toJson(host_list));
             editor.putString("host", host_save);
