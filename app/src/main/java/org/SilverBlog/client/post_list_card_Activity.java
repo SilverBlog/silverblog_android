@@ -394,7 +394,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                         }
                         Intent intent = new Intent(context, post_Activity.class);
                         intent.putExtra("edit", true);
-                        intent.putExtra("position", id1);
+                        intent.putExtra("uuid", menu_item.get("uuid").getAsString());
                         intent.putExtra("menu", true);
                         intent.putExtra("share_title", public_value.share_title);
                         intent.putExtra("share_text", public_value.share_text);

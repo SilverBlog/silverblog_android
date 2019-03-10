@@ -11,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -207,8 +208,9 @@ public class post_Activity extends AppCompatActivity {
             if (edit_menu) {
                 active_name = "get/content/menu";
             }
-            JsonObject request_obj = new JsonObject();
-            request_obj.addProperty("post_uuid", post_uuid);
+            request_json request_obj = new request_json();
+            request_obj.post_uuid = post_uuid;
+            Log.d("silverblog", "onCreate: " + new Gson().toJson(request_obj));
             RequestBody body = RequestBody.create(public_value.JSON, new Gson().toJson(request_obj));
             OkHttpClient okHttpClient = new OkHttpClient();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + active_name).method("POST", body).build();
@@ -290,6 +292,10 @@ public class post_Activity extends AppCompatActivity {
         alertDialog.show();
 
     }
+}
+
+class request_json {
+    public String post_uuid;
 }
 
 class content_json {
