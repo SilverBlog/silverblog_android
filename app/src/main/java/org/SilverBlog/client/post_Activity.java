@@ -207,7 +207,9 @@ public class post_Activity extends AppCompatActivity {
             if (edit_menu) {
                 active_name = "get/content/menu";
             }
-            RequestBody body = RequestBody.create(public_value.JSON, "{\"post_uuid\":\"" + post_uuid + "\"}");
+            JsonObject request_obj = new JsonObject();
+            request_obj.addProperty("post_uuid", post_uuid);
+            RequestBody body = RequestBody.create(public_value.JSON, new Gson().toJson(request_obj));
             OkHttpClient okHttpClient = new OkHttpClient();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + active_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
