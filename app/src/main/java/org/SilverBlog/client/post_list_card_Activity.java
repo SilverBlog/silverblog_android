@@ -525,18 +525,13 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
     public int getItemCount() {
         return post_list.size();
     }
-
     static class card_view_holder extends RecyclerView.ViewHolder {
-
         CardView cardView = itemView.findViewById(R.id.card_view);
         TextView title = itemView.findViewById(R.id.title);
         TextView excerpt = itemView.findViewById(R.id.excerpt);
-
         card_view_holder(final View itemView) {
             super(itemView);
         }
-
-
     }
 }
 
