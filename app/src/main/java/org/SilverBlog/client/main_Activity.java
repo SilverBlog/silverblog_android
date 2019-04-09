@@ -110,7 +110,7 @@ public class main_Activity extends AppCompatActivity {
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + host_save + "/control").method("OPTIONS", null).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {

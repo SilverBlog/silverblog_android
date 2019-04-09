@@ -10,6 +10,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 
 
 class public_func {
@@ -55,6 +56,9 @@ class public_func {
         }
     }
 
+    static OkHttpClient get_okhttp_obj() {
+        return new OkHttpClient().newBuilder().build();
+    }
 }
 
 class public_value {

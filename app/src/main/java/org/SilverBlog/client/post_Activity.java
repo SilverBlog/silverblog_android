@@ -96,7 +96,7 @@ public class post_Activity extends AppCompatActivity {
             mpDialog.setCancelable(false);
             mpDialog.show();
             RequestBody body = RequestBody.create(public_value.JSON, json);
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + action_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
@@ -190,7 +190,7 @@ public class post_Activity extends AppCompatActivity {
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                handleSendText(intent);
+                handle_receive_share(intent);
             }
         }
         edit_mode = intent.getBooleanExtra("edit", false);
@@ -212,7 +212,7 @@ public class post_Activity extends AppCompatActivity {
             request_obj.post_uuid = post_uuid;
             Log.d("silverblog", "onCreate: " + new Gson().toJson(request_obj));
             RequestBody body = RequestBody.create(public_value.JSON, new Gson().toJson(request_obj));
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + active_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
@@ -258,7 +258,7 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
-    void handleSendText(Intent intent) {
+    private void handle_receive_share(Intent intent) {
         final String title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
         final String content = intent.getStringExtra(Intent.EXTRA_TEXT);
         if (title == null) {
@@ -295,14 +295,14 @@ public class post_Activity extends AppCompatActivity {
 }
 
 class request_json {
-    public String post_uuid;
+    String post_uuid;
 }
 
 class content_json {
-    public String post_uuid;
-    public String content;
-    public String sign;
-    public String title;
-    public String name;
-    public long send_time;
+    String post_uuid;
+    String content;
+    String sign;
+    String title;
+    String name;
+    long send_time;
 }
