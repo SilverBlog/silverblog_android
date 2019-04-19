@@ -80,6 +80,8 @@ public class main_Activity extends AppCompatActivity {
             }).setNegativeButton(R.string.clean, (dialogInterface, i) -> {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("host_list");
+                editor.remove("host");
+                editor.remove("password_v2");
                 editor.apply();
                 host_list = new JsonParser().parse("{}").getAsJsonObject();
                 host_name_list = new ArrayList<>();
