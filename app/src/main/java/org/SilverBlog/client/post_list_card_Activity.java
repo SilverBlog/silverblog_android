@@ -491,27 +491,36 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                     @Override
                                     public void onFailure(Call call, IOException e) {
                                         mpDialog.cancel();
-                                        Intent intent1 = new Intent();
-                                        intent1.putExtra("result", context.getString(R.string.submit_error));
-                                        intent1.putExtra("success", false);
-                                        intent1.setAction(context.getPackageName());
-                                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
+                                        Intent broadcast_intent = new Intent();
+                                        broadcast_intent.putExtra("result", context.getString(R.string.submit_error));
+                                        broadcast_intent.putExtra("success", false);
+                                        broadcast_intent.setAction(context.getPackageName());
+                                        LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast_intent);
                                     }
 
                                     @Override
                                     public void onResponse(Call call, Response response) throws IOException {
                                         mpDialog.cancel();
-                                        JsonParser parser = new JsonParser();
-                                        final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
-                                        String result_message = context.getString(R.string.submit_error);
-                                        if (objects.get("status").getAsBoolean()) {
-                                            result_message = context.getString(R.string.submit_success);
+                                        Intent broadcast_intent = new Intent();
+                                        broadcast_intent.setAction(context.getPackageName());
+                                        if(response.code()!=200){
+                                            broadcast_intent.putExtra("result", context.getString(R.string.request_error) + response.code()      );
+                                            broadcast_intent.putExtra("success", false);
                                         }
-                                        Intent intent1 = new Intent();
-                                        intent1.putExtra("result", result_message);
-                                        intent1.putExtra("success", true);
-                                        intent1.setAction(context.getPackageName());
-                                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent1);
+                                        if(response.code()==200) {
+                                            JsonParser parser = new JsonParser();
+                                            final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
+                                            String result_message = context.getString(R.string.submit_error);
+                                            if (objects.get("status").getAsBoolean()) {
+                                                result_message = context.getString(R.string.submit_success);
+                                            }
+                                            broadcast_intent.putExtra("result", result_message);
+                                            broadcast_intent.putExtra("success", true);
+
+
+                                        }
+                                        LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast_intent);
+
                                     }
                                 });
                             }).setNegativeButton(R.string.cancel, null).show();

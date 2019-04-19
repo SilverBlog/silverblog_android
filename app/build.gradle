@@ -6,7 +6,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId 'org.SilverBlog.client'
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 28
         versionName appVersionName
         versionCode appVersionCode
