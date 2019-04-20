@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
 
 class public_func {
 
-    public static String get_hmac_hash(String base, String key, String type) {
+    static String get_hmac_hash(String base, String key, String type) {
         SecretKeySpec secret = new SecretKeySpec(key.getBytes(), type);
         Mac mac;
         try {
@@ -64,6 +64,7 @@ class public_func {
 class public_value {
     final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     final static String API_VERSION = "v2";
+    final static int current_api_code = 3;
     static String host;
     static String password;
     static Boolean init = false;

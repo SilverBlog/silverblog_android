@@ -11,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -30,14 +29,14 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static org.SilverBlog.client.recycler_view_adapter.sharedPreferences;
+import static org.SilverBlog.client.recycler_view_adapter.sharedpreferences;
 
-public class post_Activity extends AppCompatActivity {
-    EditText title_view;
-    EditText name_view;
-    EditText content_view;
+public class edit_activity extends AppCompatActivity {
+    private EditText title_view;
+    private EditText name_view;
+    private EditText content_view;
     String post_uuid;
-    String action_name = "new";
+     String action_name = "new";
     Boolean edit_mode = false;
     private Context context;
     private Boolean edit_menu;
@@ -45,7 +44,7 @@ public class post_Activity extends AppCompatActivity {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             if (title_view.getText().length() == 0 || content_view.getText().length() == 0) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
                 alertDialog.setTitle(R.string.content_not_none);
                 alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 alertDialog.show();
@@ -54,11 +53,11 @@ public class post_Activity extends AppCompatActivity {
             if (!public_value.init) {
                 String host_save;
                 String password_save;
-                sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-                host_save = sharedPreferences.getString("host", null);
-                password_save = sharedPreferences.getString("password_v2", null);
+                sharedpreferences = getSharedPreferences("data", MODE_PRIVATE);
+                host_save = sharedpreferences.getString("host", null);
+                password_save = sharedpreferences.getString("password_v2", null);
                 if (password_save == null || host_save == null) {
-                    Intent main_activity = new Intent(post_Activity.this, main_Activity.class);
+                    Intent main_activity = new Intent(edit_activity.this, org.SilverBlog.client.main_activity.class);
                     startActivity(main_activity);
                     finish();
                     return false;
@@ -88,7 +87,7 @@ public class post_Activity extends AppCompatActivity {
             }
             json_obj.sign = public_func.get_hmac_hash(sign_message, public_value.password + json_obj.send_time, "HmacSHA512");
             String json = gson.toJson(json_obj);
-            final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
+            final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -103,7 +102,7 @@ public class post_Activity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     mpDialog.cancel();
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
                     alertDialog.setTitle(R.string.network_error);
                     alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 }
@@ -125,8 +124,8 @@ public class post_Activity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     final JsonObject finalObjects = objects;
-                    post_Activity.this.runOnUiThread(() -> {
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                    edit_activity.this.runOnUiThread(() -> {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
                         alertDialog.setTitle(R.string.submit_error);
                         String ok_button = getString(R.string.ok_button);
                         assert finalObjects != null;
@@ -190,14 +189,33 @@ public class post_Activity extends AppCompatActivity {
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
-                handle_receive_share(intent);
+                final String title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
+                final String content = intent.getStringExtra(Intent.EXTRA_TEXT);
+                if (title == null) {
+                    final String[] content_split = content.split("\n");
+                    if (content_split[0].startsWith("# ")) {
+                        final String title_final = content_split[0].replace("# ", "");
+                        final String content_replace = content.replace(content_split[0] + "\n", "");
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
+                        alertDialog.setTitle(R.string.notice);
+                        alertDialog.setMessage(R.string.notice_remove_title);
+                        alertDialog.setNeutralButton(R.string.ok_button, (dialogInterface, i) -> {
+                            title_view.setText(title_final);
+                            content_view.setText(content_replace);
+                        });
+                        alertDialog.setNegativeButton(R.string.cancel, null);
+                        alertDialog.show();
+                    }
+                }
+                title_view.setText(title);
+                content_view.setText(content);
             }
         }
         edit_mode = intent.getBooleanExtra("edit", false);
         if (edit_mode) {
             this.setTitle(getString(R.string.edit_title));
             post_uuid = intent.getStringExtra("uuid");
-            final ProgressDialog mpDialog = new ProgressDialog(post_Activity.this);
+            final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -210,7 +228,6 @@ public class post_Activity extends AppCompatActivity {
             }
             request_json request_obj = new request_json();
             request_obj.post_uuid = post_uuid;
-            Log.d("silverblog", "onCreate: " + new Gson().toJson(request_obj));
             RequestBody body = RequestBody.create(public_value.JSON, new Gson().toJson(request_obj));
             OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + active_name).method("POST", body).build();
@@ -220,7 +237,7 @@ public class post_Activity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     mpDialog.cancel();
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
                     alertDialog.setTitle(R.string.submit_error);
                     alertDialog.setNegativeButton(getString(R.string.ok_button), (dialogInterface, i) -> finish());
                 }
@@ -258,33 +275,9 @@ public class post_Activity extends AppCompatActivity {
         }
     }
 
-    private void handle_receive_share(Intent intent) {
-        final String title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
-        final String content = intent.getStringExtra(Intent.EXTRA_TEXT);
-        if (title == null) {
-            final String[] content_split = content.split("\n");
-            if (content_split[0].startsWith("# ")) {
-                final String title_final = content_split[0].replace("# ", "");
-                final String content_replace = content.replace(content_split[0] + "\n", "");
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
-                alertDialog.setTitle(R.string.notice);
-                alertDialog.setMessage(R.string.notice_remove_title);
-                alertDialog.setNeutralButton(R.string.ok_button, (dialogInterface, i) -> {
-                    title_view.setText(title_final);
-                    content_view.setText(content_replace);
-                });
-                alertDialog.setNegativeButton(R.string.cancel, null);
-                alertDialog.show();
-            }
-        }
-        title_view.setText(title);
-        content_view.setText(content);
-
-    }
-
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(post_Activity.this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
         alertDialog.setTitle(R.string.notice);
         alertDialog.setMessage(R.string.save_notice);
         alertDialog.setNeutralButton(R.string.ok_button, (dialogInterface, i) -> finish());

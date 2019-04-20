@@ -58,16 +58,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static org.SilverBlog.client.recycler_view_adapter.sharedPreferences;
+import static org.SilverBlog.client.recycler_view_adapter.sharedpreferences;
 
-public class post_list_card_Activity extends AppCompatActivity {
-    SwipeRefreshLayout mSwipeRefreshWidget;
-    NavigationView navigationView;
-    private RecyclerView recyclerView;
+public class post_list_activity extends AppCompatActivity {
+    SwipeRefreshLayout swipe_refresh_widget;
+    NavigationView navigation_view;
+    private RecyclerView recycler_view;
     private Context context;
     private Toolbar toolbar;
 
-    public static Boolean isAbsURL(String URL) {
+    public static Boolean is_abs_url(String URL) {
         try {
             URI u = new URI(URL);
             return u.isAbsolute();
@@ -77,18 +77,19 @@ public class post_list_card_Activity extends AppCompatActivity {
         return true;
     }
 
-    public static String getAbsUrl(String absolutePath, String relativePath) {
+    public static String get_abs_url(String absolutePath, String relativePath) {
         try {
             URL absoluteUrl = new URL(absolutePath);
             URL parseUrl = new URL(absoluteUrl, relativePath);
             return parseUrl.toString();
         } catch (MalformedURLException e) {
+            e.printStackTrace();
             return "";
         }
     }
 
     void start_login() {
-        Intent main_activity = new Intent(post_list_card_Activity.this, main_Activity.class);
+        Intent main_activity = new Intent(post_list_activity.this, org.SilverBlog.client.main_activity.class);
         startActivity(main_activity);
         finish();
     }
@@ -100,9 +101,9 @@ public class post_list_card_Activity extends AppCompatActivity {
         context = getApplicationContext();
         String host_save;
         String password_save;
-        sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
-        host_save = sharedPreferences.getString("host", null);
-        password_save = sharedPreferences.getString("password_v2", null);
+        sharedpreferences = getSharedPreferences("data", MODE_PRIVATE);
+        host_save = sharedpreferences.getString("host", null);
+        password_save = sharedpreferences.getString("password_v2", null);
         public_value.init = true;
         if (password_save == null || host_save == null) {
             start_login();
@@ -115,11 +116,11 @@ public class post_list_card_Activity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Loading...");
         setSupportActionBar(toolbar);
-        recyclerView = findViewById(R.id.my_recycler_view);
+        recycler_view = findViewById(R.id.my_recycler_view);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recycler_view.setLayoutManager(layoutManager);
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setItemAnimator(new DefaultItemAnimator());
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -132,22 +133,22 @@ public class post_list_card_Activity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent new_post_activity = new Intent(post_list_card_Activity.this, post_Activity.class);
+            Intent new_post_activity = new Intent(post_list_activity.this, edit_activity.class);
             startActivity(new_post_activity);
         });
 
 
-        navigationView = findViewById(R.id.nav_view);
-        mSwipeRefreshWidget = findViewById(R.id.swipe_refresh_widget);
-        mSwipeRefreshWidget.setColorSchemeResources(R.color.colorPrimary);
-        mSwipeRefreshWidget.setOnRefreshListener(() -> {
-            get_post_list_content();
-            get_menu_list_content();
+        navigation_view = findViewById(R.id.nav_view);
+        swipe_refresh_widget = findViewById(R.id.swipe_refresh_widget);
+        swipe_refresh_widget.setColorSchemeResources(R.color.colorPrimary);
+        swipe_refresh_widget.setOnRefreshListener(() -> {
+            get_post_list();
+            get_menu_list();
         });
 
-        get_post_list_content();
-        get_menu_list_content();
-        get_system_info_content();
+        get_post_list();
+        get_menu_list();
+        get_system_info();
     }
 
     @Override
@@ -161,13 +162,7 @@ public class post_list_card_Activity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.post_list_menu, menu);
         return true;
     }
@@ -176,13 +171,13 @@ public class post_list_card_Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.send_to_git_button:
-                final ProgressDialog mpDialog = new ProgressDialog(post_list_card_Activity.this);
-                mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                mpDialog.setTitle(getString(R.string.loading));
-                mpDialog.setMessage(getString(R.string.loading_message));
-                mpDialog.setIndeterminate(false);
-                mpDialog.setCancelable(false);
-                mpDialog.show();
+                final ProgressDialog dialog = new ProgressDialog(post_list_activity.this);
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.setTitle(getString(R.string.loading));
+                dialog.setMessage(getString(R.string.loading_message));
+                dialog.setIndeterminate(false);
+                dialog.setCancelable(false);
+                dialog.show();
                 OkHttpClient okHttpClient = public_func.get_okhttp_obj();
                 Gson gson = new Gson();
                 sign_json request_json_obj = new sign_json();
@@ -194,14 +189,14 @@ public class post_list_card_Activity extends AppCompatActivity {
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        mpDialog.cancel();
+                        dialog.cancel();
                         Snackbar.make(findViewById(R.id.toolbar), R.string.git_push_error, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        mpDialog.cancel();
+                        dialog.cancel();
                         if (response.code() != 200) {
                             Looper.prepare();
                             Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
@@ -220,15 +215,20 @@ public class post_list_card_Activity extends AppCompatActivity {
                 });
                 break;
             case R.id.logout:
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.remove("host");
+                editor.remove("password_v2");
+                editor.apply();
                 start_login();
+
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    void get_post_list_content() {
-        mSwipeRefreshWidget.setRefreshing(true);
+    void get_post_list() {
+        swipe_refresh_widget.setRefreshing(true);
         Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/post").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
@@ -250,7 +250,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                 }
                 runOnUiThread(() -> {
                     JsonParser parser = new JsonParser();
-                    final List<post_list_serialzable> post_list = new ArrayList<>();
+                    final List<post_list> post_list = new ArrayList<>();
                     assert response.body() != null;
                     JsonArray result_array = null;
                     try {
@@ -260,29 +260,29 @@ public class post_list_card_Activity extends AppCompatActivity {
                     }
                     public_value.post_list = result_array;
 
-                    mSwipeRefreshWidget.setRefreshing(false);
+                    swipe_refresh_widget.setRefreshing(false);
 
                     assert result_array != null;
                     for (JsonElement item : result_array) {
                         JsonObject sub_item = item.getAsJsonObject();
-                        post_list_serialzable list_obj = new post_list_serialzable();
+                        post_list list_obj = new post_list();
                         list_obj.title = sub_item.get("title").getAsString();
                         list_obj.excerpt = sub_item.get("excerpt").getAsString();
                         list_obj.uuid = sub_item.get("uuid").getAsString();
                         post_list.add(list_obj);
                     }
                     if (result_array.size() == 0) {
-                        Snackbar.make(mSwipeRefreshWidget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(swipe_refresh_widget, R.string.list_is_none, Snackbar.LENGTH_LONG).show();
                     }
-                    recycler_view_adapter adapter = new recycler_view_adapter(post_list, post_list_card_Activity.this);
-                    recyclerView.setAdapter(adapter);
+                    recycler_view_adapter adapter = new recycler_view_adapter(post_list, post_list_activity.this);
+                    recycler_view.setAdapter(adapter);
                 });
             }
         });
 
     }
 
-    void get_system_info_content() {
+    void get_system_info() {
         Request request = new Request.Builder().url("https://" + public_value.host + "/control/system_info").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
@@ -313,28 +313,28 @@ public class post_list_card_Activity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     assert result_object != null;
-                    if (result_object.get("api_version").getAsInt() < 3) {
-                        new AlertDialog.Builder(post_list_card_Activity.this)
+                    if (result_object.get("api_version").getAsInt() < public_value.current_api_code) {
+                        new AlertDialog.Builder(post_list_activity.this)
                                 .setMessage(getString(R.string.api_too_low))
                                 .show();
                         return;
                     }
-                    if (result_object.get("api_version").getAsInt() > 3) {
-                        new AlertDialog.Builder(post_list_card_Activity.this)
+                    if (result_object.get("api_version").getAsInt() > public_value.current_api_code) {
+                        new AlertDialog.Builder(post_list_activity.this)
                                 .setMessage(R.string.api_too_high)
                                 .show();
                         return;
                     }
-                    View headerView = navigationView.getHeaderView(0);
-                    ImageView ivAvatar = headerView.findViewById(R.id.imageView);
+                    View header_view = navigation_view.getHeaderView(0);
+                    ImageView ivAvatar = header_view.findViewById(R.id.imageView);
                     String imageURL = result_object.get("author_image").getAsString();
-                    if (!isAbsURL(imageURL)) {
-                        imageURL = getAbsUrl(public_value.host, imageURL);
+                    if (!is_abs_url(imageURL)) {
+                        imageURL = get_abs_url(public_value.host, imageURL);
                     }
 
-                    Glide.with(post_list_card_Activity.this).load(imageURL).apply(RequestOptions.circleCropTransform()).into(ivAvatar);
-                    TextView username = headerView.findViewById(R.id.username);
-                    TextView desc = headerView.findViewById(R.id.desc);
+                    Glide.with(post_list_activity.this).load(imageURL).apply(RequestOptions.circleCropTransform()).into(ivAvatar);
+                    TextView username = header_view.findViewById(R.id.username);
+                    TextView desc = header_view.findViewById(R.id.desc);
                     username.setText(result_object.get("author_name").getAsString());
                     desc.setText(result_object.get("project_description").getAsString());
                     toolbar.setTitle(result_object.get("project_name").getAsString());
@@ -345,7 +345,7 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     }
 
-    void get_menu_list_content() {
+    void get_menu_list() {
         Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/menu").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
@@ -375,15 +375,15 @@ public class post_list_card_Activity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     public_value.menu_list = result_array;
-                    navigationView.getMenu().clear();
+                    navigation_view.getMenu().clear();
                     int id = 0;
                     assert result_array != null;
                     for (JsonElement item : result_array) {
                         JsonObject sub_item = item.getAsJsonObject();
-                        navigationView.getMenu().add(Menu.NONE, id, Menu.NONE, sub_item.get("title").getAsString());
+                        navigation_view.getMenu().add(Menu.NONE, id, Menu.NONE, sub_item.get("title").getAsString());
                         id++;
                     }
-                    navigationView.setNavigationItemSelectedListener(item -> {
+                    navigation_view.setNavigationItemSelectedListener(item -> {
                         int id1 = item.getItemId();
                         JsonArray menu_list = public_value.menu_list;
                         JsonObject menu_item = menu_list.get(id1).getAsJsonObject();
@@ -392,7 +392,7 @@ public class post_list_card_Activity extends AppCompatActivity {
                             startActivity(new Intent(Intent.ACTION_VIEW, uri));
                             return false;
                         }
-                        Intent intent = new Intent(context, post_Activity.class);
+                        Intent intent = new Intent(context, edit_activity.class);
                         intent.putExtra("edit", true);
                         intent.putExtra("uuid", menu_item.get("uuid").getAsString());
                         intent.putExtra("menu", true);
@@ -414,31 +414,27 @@ public class post_list_card_Activity extends AppCompatActivity {
 
     class result_receiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context arg0, Intent arg1) {
-            if (arg1.hasExtra("result")) {
-                Snackbar.make(findViewById(R.id.toolbar), arg1.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
+        public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra("result")) {
+                Snackbar.make(findViewById(R.id.toolbar), intent.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
             }
-            if (arg1.getBooleanExtra("success", false)) {
-                get_post_list_content();
-                get_menu_list_content();
+            if (intent.getBooleanExtra("success", false)) {
+                get_post_list();
+                get_menu_list();
             }
         }
     }
 }
 
-class post_list_serialzable {
-    public String title;
-    public String excerpt;
-    public String uuid;
-}
+
 
 class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.card_view_holder> {
 
-    static SharedPreferences sharedPreferences;
-    private List<post_list_serialzable> post_list;
+    static SharedPreferences sharedpreferences;
+    private List<post_list> post_list;
     private Context context;
 
-    recycler_view_adapter(List<post_list_serialzable> post_list, Context context) {
+    recycler_view_adapter(List<post_list> post_list, Context context) {
         this.post_list = post_list;
         this.context = context;
     }
@@ -455,10 +451,10 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
 
         personViewHolder.title.setText(post_list.get(position).title);
         personViewHolder.excerpt.setText(post_list.get(position).excerpt);
-        personViewHolder.cardView.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.select).setItems(new String[]{context.getString(R.string.modify), context.getString(R.string.delete)}, (dialogInterface, i) -> {
+        personViewHolder.card_view.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.select).setItems(new String[]{context.getString(R.string.modify), context.getString(R.string.delete)}, (dialogInterface, i) -> {
             switch (i) {
                 case 0:
-                    Intent intent = new Intent(context, post_Activity.class);
+                    Intent intent = new Intent(context, edit_activity.class);
                     intent.putExtra("edit", true);
                     intent.putExtra("uuid", post_list.get(position).uuid);
                     intent.putExtra("share_title", public_value.share_title);
@@ -470,13 +466,13 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                 case 1:
                     new AlertDialog.Builder(context).setTitle(R.string.notice).setMessage(R.string.delete_notify).setNeutralButton(R.string.ok_button,
                             (dialogInterface1, i1) -> {
-                                final ProgressDialog mpDialog = new ProgressDialog(context);
-                                mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                mpDialog.setTitle(context.getString(R.string.loading));
-                                mpDialog.setMessage(context.getString(R.string.loading_message));
-                                mpDialog.setIndeterminate(false);
-                                mpDialog.setCancelable(false);
-                                mpDialog.show();
+                                final ProgressDialog dialog = new ProgressDialog(context);
+                                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                                dialog.setTitle(context.getString(R.string.loading));
+                                dialog.setMessage(context.getString(R.string.loading_message));
+                                dialog.setIndeterminate(false);
+                                dialog.setCancelable(false);
+                                dialog.show();
                                 JsonObject post_obj = public_value.post_list.get(position).getAsJsonObject();
                                 sign_json request_json_obj = new sign_json();
                                 Gson gson = new Gson();
@@ -490,7 +486,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                 call.enqueue(new Callback() {
                                     @Override
                                     public void onFailure(Call call, IOException e) {
-                                        mpDialog.cancel();
+                                        dialog.cancel();
                                         Intent broadcast_intent = new Intent();
                                         broadcast_intent.putExtra("result", context.getString(R.string.submit_error));
                                         broadcast_intent.putExtra("success", false);
@@ -500,7 +496,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
 
                                     @Override
                                     public void onResponse(Call call, Response response) throws IOException {
-                                        mpDialog.cancel();
+                                        dialog.cancel();
                                         Intent broadcast_intent = new Intent();
                                         broadcast_intent.setAction(context.getPackageName());
                                         if(response.code()!=200){
@@ -520,7 +516,6 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
 
                                         }
                                         LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast_intent);
-
                                     }
                                 });
                             }).setNegativeButton(R.string.cancel, null).show();
@@ -535,7 +530,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
         return post_list.size();
     }
     static class card_view_holder extends RecyclerView.ViewHolder {
-        CardView cardView = itemView.findViewById(R.id.card_view);
+        CardView card_view = itemView.findViewById(R.id.card_view);
         TextView title = itemView.findViewById(R.id.title);
         TextView excerpt = itemView.findViewById(R.id.excerpt);
         card_view_holder(final View itemView) {
@@ -548,4 +543,10 @@ class sign_json {
     String post_uuid;
     String sign;
     long send_time;
+}
+
+class post_list {
+    String title;
+    String excerpt;
+    String uuid;
 }

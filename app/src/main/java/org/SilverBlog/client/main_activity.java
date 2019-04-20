@@ -40,7 +40,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class main_Activity extends AppCompatActivity {
+public class main_activity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     String host_save;
     String password_save;
@@ -105,7 +105,7 @@ public class main_Activity extends AppCompatActivity {
 
             host_save = String.valueOf(host.getText());
             password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
-            final ProgressDialog mpDialog = new ProgressDialog(main_Activity.this);
+            final ProgressDialog mpDialog = new ProgressDialog(main_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -158,11 +158,11 @@ public class main_Activity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.maintoolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
-            if (ContextCompat.checkSelfPermission(main_Activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(main_Activity.this, new String[]{Manifest.permission.CAMERA}, 1);
+            if (ContextCompat.checkSelfPermission(main_activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(main_activity.this, new String[]{Manifest.permission.CAMERA}, 1);
                 return false;
             }
-            Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
+            Intent intent = new Intent(main_activity.this, CaptureActivity.class);
             startActivityForResult(intent, 0);
             return true;
         });
@@ -183,7 +183,7 @@ public class main_Activity extends AppCompatActivity {
     void start_edit() {
         public_value.host = host_save;
         public_value.password = password_save;
-        Intent edit_post_activity = new Intent(main_Activity.this, post_list_card_Activity.class);
+        Intent edit_post_activity = new Intent(main_activity.this, post_list_activity.class);
         startActivity(edit_post_activity);
         finish();
     }
@@ -192,7 +192,7 @@ public class main_Activity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(main_Activity.this, CaptureActivity.class);
+                Intent intent = new Intent(main_activity.this, CaptureActivity.class);
                 startActivityForResult(intent, 0);
                 return;
             }
