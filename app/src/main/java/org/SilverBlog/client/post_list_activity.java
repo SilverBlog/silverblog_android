@@ -512,8 +512,6 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                             }
                                             broadcast_intent.putExtra("result", result_message);
                                             broadcast_intent.putExtra("success", true);
-
-
                                         }
                                         LocalBroadcastManager.getInstance(context).sendBroadcast(broadcast_intent);
                                     }
