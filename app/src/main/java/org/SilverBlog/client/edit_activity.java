@@ -158,8 +158,6 @@ public class edit_activity extends AppCompatActivity {
                     });
                 }
             });
-
-
             return true;
         }
     };
