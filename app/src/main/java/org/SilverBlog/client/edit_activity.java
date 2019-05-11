@@ -3,6 +3,7 @@ package org.SilverBlog.client;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
@@ -11,6 +12,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -126,9 +129,32 @@ public class edit_activity extends AppCompatActivity {
                     final JsonObject finalObjects = objects;
                     edit_activity.this.runOnUiThread(() -> {
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
-                        alertDialog.setTitle(R.string.submit_error);
                         String ok_button = getString(R.string.ok_button);
                         assert finalObjects != null;
+                        if (!finalObjects.get("status").getAsBoolean()) {
+                            final EditText et = new EditText(context);
+                            et.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                            alertDialog.setTitle(R.string.submit_error);
+                            alertDialog.setView(et);
+                            alertDialog.setNegativeButton(ok_button, (dialogInterface, i) -> {
+                                String password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(et.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
+                                public_value.password = password_save;
+                                JsonObject host_list = new JsonParser().parse(Objects.requireNonNull(sharedpreferences.getString("host_list", "{}"))).getAsJsonObject();
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                if (host_list.has(public_value.host)) {
+                                    JsonObject object = new JsonObject();
+                                    object.addProperty("host", public_value.host);
+                                    object.addProperty("password_v2", password_save);
+                                    host_list.add(public_value.host, object);
+                                }
+                                editor.putString("host_list", new Gson().toJson(host_list));
+                                editor.putString("host", public_value.host);
+                                editor.putString("password_v2", password_save);
+                                Log.d("silverblog", "onActivityResult: " + password_save);
+                                editor.apply();
+
+                            });
+                        }
                         if (finalObjects.get("status").getAsBoolean()) {
                             alertDialog.setTitle(R.string.submit_success);
                             ok_button = getString(R.string.visit_document);
@@ -141,19 +167,20 @@ public class edit_activity extends AppCompatActivity {
                                     finish();
                                 }
                             });
+                            alertDialog.setNegativeButton(ok_button,
+                                    (dialogInterface, i) -> {
+                                        if (finalObjects.get("status").getAsBoolean()) {
+                                            Uri uri = Uri.parse("https://" + public_value.host + "/post/" + finalObjects.get("name").getAsString());
+                                            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                                            Intent intent = new Intent();
+                                            intent.setAction(context.getPackageName());
+                                            intent.putExtra("success", true);
+                                            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                                            finish();
+                                        }
+                                    });
+
                         }
-                        alertDialog.setNegativeButton(ok_button,
-                                (dialogInterface, i) -> {
-                                    if (finalObjects.get("status").getAsBoolean()) {
-                                        Uri uri = Uri.parse("https://" + public_value.host + "/post/" + finalObjects.get("name").getAsString());
-                                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                                        Intent intent = new Intent();
-                                        intent.setAction(context.getPackageName());
-                                        intent.putExtra("success", true);
-                                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-                                        finish();
-                                    }
-                                });
                         alertDialog.create().show();
                     });
                 }
@@ -244,6 +271,7 @@ public class edit_activity extends AppCompatActivity {
                 public void onResponse(Call call, final Response response) {
                     if (response.code() != 200) {
                         Looper.prepare();
+
                         Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
                         Looper.loop();
                         return;

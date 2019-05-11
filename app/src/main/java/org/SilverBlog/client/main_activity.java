@@ -63,7 +63,7 @@ public class main_activity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 host_save = host_info.get("host").getAsString();
                 if (host_info.has("password")) {
-                    String password_v2 = public_func.get_hash(host_info.get("password").getAsString() + "SiLvErBlOg", "SHA-256");
+                    String password_v2 = public_func.get_hmac_hash(host_info.get("password").getAsString(), "SiLvErBlOg", "HmacSHA256");
                     host_list.remove(host_name_list.get(i));
                     JsonObject object = new JsonObject();
                     object.addProperty("host", host_save);
