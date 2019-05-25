@@ -21,23 +21,17 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.zxing.activity.CaptureActivity;
+import okhttp3.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class main_activity extends AppCompatActivity {
@@ -70,8 +64,10 @@ public class main_activity extends AppCompatActivity {
                     object.addProperty("password_v2", password_v2);
                     host_list.add(host_name_list.get(i), object);
                     editor.putString("host_list", new Gson().toJson(host_list));
+                    password_save = password_v2;
+                } else {
+                    password_save = host_info.get("password_v2").getAsString();
                 }
-                password_save = host_info.get("password_v2").getAsString();
                 editor.putString("host", host_save);
                 editor.putString("password_v2", password_save);
                 editor.apply();
