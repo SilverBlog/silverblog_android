@@ -14,14 +14,12 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.widget.Toast;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.camera.CameraManager;
 import com.google.zxing.decoding.CaptureActivityHandler;
 import com.google.zxing.decoding.InactivityTimer;
 import com.google.zxing.view.ViewfinderView;
-
 import org.SilverBlog.client.R;
 
 import java.io.IOException;
@@ -67,7 +65,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         viewfinderView = findViewById(R.id.viewfinder_content);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
-        this.setTitle("扫描二维码");
+        this.setTitle(R.string.scan_button);
 
 
     }
