@@ -18,23 +18,11 @@ package com.google.zxing.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ComposeShader;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.RadialGradient;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.SweepGradient;
+import android.graphics.*;
 import android.util.AttributeSet;
 import android.view.View;
-
 import com.google.zxing.ResultPoint;
 import com.google.zxing.camera.CameraManager;
-
 import org.SilverBlog.client.R;
 
 import java.util.Collection;
@@ -50,28 +38,21 @@ public final class ViewfinderView extends View {
   private static final int[]  SCANNER_ALPHA                 =   {0, 64, 128, 192, 255, 192, 128, 64};
   private static final long   ANIMATION_DELAY               =   10L;
   private static final int    OPAQUE                        =   0xFF;
-  private static final int    CORNER_RECT_WIDTH             =   8;  //扫描区边角的宽
-  private static final int    CORNER_RECT_HEIGHT            =   40; //扫描区边角的高
-  private static final int    SCANNER_LINE_MOVE_DISTANCE    =   5;  //扫描线移动距离
-  private static final int    SCANNER_LINE_HEIGHT           =   10;  //扫描线宽度
+  private static final int CORNER_RECT_WIDTH = 8;
+  private static final int CORNER_RECT_HEIGHT = 40;
+  private static final int SCANNER_LINE_MOVE_DISTANCE = 5;
+  private static final int SCANNER_LINE_HEIGHT = 10;
 
   private final Paint paint;
   private Bitmap resultBitmap;
-  //模糊区域颜色
   private final int maskColor;
   private final int resultColor;
-  //扫描区域边框颜色
   private final int frameColor;
-  //扫描线颜色
   private final int laserColor;
-  //四角颜色
   private final int cornerColor;
-  //扫描点的颜色
   private final int resultPointColor;
   private int scannerAlpha;
-  //扫描区域提示文本
   private final String labelText;
-  //扫描区域提示文本颜色
   private final int labelTextColor;
   private final float labelTextSize;
 
@@ -81,11 +62,9 @@ public final class ViewfinderView extends View {
   private Collection<ResultPoint> possibleResultPoints;
   private Collection<ResultPoint> lastPossibleResultPoints;
 
-  // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
     super(context, attrs);
 
-    //初始化自定义属性信息
 
     TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ViewfinderView);
     laserColor = array.getColor(R.styleable.ViewfinderView_laser_color, 0x00FF00);
@@ -131,9 +110,7 @@ public final class ViewfinderView extends View {
     } else {
       // Draw a two pixel solid black border inside the framing rect
       drawFrame(canvas, frame);
-      // 绘制边角
       drawCorner(canvas, frame);
-      //绘制提示信息
       drawTextInfo(canvas, frame);
       // Draw a red "laser scanner" line through the middle to show decoding is active
       drawLaserScanner(canvas, frame);
@@ -161,12 +138,10 @@ public final class ViewfinderView extends View {
 
       // Request another update at the animation interval, but only repaint the laser line,
       // not the entire viewfinder mask.
-      //指定重绘区域，该方法会在子线程中执行
       postInvalidateDelayed(ANIMATION_DELAY, frame.left, frame.top, frame.right, frame.bottom);
     }
   }
 
-  //绘制文本
   private void drawTextInfo(Canvas canvas, Rect frame) {
     paint.setColor(labelTextColor);
     paint.setTextSize(labelTextSize);
@@ -175,32 +150,20 @@ public final class ViewfinderView extends View {
   }
 
 
-  //绘制边角
   private void drawCorner(Canvas canvas, Rect frame) {
     paint.setColor(cornerColor);
-    //左上
     canvas.drawRect(frame.left, frame.top, frame.left + CORNER_RECT_WIDTH, frame.top + CORNER_RECT_HEIGHT, paint);
     canvas.drawRect(frame.left, frame.top, frame.left + CORNER_RECT_HEIGHT, frame.top + CORNER_RECT_WIDTH, paint);
-    //右上
     canvas.drawRect(frame.right - CORNER_RECT_WIDTH, frame.top, frame.right, frame.top + CORNER_RECT_HEIGHT, paint);
     canvas.drawRect(frame.right - CORNER_RECT_HEIGHT, frame.top, frame.right, frame.top + CORNER_RECT_WIDTH, paint);
-    //左下
     canvas.drawRect(frame.left, frame.bottom - CORNER_RECT_WIDTH, frame.left + CORNER_RECT_HEIGHT, frame.bottom, paint);
     canvas.drawRect(frame.left, frame.bottom - CORNER_RECT_HEIGHT, frame.left + CORNER_RECT_WIDTH, frame.bottom, paint);
-    //右下
     canvas.drawRect(frame.right - CORNER_RECT_WIDTH, frame.bottom - CORNER_RECT_HEIGHT, frame.right, frame.bottom, paint);
     canvas.drawRect(frame.right - CORNER_RECT_HEIGHT, frame.bottom - CORNER_RECT_WIDTH, frame.right, frame.bottom, paint);
   }
 
-  //绘制扫描线
   private void drawLaserScanner(Canvas canvas, Rect frame) {
     paint.setColor(laserColor);
-    //扫描线闪烁效果
-//    paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
-//    scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-//    int middle = frame.height() / 2 + frame.top;
-//    canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
-    //线性渐变
     LinearGradient linearGradient = new LinearGradient(
             frame.left, scannerStart,
             frame.left, scannerStart + SCANNER_LINE_HEIGHT,
@@ -226,9 +189,6 @@ public final class ViewfinderView extends View {
 
     paint.setShader(radialGradient);
     if(scannerStart <= scannerEnd) {
-      //矩形
-//      canvas.drawRect(frame.left, scannerStart, frame.right, scannerStart + SCANNER_LINE_HEIGHT, paint);
-      //椭圆
       RectF rectF = new RectF(frame.left + 2 * SCANNER_LINE_HEIGHT, scannerStart, frame.right - 2 * SCANNER_LINE_HEIGHT, scannerStart + SCANNER_LINE_HEIGHT);
       canvas.drawOval(rectF, paint);
       scannerStart += SCANNER_LINE_MOVE_DISTANCE;
@@ -238,14 +198,12 @@ public final class ViewfinderView extends View {
     paint.setShader(null);
   }
 
-  //处理颜色模糊
   public int shadeColor(int color) {
     String hax = Integer.toHexString(color);
     String result = "20"+hax.substring(2);
     return Integer.valueOf(result, 16);
   }
 
-  // 绘制扫描区边框 Draw a two pixel solid black border inside the framing rect
   private void drawFrame(Canvas canvas, Rect frame) {
     paint.setColor(frameColor);
     canvas.drawRect(frame.left, frame.top, frame.right + 1, frame.top + 2, paint);
@@ -254,7 +212,6 @@ public final class ViewfinderView extends View {
     canvas.drawRect(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1, paint);
   }
 
-  // 绘制模糊区域 Draw the exterior (i.e. outside the framing rect) darkened
   private void drawExterior(Canvas canvas, Rect frame, int width, int height) {
     paint.setColor(resultBitmap != null ? resultColor : maskColor);
     canvas.drawRect(0, 0, width, frame.top, paint);
