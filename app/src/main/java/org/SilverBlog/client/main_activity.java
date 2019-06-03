@@ -52,17 +52,17 @@ public class main_activity extends AppCompatActivity {
     View.OnClickListener history_host = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), (dialogInterface, i) -> {
-                JsonObject host_info = host_list.get(host_name_list.get(i)).getAsJsonObject();
+            new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), (dialogInterface, index) -> {
+                JsonObject host_info = host_list.get(host_name_list.get(index)).getAsJsonObject();
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 host_save = host_info.get("host").getAsString();
                 if (host_info.has("password")) {
                     String password_v2 = public_func.get_hmac_hash(host_info.get("password").getAsString(), "SiLvErBlOg", "HmacSHA256");
-                    host_list.remove(host_name_list.get(i));
+                    host_list.remove(host_name_list.get(index));
                     JsonObject object = new JsonObject();
                     object.addProperty("host", host_save);
                     object.addProperty("password_v2", password_v2);
-                    host_list.add(host_name_list.get(i), object);
+                    host_list.add(host_name_list.get(index), object);
                     editor.putString("host_list", new Gson().toJson(host_list));
                     password_save = password_v2;
                 } else {
@@ -151,7 +151,7 @@ public class main_activity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.maintoolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
             if (ContextCompat.checkSelfPermission(main_activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {

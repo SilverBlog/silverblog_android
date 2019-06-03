@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-@SuppressWarnings("ALL")
 public class fab_scroll_behavior extends FloatingActionButton.Behavior {
 
     public fab_scroll_behavior(Context context, AttributeSet attrs) {

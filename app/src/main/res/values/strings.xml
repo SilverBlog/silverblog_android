@@ -1,85 +1,45 @@
 <resources>
-        
     <string name="app_name" translatable="false">SliverBlog</string>
-        
     <string name="send_button">Publish</string>
-        
     <string name="git_repo">Publish to git repository</string>
-        
     <string name="https_myblog_com">Blog address (example: demo.silverblog.org)</string>
-        
     <string name="admin_password">Password</string>
-        
     <string name="save_button">Save</string>
-        
     <string name="scanner_notify">Please execute [./manage.py qrcode] and scan the Qrcode</string>
-        
     <string name="document">Article</string>
-        
     <string name="menu">Menu</string>
-        
     <string name="document_title">Article title</string>
-        
     <string name="document_url">Article URL</string>
-        
     <string name="document_content">Article Content</string>
-        
     <string name="submit_error">Operation failed! Please check the password.</string>
-        
     <string name="ok_button">OK</string>
-        
     <string name="submit_success">The operation is completed!</string>
-        
     <string name="visit_document">Visit new blog</string>
-        
     <string name="cancel">Cancel</string>
-        
     <string name="loading">Connecting to server…</string>
-        
     <string name="loading_message">Please wait…</string>
-        
     <string name="list_is_none">The current article list is empty</string>
-        
     <string name="network_error">please check network status!</string>
-        
     <string name="git_push_error">Operation failed! Please check the API server output!</string>
-        
     <string name="delete_notify">Delete this article? (Warning! This operation is irreversible, please exercise caution!)</string>
-        
     <string name="modify">Modify</string>
-        
     <string name="delete">Delete</string>
-        
     <string name="scan_button">Scan QR code</string>
-        
     <string name="share_menu_button">Share</string>
-        
     <string name="edit_title">Edit article</string>
-        
     <string name="content_not_none">Title and content can not be empty!</string>
-        
     <string name="post_title">New article</string>
     <string name="check_input">Please configure server information first!</string>
-        
     <string name="config_save">Config Saved</string>
-        
     <string name="scan_qr">Please authorize the camera so that the QR code can be scanned normally.</string>
-        
     <string name="QRcode_error">Wrong QR code format!</string>
-        
     <string name="check_config">Please check your System.json configuration file.</string>
-        
     <string name="navigation_drawer_open">Open navigation</string>
-        
     <string name="navigation_drawer_close">Close navigation</string>
-        
     <string name="logout">Logout</string>
-        
     <string name="notice">Notice</string>
-        
     <string name="save_notice">The article has not been saved, do you really want to leave the edit page?</string>
     <string name="use_old">Use the previous config</string>
-        
     <string name="select_config">Please select the config</string>
     <string name="api_too_low">The current server API version is too low. Please try again after upgrading.</string>
     <string name="select">Please select operation</string>
@@ -88,4 +48,5 @@
     <string name="cannot_connect">Unable to connect to server.</string>
     <string name="api_too_high">The current client API version is too low. Please try again after upgrading.</string>
     <string name="request_error">Request failed, error code:</string>
+    <string name="load">Loading...</string>
 </resources>

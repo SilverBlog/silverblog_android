@@ -59,7 +59,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
-        Toolbar toolbar = findViewById(R.id.maintoolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         CameraManager.init(getApplication());
         viewfinderView = findViewById(R.id.viewfinder_content);
