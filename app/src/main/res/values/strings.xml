@@ -19,7 +19,7 @@
     <string name="loading">Connecting to server…</string>
     <string name="loading_message">Please wait…</string>
     <string name="list_is_none">The current article list is empty</string>
-    <string name="network_error">please check network status!</string>
+    <string name="network_error">Please check network status!</string>
     <string name="git_push_error">Operation failed! Please check the API server output!</string>
     <string name="delete_notify">Delete this article? (Warning! This operation is irreversible, please exercise caution!)</string>
     <string name="modify">Modify</string>
