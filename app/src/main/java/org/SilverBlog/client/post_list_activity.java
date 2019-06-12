@@ -6,23 +6,27 @@ import android.content.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.*;
 import okhttp3.*;
 
@@ -213,6 +217,7 @@ public class post_list_activity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Looper.prepare();
+                swipe_refresh_widget.setRefreshing(false);
                 Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
                 Looper.loop();
             }
@@ -221,11 +226,13 @@ public class post_list_activity extends AppCompatActivity {
             public void onResponse(Call call, final Response response) {
                 if (response.code() != 200) {
                     Looper.prepare();
+                    swipe_refresh_widget.setRefreshing(false);
                     Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
                     Looper.loop();
                     return;
                 }
                 runOnUiThread(() -> {
+                    swipe_refresh_widget.setRefreshing(false);
                     JsonParser parser = new JsonParser();
                     final List<post_list> post_list = new ArrayList<>();
                     assert response.body() != null;
@@ -236,8 +243,6 @@ public class post_list_activity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     public_value.post_list = result_array;
-
-                    swipe_refresh_widget.setRefreshing(false);
 
                     assert result_array != null;
                     for (JsonElement item : result_array) {
@@ -303,13 +308,13 @@ public class post_list_activity extends AppCompatActivity {
                         return;
                     }
                     View header_view = navigation_view.getHeaderView(0);
-                    ImageView ivAvatar = header_view.findViewById(R.id.imageView);
-                    String imageURL = result_object.get("author_image").getAsString();
-                    if (!is_abs_url(imageURL)) {
-                        imageURL = get_abs_url(public_value.host, imageURL);
+                    ImageView image_view = header_view.findViewById(R.id.imageView);
+                    String image_url = result_object.get("author_image").getAsString();
+                    if (!is_abs_url(image_url)) {
+                        image_url = get_abs_url(public_value.host, image_url);
                     }
 
-                    Glide.with(post_list_activity.this).load(imageURL).apply(RequestOptions.circleCropTransform()).into(ivAvatar);
+                    Glide.with(post_list_activity.this).load(image_url).apply(RequestOptions.circleCropTransform()).into(image_view);
                     TextView username = header_view.findViewById(R.id.username);
                     TextView desc = header_view.findViewById(R.id.desc);
                     username.setText(result_object.get("author_name").getAsString());
@@ -353,12 +358,12 @@ public class post_list_activity extends AppCompatActivity {
                     }
                     public_value.menu_list = result_array;
                     navigation_view.getMenu().clear();
-                    int id = 0;
+                    int index = 0;
                     assert result_array != null;
                     for (JsonElement item : result_array) {
                         JsonObject sub_item = item.getAsJsonObject();
-                        navigation_view.getMenu().add(Menu.NONE, id, Menu.NONE, sub_item.get("title").getAsString());
-                        id++;
+                        navigation_view.getMenu().add(Menu.NONE, index, Menu.NONE, sub_item.get("title").getAsString());
+                        index++;
                     }
                     navigation_view.setNavigationItemSelectedListener(item -> {
                         int id1 = item.getItemId();
@@ -393,7 +398,7 @@ public class post_list_activity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("result")) {
-                Snackbar.make(findViewById(R.id.toolbar), intent.getStringExtra("result"), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.toolbar), Objects.requireNonNull(intent.getStringExtra("result")), Snackbar.LENGTH_LONG).show();
             }
             if (intent.getBooleanExtra("success", false)) {
                 get_post_list();

@@ -7,16 +7,16 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -210,6 +210,7 @@ public class edit_activity extends AppCompatActivity {
                 final String title = intent.getStringExtra(Intent.EXTRA_SUBJECT);
                 final String content = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (title == null) {
+                    assert content != null;
                     final String[] content_split = content.split("\n");
                     if (content_split[0].startsWith("# ")) {
                         final String title_final = content_split[0].replace("# ", "");
