@@ -1,7 +1,6 @@
 package org.SilverBlog.client;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -179,7 +178,7 @@ public class main_activity extends AppCompatActivity {
     void start_edit() {
         public_value.host = host_save;
         public_value.password = password_save;
-        Intent edit_post_activity = new Intent(main_activity.this, post_list_activity.class);
+        Intent edit_post_activity = new Intent(getApplicationContext(), post_list_activity.class);
         startActivity(edit_post_activity);
         finish();
     }
@@ -197,7 +196,6 @@ public class main_activity extends AppCompatActivity {
     }
 
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

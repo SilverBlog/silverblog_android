@@ -21,9 +21,7 @@ class public_func {
             mac.init(secret);
             byte[] digest = mac.doFinal(base.getBytes());
             return byte2hex(digest);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
         }
         return null;

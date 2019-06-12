@@ -70,7 +70,7 @@ public class post_list_activity extends AppCompatActivity {
     }
 
     void start_login() {
-        Intent main_activity = new Intent(post_list_activity.this, org.SilverBlog.client.main_activity.class);
+        Intent main_activity = new Intent(getApplicationContext(), org.SilverBlog.client.main_activity.class);
         startActivity(main_activity);
         finish();
     }
@@ -429,11 +429,11 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
     }
 
     @Override
-    public void onBindViewHolder(@NonNull card_view_holder personViewHolder, @SuppressLint("RecyclerView") final int position) {
+    public void onBindViewHolder(@NonNull card_view_holder card_view_holder_obj, @SuppressLint("RecyclerView") final int position) {
 
-        personViewHolder.title.setText(post_list.get(position).title);
-        personViewHolder.excerpt.setText(post_list.get(position).excerpt);
-        personViewHolder.card_view.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.select).setItems(new String[]{context.getString(R.string.modify), context.getString(R.string.delete)}, (dialogInterface, i) -> {
+        card_view_holder_obj.title.setText(post_list.get(position).title);
+        card_view_holder_obj.excerpt.setText(post_list.get(position).excerpt);
+        card_view_holder_obj.card_view.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.select).setItems(new String[]{context.getString(R.string.modify), context.getString(R.string.delete)}, (dialogInterface, i) -> {
             switch (i) {
                 case 0:
                     Intent intent = new Intent(context, edit_activity.class);
