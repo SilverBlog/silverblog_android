@@ -35,7 +35,7 @@ build:
     expire_in: 1 week
 
 release_play_build_develop:
-  image: preventis/docker-android-alpine:latest
+  image: jangrewe/gitlab-ci-android:latest
   stage: play
   only:
     - develop
@@ -48,7 +48,7 @@ release_play_build_develop:
     - ./gradlew publishApk --track beta
 
 release_play_build_master:
-  image: preventis/docker-android-alpine:latest
+  image: jangrewe/gitlab-ci-android:latest
   stage: play
   only:
     - master
