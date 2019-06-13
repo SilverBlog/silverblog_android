@@ -170,8 +170,6 @@ public class main_activity extends AppCompatActivity {
     }
 
     void start_edit() {
-        public_value.host = host_save;
-        public_value.password = password_save;
         Intent edit_post_activity = new Intent(context, post_list_activity.class);
         startActivity(edit_post_activity);
         finish();

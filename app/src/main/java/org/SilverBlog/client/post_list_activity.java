@@ -152,7 +152,7 @@ public class post_list_activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.send_to_git_button:
-                final ProgressDialog dialog = new ProgressDialog(context);
+                final ProgressDialog dialog = new ProgressDialog(post_list_activity.this);
                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 dialog.setTitle(getString(R.string.loading));
                 dialog.setMessage(getString(R.string.loading_message));

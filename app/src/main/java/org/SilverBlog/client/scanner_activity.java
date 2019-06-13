@@ -77,8 +77,6 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
         editor.putString("host", host_save);
         editor.putString("password_v2", password_save);
         editor.apply();
-        public_value.host = host_save;
-        public_value.password = password_save;
         Intent edit_post_activity = new Intent(getApplicationContext(), post_list_activity.class);
         startActivity(edit_post_activity);
         finish();

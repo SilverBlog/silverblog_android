@@ -39,6 +39,11 @@ public class edit_activity extends AppCompatActivity {
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
+            return send_post();
+
+        }
+
+        boolean send_post() {
             if (title_view.getText().length() == 0 || content_view.getText().length() == 0) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setTitle(R.string.content_not_none);
@@ -53,7 +58,7 @@ public class edit_activity extends AppCompatActivity {
                 host_save = sharedpreferences.getString("host", null);
                 password_save = sharedpreferences.getString("password_v2", null);
                 if (password_save == null || host_save == null) {
-                    Intent main_activity = new Intent(edit_activity.this, org.SilverBlog.client.main_activity.class);
+                    Intent main_activity = new Intent(context, main_activity.class);
                     startActivity(main_activity);
                     finish();
                     return false;
@@ -79,11 +84,11 @@ public class edit_activity extends AppCompatActivity {
             json_obj.send_time = System.currentTimeMillis();
             String sign_message = json_obj.title + json_obj.name + public_func.get_hash(json_obj.content, "SHA-512");
             if (edit_mode) {
-                sign_message += json_obj.post_uuid;
+                sign_message = json_obj.post_uuid + sign_message;
             }
             json_obj.sign = public_func.get_hmac_hash(sign_message, public_value.password + json_obj.send_time, "HmacSHA512");
             String json = gson.toJson(json_obj);
-            final ProgressDialog mpDialog = new ProgressDialog(context);
+            final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -145,7 +150,7 @@ public class edit_activity extends AppCompatActivity {
                                 editor.putString("password_v2", password_save);
                                 Log.d("silverblog", "onActivityResult: " + password_save);
                                 editor.apply();
-
+                                send_post();
                             });
                         }
                         if (finalObjects.get("status").getAsBoolean()) {
@@ -234,7 +239,7 @@ public class edit_activity extends AppCompatActivity {
         if (edit_mode) {
             this.setTitle(getString(R.string.edit_title));
             post_uuid = intent.getStringExtra("uuid");
-            final ProgressDialog mpDialog = new ProgressDialog(context);
+            final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
