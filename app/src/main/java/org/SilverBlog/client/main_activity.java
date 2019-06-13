@@ -98,7 +98,7 @@ public class main_activity extends AppCompatActivity {
 
             host_save = String.valueOf(host.getText());
             password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
-            final ProgressDialog mpDialog = new ProgressDialog(main_activity.this);
+            final ProgressDialog mpDialog = new ProgressDialog(context);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -172,7 +172,7 @@ public class main_activity extends AppCompatActivity {
     void start_edit() {
         public_value.host = host_save;
         public_value.password = password_save;
-        Intent edit_post_activity = new Intent(getApplicationContext(), post_list_activity.class);
+        Intent edit_post_activity = new Intent(context, post_list_activity.class);
         startActivity(edit_post_activity);
         finish();
     }

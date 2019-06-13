@@ -70,7 +70,7 @@ public class post_list_activity extends AppCompatActivity {
     }
 
     void start_login() {
-        Intent main_activity = new Intent(getApplicationContext(), org.SilverBlog.client.main_activity.class);
+        Intent main_activity = new Intent(context, main_activity.class);
         startActivity(main_activity);
         finish();
     }
@@ -98,7 +98,7 @@ public class post_list_activity extends AppCompatActivity {
         toolbar.setTitle("Loading...");
         setSupportActionBar(toolbar);
         recycler_view = findViewById(R.id.my_recycler_view);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recycler_view.setLayoutManager(layoutManager);
         recycler_view.setHasFixedSize(true);
         recycler_view.setItemAnimator(new DefaultItemAnimator());
@@ -114,7 +114,7 @@ public class post_list_activity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(context).registerReceiver(receiver, filter);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-            Intent new_post_activity = new Intent(post_list_activity.this, edit_activity.class);
+            Intent new_post_activity = new Intent(context, edit_activity.class);
             startActivity(new_post_activity);
         });
 
@@ -152,7 +152,7 @@ public class post_list_activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.send_to_git_button:
-                final ProgressDialog dialog = new ProgressDialog(post_list_activity.this);
+                final ProgressDialog dialog = new ProgressDialog(context);
                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 dialog.setTitle(getString(R.string.loading));
                 dialog.setMessage(getString(R.string.loading_message));

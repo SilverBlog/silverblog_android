@@ -32,7 +32,7 @@ public class edit_activity extends AppCompatActivity {
     private EditText name_view;
     private EditText content_view;
     String post_uuid;
-     String action_name = "new";
+    String action_name = "new";
     Boolean edit_mode = false;
     private Context context;
     private Boolean edit_menu;
@@ -40,7 +40,7 @@ public class edit_activity extends AppCompatActivity {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             if (title_view.getText().length() == 0 || content_view.getText().length() == 0) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                 alertDialog.setTitle(R.string.content_not_none);
                 alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 alertDialog.show();
@@ -83,7 +83,7 @@ public class edit_activity extends AppCompatActivity {
             }
             json_obj.sign = public_func.get_hmac_hash(sign_message, public_value.password + json_obj.send_time, "HmacSHA512");
             String json = gson.toJson(json_obj);
-            final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
+            final ProgressDialog mpDialog = new ProgressDialog(context);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -98,7 +98,7 @@ public class edit_activity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     mpDialog.cancel();
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                     alertDialog.setTitle(R.string.network_error);
                     alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 }
@@ -234,7 +234,7 @@ public class edit_activity extends AppCompatActivity {
         if (edit_mode) {
             this.setTitle(getString(R.string.edit_title));
             post_uuid = intent.getStringExtra("uuid");
-            final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
+            final ProgressDialog mpDialog = new ProgressDialog(context);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             mpDialog.setTitle(getString(R.string.loading));
             mpDialog.setMessage(getString(R.string.loading_message));
@@ -256,7 +256,7 @@ public class edit_activity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     mpDialog.cancel();
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                     alertDialog.setTitle(R.string.submit_error);
                     alertDialog.setNegativeButton(getString(R.string.ok_button), (dialogInterface, i) -> finish());
                 }

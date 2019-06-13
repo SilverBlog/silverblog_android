@@ -7,10 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -52,7 +49,7 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
         JsonObject objects;
         try {
             objects = parser.parse(rawResult.getText()).getAsJsonObject();
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | JsonSyntaxException e) {
             Snackbar.make(mScannerView, R.string.QRcode_error, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             mScannerView.resumeCameraPreview(this);
