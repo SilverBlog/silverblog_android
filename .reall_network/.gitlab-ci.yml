@@ -21,7 +21,7 @@ release_github:
 
 
 build:
-  image: preventis/docker-android-alpine:latest
+  image: jangrewe/gitlab-ci-android:latest
   stage: build
   script:
     - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"${CI_COMMIT_REF_NAME}\"}" > ./app/version.gradle
