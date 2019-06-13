@@ -4,7 +4,6 @@
     <string name="https_myblog_com">博客地址(例：demo.silverblog.org)</string>
     <string name="admin_password">管理员密码</string>
     <string name="save_button">保存配置</string>
-    <string name="scanner_notify">请执行[./manage.py qrcode]并扫描输出的二维码</string>
     <string name="document">文章</string>
     <string name="menu">菜单</string>
     <string name="document_title">文章标题</string>

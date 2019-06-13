@@ -5,7 +5,6 @@
     <string name="https_myblog_com">Blog address (example: demo.silverblog.org)</string>
     <string name="admin_password">Password</string>
     <string name="save_button">Save</string>
-    <string name="scanner_notify">Please execute [./manage.py qrcode] and scan the Qrcode</string>
     <string name="document">Article</string>
     <string name="menu">Menu</string>
     <string name="document_title">Article title</string>

@@ -16,12 +16,12 @@
             tools:ignore="GoogleAppIndexingWarning"
             android:fullBackupContent="@xml/backup_descriptor">
         <activity
-            android:name="org.SilverBlog.client.main_activity"
-            android:windowSoftInputMode="adjustResize" />
+                android:name=".main_activity"
+                android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="org.SilverBlog.client.edit_activity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+                android:name=".edit_activity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -32,9 +32,9 @@
         </activity>
         <activity android:name=".scanner_activity"/>
         <activity
-            android:name="org.SilverBlog.client.post_list_activity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+                android:name=".post_list_activity"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -28,6 +28,7 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
         setContentView(mScannerView);                // Set the scanner view as the content view
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
