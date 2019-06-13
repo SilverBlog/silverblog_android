@@ -18,13 +18,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.zxing.activity.CaptureActivity;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -41,7 +39,7 @@ public class main_activity extends AppCompatActivity {
     EditText password;
     JsonObject host_list;
     ArrayList<String> host_name_list;
-
+    Context context;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
@@ -147,18 +145,14 @@ public class main_activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        context = getApplicationContext();
         sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
-            if (ContextCompat.checkSelfPermission(main_activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(main_activity.this, new String[]{Manifest.permission.CAMERA}, 1);
-                return false;
-            }
-            Intent intent = new Intent(main_activity.this, CaptureActivity.class);
-            startActivityForResult(intent, 0);
+            ActivityCompat.requestPermissions(main_activity.this, new String[]{Manifest.permission.CAMERA}, 1);
             return true;
         });
         host_list = new JsonParser().parse(Objects.requireNonNull(sharedPreferences.getString("host_list", "{}"))).getAsJsonObject();
@@ -187,51 +181,12 @@ public class main_activity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(main_activity.this, CaptureActivity.class);
-                startActivityForResult(intent, 0);
+                Intent intent = new Intent(context, scanner_activity.class);
+                startActivity(intent);
+                finish();
                 return;
             }
             Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            String scanResult = null;
-            if (bundle != null) {
-                scanResult = bundle.getString("result");
-            }
-            JsonParser parser = new JsonParser();
-            JsonObject objects;
-            try {
-                assert scanResult != null;
-                objects = parser.parse(scanResult).getAsJsonObject();
-            } catch (IllegalStateException e) {
-                Snackbar.make(host, R.string.QRcode_error, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                return;
-            }
-            host_save = objects.get("H").getAsString();
-            password_save = objects.get("P").getAsString();
-            if (password_save.length() == 0 || host_save.length() == 0) {
-                Snackbar.make(host, R.string.check_config, Snackbar.LENGTH_LONG).show();
-            }
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            if (!host_list.has(host_save)) {
-                JsonObject object = new JsonObject();
-                object.addProperty("host", host_save);
-                object.addProperty("password_v2", password_save);
-                host_list.add(host_save, object);
-            }
-            editor.putString("host_list", new Gson().toJson(host_list));
-            editor.putString("host", host_save);
-            editor.putString("password_v2", password_save);
-            editor.apply();
-            start_edit();
         }
     }
 }

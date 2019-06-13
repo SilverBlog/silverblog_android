@@ -34,7 +34,7 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="com.google.zxing.activity.CaptureActivity" />
+        <activity android:name=".scanner_activity"/>
         <activity
             android:name="org.SilverBlog.client.post_list_activity"
             android:label="@string/app_name"
