@@ -87,6 +87,5 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
         Intent intent = new Intent(getApplicationContext(), main_activity.class);
         startActivity(intent);
         finish();
-
     }
 }

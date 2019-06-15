@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -112,14 +113,24 @@ public class main_activity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     mpDialog.cancel();
-                    Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG).show();
+                    Looper.prepare();
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
+                    alertDialog.setTitle(R.string.cannot_connect);
+                    alertDialog.setNegativeButton(getString(R.string.ok_button), null);
+                    alertDialog.show();
+                    Looper.loop();
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) {
                     mpDialog.cancel();
                     if (response.code() != 204) {
-                        Snackbar.make(view, R.string.cannot_connect, Snackbar.LENGTH_LONG).show();
+                        Looper.prepare();
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
+                        alertDialog.setTitle(R.string.cannot_connect);
+                        alertDialog.setNegativeButton(getString(R.string.ok_button), null);
+                        alertDialog.show();
+                        Looper.loop();
                         return;
                     }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
