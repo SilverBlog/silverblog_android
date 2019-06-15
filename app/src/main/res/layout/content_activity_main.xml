@@ -58,12 +58,12 @@
         android:text="@string/save_button" />
 
     <Button
-        android:id="@+id/use_old"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/save_button"
-        android:text="@string/use_old" />
+            android:id="@+id/use_previous_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/save_button"
+            android:text="@string/use_old"/>
 
 
 </RelativeLayout>

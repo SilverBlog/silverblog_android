@@ -9,17 +9,17 @@
                                            tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_post_list_card_"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            layout="@layout/app_bar_post_list_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_post_list_card_" />
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_post_list_card"/>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

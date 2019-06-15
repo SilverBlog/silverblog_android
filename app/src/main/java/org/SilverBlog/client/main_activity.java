@@ -161,7 +161,7 @@ public class main_activity extends AppCompatActivity {
         for (Map.Entry<String, JsonElement> entry : host_list.entrySet()) {
             host_name_list.add(entry.getKey());
         }
-        Button history_host_button = findViewById(R.id.use_old);
+        Button history_host_button = findViewById(R.id.use_previous_button);
         history_host_button.setOnClickListener(history_host);
         Button save_button = findViewById(R.id.save_button);
         host = findViewById(R.id.host);

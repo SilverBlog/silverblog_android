@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/send_to_git_button"
-        android:title="@string/git_repo"
+            android:id="@+id/send_git_button"
+            android:title="@string/git_repo"
         />
     <item
         android:id="@+id/logout"

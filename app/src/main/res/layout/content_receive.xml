@@ -21,14 +21,14 @@
         android:layout_alignParentStart="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/titleview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:ems="10"
-            android:hint="@string/document_title" />
+                android:id="@+id/title_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:ems="10"
+                android:hint="@string/document_title"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -40,14 +40,13 @@
         android:layout_below="@+id/title_group">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nameview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:ems="10"
-            android:hint="@string/document_url"
-            android:inputType="textPersonName" />
+                android:id="@+id/name_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:ems="10"
+                android:hint="@string/document_url"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -59,7 +58,7 @@
         android:layout_alignParentBottom="true">
 
         <android.widget.EditText
-                android:id="@+id/mdcontent"
+                android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"

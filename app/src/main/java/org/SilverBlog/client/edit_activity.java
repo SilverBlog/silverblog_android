@@ -45,7 +45,7 @@ public class edit_activity extends AppCompatActivity {
 
         boolean send_post() {
             if (title_view.getText().length() == 0 || content_view.getText().length() == 0) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(edit_activity.this);
                 alertDialog.setTitle(R.string.content_not_none);
                 alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                 alertDialog.show();
@@ -200,9 +200,9 @@ public class edit_activity extends AppCompatActivity {
         context = getApplicationContext();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        title_view = findViewById(R.id.titleview);
-        content_view = findViewById(R.id.mdcontent);
-        name_view = findViewById(R.id.nameview);
+        title_view = findViewById(R.id.title_view);
+        content_view = findViewById(R.id.content);
+        name_view = findViewById(R.id.name_view);
         this.setTitle(getString(R.string.post_title));
         toolbar.setOnMenuItemClickListener(onMenuItemClick);
         Intent intent = getIntent();
