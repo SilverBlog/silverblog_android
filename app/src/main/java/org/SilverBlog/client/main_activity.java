@@ -195,7 +195,7 @@ public class main_activity extends AppCompatActivity {
                 finish();
                 return;
             }
-            Snackbar.make(host, R.string.scan_qr, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(host, R.string.scan_qrcode, Snackbar.LENGTH_LONG).show();
         }
     }
 }

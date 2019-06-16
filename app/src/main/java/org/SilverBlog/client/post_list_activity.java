@@ -164,8 +164,8 @@ public class post_list_activity extends AppCompatActivity {
                 sign_json request_json_obj = new sign_json();
                 request_json_obj.send_time = System.currentTimeMillis();
                 request_json_obj.sign = public_func.get_hmac_hash("git_page_publish", public_value.password + request_json_obj.send_time, "HmacSHA512");
-                RequestBody body = RequestBody.create(public_value.JSON, gson.toJson(request_json_obj));
-                Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/git_page_publish").method("POST", body).build();
+                RequestBody body = RequestBody.create(final_value.JSON, gson.toJson(request_json_obj));
+                Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/git_page_publish").method("POST", body).build();
                 Call call = okHttpClient.newCall(request);
                 call.enqueue(new Callback() {
                     @Override
@@ -210,7 +210,7 @@ public class post_list_activity extends AppCompatActivity {
 
     void get_post_list() {
         swipe_refresh_widget.setRefreshing(true);
-        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/post").build();
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/get/list/post").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -295,13 +295,13 @@ public class post_list_activity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     assert result_object != null;
-                    if (result_object.get("api_version").getAsInt() < public_value.current_api_code) {
+                    if (result_object.get("api_version").getAsInt() < final_value.current_api_code) {
                         new AlertDialog.Builder(post_list_activity.this)
                                 .setMessage(getString(R.string.api_too_low))
                                 .show();
                         return;
                     }
-                    if (result_object.get("api_version").getAsInt() > public_value.current_api_code) {
+                    if (result_object.get("api_version").getAsInt() > final_value.current_api_code) {
                         new AlertDialog.Builder(post_list_activity.this)
                                 .setMessage(R.string.api_too_high)
                                 .show();
@@ -328,7 +328,7 @@ public class post_list_activity extends AppCompatActivity {
     }
 
     void get_menu_list() {
-        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/get/list/menu").build();
+        Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/get/list/menu").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
@@ -461,8 +461,8 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                 request_json_obj.post_uuid = post_list.get(position).uuid;
                                 request_json_obj.send_time = System.currentTimeMillis();
                                 request_json_obj.sign = public_func.get_hmac_hash(request_json_obj.post_uuid + post_obj.get("title").getAsString() + post_obj.get("name").getAsString(), public_value.password + request_json_obj.send_time, "HmacSHA512");
-                                RequestBody body = RequestBody.create(public_value.JSON, gson.toJson(request_json_obj));
-                                Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/delete").method("POST", body).build();
+                                RequestBody body = RequestBody.create(final_value.JSON, gson.toJson(request_json_obj));
+                                Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/delete").method("POST", body).build();
                                 OkHttpClient okHttpClient = public_func.get_okhttp_obj();
                                 Call call = okHttpClient.newCall(request);
                                 call.enqueue(new Callback() {
@@ -509,6 +509,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
     public int getItemCount() {
         return post_list.size();
     }
+
     static class card_view_holder extends RecyclerView.ViewHolder {
         CardView card_view = itemView.findViewById(R.id.card_view);
         TextView title = itemView.findViewById(R.id.title);
@@ -530,3 +531,4 @@ class post_list {
     String excerpt;
     String uuid;
 }
+

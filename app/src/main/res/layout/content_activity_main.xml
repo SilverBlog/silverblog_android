@@ -20,13 +20,13 @@
         android:layout_alignParentStart="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/host"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/https_myblog_com"
+                android:id="@+id/host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/blog_address"
 
-            android:inputType="textPersonName" />
+                android:inputType="textPersonName"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

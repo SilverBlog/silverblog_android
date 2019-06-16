@@ -42,6 +42,4 @@ public class fab_scroll_behavior extends FloatingActionButton.Behavior {
     private void animateIn(FloatingActionButton fab) {
         fab.animate().translationY(0).setInterpolator(new LinearInterpolator()).start();
     }
-
-
 }

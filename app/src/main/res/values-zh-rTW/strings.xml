@@ -1,7 +1,7 @@
 <resources>
     <string name="send_button">發布</string>
     <string name="git_repo">發佈到Git倉庫</string>
-    <string name="https_myblog_com">博客地址(例：demo.silverblog.org)</string>
+    <string name="blog_address">博客地址(例：demo.silverblog.org)</string>
     <string name="admin_password">管理員密碼</string>
     <string name="save_button">保存配置</string>
     <string name="document">文章</string>
@@ -18,8 +18,8 @@
     <string name="loading_message">請稍後…</string>
     <string name="list_is_none">當前文章列表為空</string>
     <string name="network_error">請檢查網絡狀態！</string>
-    <string name="git_push_error">操作失敗！請查看API服務器輸出！ </string>
-    <string name="delete_notify">刪除這篇文章？ (警告！本操作不可逆，請謹慎操作！）</string>
+    <string name="git_push_error">操作失敗！請查看伺服器日誌。</string>
+    <string name="delete_notify">刪除的文章無法恢復，是否繼續?</string>
     <string name="modify">修改</string>
     <string name="delete">刪除</string>
     <string name="select">請選擇操作</string>
@@ -30,9 +30,9 @@
     <string name="post_title">發布文章</string>
     <string name="check_input">請先配置伺服器信息</string>
     <string name="config_save">配置已保存</string>
-    <string name="scan_qr">請授權相機權限，以便能夠正常掃描二維碼。</string>
-    <string name="QRcode_error">二維碼格式錯誤！ </string>
-    <string name="check_config">請檢查您的System.json配置文件。</string>
+    <string name="scan_qrcode">掃描 QR Code 需要相機權限。</string>
+    <string name="qrcode_format_error">QR Code 格式錯誤！</string>
+    <string name="check_config">請檢查您的配置文件。</string>
     <string name="logout">退出</string>
     <string name="notice">提示</string>
     <string name="save_notice">文章尚未保存，您真的要離開編輯頁面？</string>

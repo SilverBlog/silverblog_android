@@ -95,9 +95,9 @@ public class edit_activity extends AppCompatActivity {
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
-            RequestBody body = RequestBody.create(public_value.JSON, json);
+            RequestBody body = RequestBody.create(final_value.JSON, json);
             OkHttpClient okHttpClient = public_func.get_okhttp_obj();
-            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + action_name).method("POST", body).build();
+            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/" + action_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
                 @Override
@@ -252,9 +252,9 @@ public class edit_activity extends AppCompatActivity {
             }
             request_json request_obj = new request_json();
             request_obj.post_uuid = post_uuid;
-            RequestBody body = RequestBody.create(public_value.JSON, new Gson().toJson(request_obj));
+            RequestBody body = RequestBody.create(final_value.JSON, new Gson().toJson(request_obj));
             OkHttpClient okHttpClient = public_func.get_okhttp_obj();
-            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + public_value.API_VERSION + "/" + active_name).method("POST", body).build();
+            Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/" + active_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
 

@@ -58,9 +58,7 @@ class public_func {
 }
 
 class public_value {
-    final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    final static String API_VERSION = "v2";
-    final static int current_api_code = 3;
+
     static String host;
     static String password;
     static Boolean init = false;
@@ -68,4 +66,10 @@ class public_value {
     static String share_text = null;
     static JsonArray post_list;
     static JsonArray menu_list;
+}
+
+final class final_value {
+    static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    static String API_VERSION = "v2";
+    static int current_api_code = 3;
 }

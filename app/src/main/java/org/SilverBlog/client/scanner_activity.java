@@ -50,7 +50,7 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
         try {
             objects = parser.parse(rawResult.getText()).getAsJsonObject();
         } catch (IllegalStateException | JsonSyntaxException e) {
-            Snackbar.make(mScannerView, R.string.QRcode_error, Snackbar.LENGTH_LONG)
+            Snackbar.make(mScannerView, R.string.qrcode_format_error, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             mScannerView.resumeCameraPreview(this);
             return;

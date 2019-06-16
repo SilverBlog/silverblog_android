@@ -1,7 +1,7 @@
 <resources>
     <string name="send_button">发布</string>
     <string name="git_repo">发布到Git仓库</string>
-    <string name="https_myblog_com">博客地址(例：demo.silverblog.org)</string>
+    <string name="blog_address">博客地址(例：demo.silverblog.org)</string>
     <string name="admin_password">管理员密码</string>
     <string name="save_button">保存配置</string>
     <string name="document">文章</string>
@@ -18,8 +18,8 @@
     <string name="loading_message">请稍后…</string>
     <string name="list_is_none">当前文章列表为空</string>
     <string name="network_error">请检查网络状态！</string>
-    <string name="git_push_error">操作失败！请查看API服务器输出！</string>
-    <string name="delete_notify">删除这篇文章？(警告！本操作不可逆，请谨慎操作！）</string>
+    <string name="git_push_error">操作失败！请查看服务器日志。</string>
+    <string name="delete_notify">删除的文章无法恢复，是否继续？</string>
     <string name="modify">修改</string>
     <string name="delete">删除</string>
     <string name="select">请选择操作</string>
@@ -30,9 +30,9 @@
     <string name="post_title">发布文章</string>
     <string name="check_input">请先配置服务器信息</string>
     <string name="config_save">配置已保存</string>
-    <string name="scan_qr">请授权相机权限，以便能够正常扫描二维码。</string>
-    <string name="QRcode_error">二维码格式错误！</string>
-    <string name="check_config">请检查您的System.json配置文件。</string>
+    <string name="scan_qrcode">扫描二维码需要相机权限。</string>
+    <string name="qrcode_format_error">二维码格式错误！</string>
+    <string name="check_config">请检查您的配置文件。</string>
     <string name="logout">退出</string>
     <string name="notice">提示</string>
     <string name="save_notice">文章尚未保存，您真的要离开编辑页面？</string>

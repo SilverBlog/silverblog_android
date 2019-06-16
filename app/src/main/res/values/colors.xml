@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#37474f</color>
     <color name="colorAccent">#78909c</color>
     <color name="card_head">#212121</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
+
