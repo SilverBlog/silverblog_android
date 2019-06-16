@@ -17,18 +17,19 @@ public class fab_scroll_behavior extends FloatingActionButton.Behavior {
 
     @Override
     public boolean onStartNestedScroll(@NonNull final CoordinatorLayout coordinatorLayout, @NonNull final FloatingActionButton child,
-                                       @NonNull final View directTargetChild, @NonNull final View target, final int nestedScrollAxes) {
+                                       @NonNull final View directTargetChild, @NonNull final View target, final int nestedScrollAxes,int type) {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL;
     }
 
     @Override
     public void onNestedScroll(@NonNull final CoordinatorLayout coordinatorLayout, @NonNull final FloatingActionButton child,
                                @NonNull final View target, final int dxConsumed, final int dyConsumed,
-                               final int dxUnconsumed, final int dyUnconsumed) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+                               final int dxUnconsumed, final int dyUnconsumed,int type) {
+        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,type);
         if (dyConsumed > 0) {
             animateOut(child);
-        } else if (dyConsumed < 0) {
+        }
+        if (dyConsumed < 0) {
             animateIn(child);
         }
     }
