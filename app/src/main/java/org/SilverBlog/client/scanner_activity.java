@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.*;
 import com.google.zxing.Result;
@@ -21,8 +23,11 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
-        setContentView(mScannerView);                // Set the scanner view as the content view
+        setContentView(R.layout.scanner_activity);
+
+        ViewGroup contentFrame = findViewById(R.id.content_frame);
+        mScannerView = new ZXingScannerView(this);
+        contentFrame.addView(mScannerView);
     }
 
 
