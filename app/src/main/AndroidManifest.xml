@@ -30,7 +30,9 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name=".scanner_activity"/>
+        <activity android:name=".scanner_activity"
+            android:label="@string/scan_title"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".post_list_activity"
             android:label="@string/app_name"

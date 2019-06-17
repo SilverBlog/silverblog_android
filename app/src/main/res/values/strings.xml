@@ -23,7 +23,7 @@
     <string name="delete_notify">Deleted article cannot be recovered, delete anyway?</string>
     <string name="modify">Modify</string>
     <string name="delete">Delete</string>
-    <string name="scan_button">Scan QR code</string>
+    <string name="scan_title">Scan QR Code</string>
     <string name="share_menu_button">Share</string>
     <string name="edit_title">Edit article</string>
     <string name="content_not_none">Title and content can not be empty!</string>

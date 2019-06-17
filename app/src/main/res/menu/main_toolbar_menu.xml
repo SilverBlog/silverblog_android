@@ -5,6 +5,6 @@
     <item
             android:id="@+id/scan_button"
             android:icon="@drawable/ic_scan_code"
-            android:title="@string/scan_button"
+            android:title="@string/scan_title"
             app:showAsAction="ifRoom"/>
 </menu>

@@ -23,7 +23,7 @@
     <string name="modify">修改</string>
     <string name="delete">删除</string>
     <string name="select">请选择操作</string>
-    <string name="scan_button">扫描二维码</string>
+    <string name="scan_title">扫描二维码</string>
     <string name="share_menu_button">分享</string>
     <string name="edit_title">修改文章</string>
     <string name="content_not_none">标题和内容不能为空！</string>

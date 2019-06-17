@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.*;
 import com.google.zxing.Result;
@@ -24,31 +26,32 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
     public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.scanner_activity);
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.scan_title);
         ViewGroup contentFrame = findViewById(R.id.content_frame);
         mScannerView = new ZXingScannerView(this);
         contentFrame.addView(mScannerView);
+
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();          // Start camera on resume
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+        mScannerView.stopCamera();
     }
 
     @Override
     public void handleResult(Result rawResult) {
-        // Do something with the result here
-        Log.v("scanner", rawResult.getText()); // Prints scan results
-        Log.v("scanner", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
+        Log.v("scanner", rawResult.getText());
+        Log.v("scanner", rawResult.getBarcodeFormat().toString());
         SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
         JsonParser parser = new JsonParser();
         JsonObject objects;
