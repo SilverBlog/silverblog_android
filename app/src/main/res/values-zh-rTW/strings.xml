@@ -1,89 +1,50 @@
 <resources>
     <string name="send_button">發布</string>
-        
     <string name="git_repo">發佈到Git倉庫</string>
-        
-    <string name="https_myblog_com">博客地址(例：demo.silverblog.org)</string>
-        
+    <string name="blog_address">博客地址(例：demo.silverblog.org)</string>
     <string name="admin_password">管理員密碼</string>
-        
     <string name="save_button">保存配置</string>
-        
-    <string name="scanner_notify">請執行[./manage.py qrcode]並掃描輸出的二維碼</string>
-        
     <string name="document">文章</string>
-        
     <string name="menu">菜單</string>
-        
     <string name="document_title">文章標題</string>
-        
     <string name="document_url">文章URL(留空將使用拼音)</string>
-        
     <string name="document_content">文章內容</string>
-        
     <string name="submit_error">操作失敗！請檢查密碼。</string>
-        
     <string name="ok_button">確定</string>
-        
-    <string name="submit_success">操作完成！ </string>
-        
+    <string name="submit_success">操作完成！</string>
     <string name="visit_document">訪問新博文</string>
-        
     <string name="cancel">取消</string>
-        
     <string name="loading">正在連接伺服器…</string>
-        
     <string name="loading_message">請稍後…</string>
-        
     <string name="list_is_none">當前文章列表為空</string>
-        
-    <string name="network_error">獲取失敗，請檢查網絡狀態！</string>
-        
-    <string name="git_push_error">操作失敗！請查看API服務器輸出！ </string>
-        
-    <string name="delete_notify">刪除這篇文章？ (警告！本操作不可逆，請謹慎操作！）</string>
-        
+    <string name="network_error">請檢查網絡狀態！</string>
+    <string name="git_push_error">操作失敗！請查看伺服器日誌。</string>
+    <string name="delete_notify">刪除的文章無法恢復，是否繼續?</string>
     <string name="modify">修改</string>
-        
     <string name="delete">刪除</string>
-        
     <string name="select">請選擇操作</string>
-        
-    <string name="scan_button">掃描二維碼</string>
-        
+    <string name="scan_title">掃描QR Code</string>
     <string name="share_menu_button">分享</string>
-        
     <string name="edit_title">修改文章</string>
-        
     <string name="content_not_none">標題和內容不能為空！</string>
-        
     <string name="post_title">發布文章</string>
-        
     <string name="check_input">請先配置伺服器信息</string>
-        
     <string name="config_save">配置已保存</string>
-        
-    <string name="scan_qr">請授權相機權限，以便能夠正常掃描二維碼。</string>
-        
-    <string name="QRcode_error">二維碼格式錯誤！ </string>
-        
-    <string name="check_config">請檢查您的System.json配置文件。</string>
+    <string name="scan_qrcode">掃描 QR Code 需要相機權限。</string>
+    <string name="qrcode_format_error">QR Code 格式錯誤！</string>
+    <string name="check_config">請檢查您的配置文件。</string>
     <string name="logout">退出</string>
-        
     <string name="notice">提示</string>
-        
-    <string name="save_notice">文章尚未保存，您真的要離開編輯頁面？</string><![CDATA[
-        
-        
-    ]]>
+    <string name="save_notice">文章尚未保存，您真的要離開編輯頁面？</string>
     <string name="use_old">使用之前的配置</string>
-        
     <string name="select_config">請選擇配置</string>
     <string name="api_too_low">當前伺服器API版本太低，請升級後重試。</string>
-    <string name="app_name">SilverBlog</string>
     <string name="navigation_drawer_open">打開選單</string>
     <string name="navigation_drawer_close">關閉選單</string>
     <string name="notice_remove_title">標題已在內容中找到。 你想刪除標題嗎？</string>
     <string name="clean">清空</string>
     <string name="cannot_connect">無法連接到伺服器</string>
+    <string name="api_too_high">當前客戶端API版本太低，請升級後重試。</string>
+    <string name="request_error">請求失敗，錯誤碼：</string>
+    <string name="load">載入中…</string>
 </resources>
