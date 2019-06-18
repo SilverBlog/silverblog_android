@@ -16,7 +16,8 @@ release_github:
     stage: deploy
     script:
         - git push --set-upstream https://${github_key}@github.com/SilverBlog/SilverBlog_Android.git HEAD:master
-        - /opt/github-release-upload.sh github_api_token=${github_key} owner=silverblog repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk"
+        - /opt/github-release-upload.sh github_api_token=${github_key} owner=silverblog repo=SilverBlog_Android tag=$(date "+%Y%m%d%H%M%S") filename="./app/build/outputs/apk/release/app-release.apk" pre_release="false"
+        - git clone https://git.reallserver.cn/qwe7002/telegram-sms.wiki.git wiki
 
 
 build:
