@@ -250,10 +250,10 @@ public class post_list_activity extends AppCompatActivity {
                     swipe_refresh_widget.setRefreshing(false);
                     JsonParser parser = new JsonParser();
                     final List<post_list> post_list = new ArrayList<>();
-                    assert response.body() != null;
+
                     JsonArray result_array = null;
                     try {
-                        result_array = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonArray();
+                        result_array = parser.parse(Objects.requireNonNull(Objects.requireNonNull(response.body()).string())).getAsJsonArray();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -303,9 +303,10 @@ public class post_list_activity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     JsonParser parser = new JsonParser();
                     JsonObject result_object = null;
+
                     try {
-                        assert response.body() != null;
-                        result_object = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonObject();
+
+                        result_object = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -371,9 +372,9 @@ public class post_list_activity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     JsonParser parser = new JsonParser();
                     JsonArray result_array = null;
-                    assert response.body() != null;
+
                     try {
-                        result_array = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonArray();
+                        result_array = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonArray();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

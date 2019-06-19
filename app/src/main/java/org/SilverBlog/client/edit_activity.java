@@ -12,18 +12,26 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import okhttp3.*;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static org.SilverBlog.client.recycler_view_adapter.sharedpreferences;
 
@@ -279,8 +287,7 @@ public class edit_activity extends AppCompatActivity {
                         JsonParser parser = new JsonParser();
                         JsonObject objects = null;
                         try {
-                            assert response.body() != null;
-                            objects = parser.parse(Objects.requireNonNull(response.body().string())).getAsJsonObject();
+                            objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
