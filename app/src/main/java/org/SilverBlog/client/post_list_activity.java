@@ -2,13 +2,22 @@ package org.SilverBlog.client;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.*;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -22,13 +31,17 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.*;
-import okhttp3.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,6 +51,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static org.SilverBlog.client.recycler_view_adapter.sharedpreferences;
 
@@ -58,15 +78,10 @@ public class post_list_activity extends AppCompatActivity {
         return true;
     }
 
-    public static String get_abs_url(String absolutePath, String relativePath) {
-        try {
-            URL absoluteUrl = new URL(absolutePath);
-            URL parseUrl = new URL(absoluteUrl, relativePath);
-            return parseUrl.toString();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return "";
-        }
+    public static String get_abs_url(String absolutePath, String relativePath) throws MalformedURLException {
+        URL absoluteUrl = new URL(absolutePath);
+        URL parseUrl = new URL(absoluteUrl, relativePath);
+        return parseUrl.toString();
     }
 
     void start_login() {
@@ -311,10 +326,16 @@ public class post_list_activity extends AppCompatActivity {
                     ImageView image_view = header_view.findViewById(R.id.imageView);
                     String image_url = result_object.get("author_image").getAsString();
                     if (!is_abs_url(image_url)) {
-                        image_url = get_abs_url(public_value.host, image_url);
+                        try {
+                            image_url = get_abs_url(public_value.host, image_url);
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                            image_url = null;
+                        }
                     }
-
-                    Glide.with(post_list_activity.this).load(image_url).apply(RequestOptions.circleCropTransform()).into(image_view);
+                    if (image_url != null) {
+                        Glide.with(post_list_activity.this).load(image_url).apply(RequestOptions.circleCropTransform()).into(image_view);
+                    }
                     TextView username = header_view.findViewById(R.id.username);
                     TextView desc = header_view.findViewById(R.id.desc);
                     username.setText(result_object.get("author_name").getAsString());
@@ -436,6 +457,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
         card_view_holder_obj.card_view.setOnClickListener(v -> new AlertDialog.Builder(context).setTitle(R.string.select).setItems(new String[]{context.getString(R.string.modify), context.getString(R.string.delete)}, (dialogInterface, i) -> {
             switch (i) {
                 case 0:
+                    //Modify
                     Intent intent = new Intent(context, edit_activity.class);
                     intent.putExtra("edit", true);
                     intent.putExtra("uuid", post_list.get(position).uuid);
@@ -446,6 +468,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                     context.startActivity(intent);
                     break;
                 case 1:
+                    //Delete
                     new AlertDialog.Builder(context).setTitle(R.string.notice).setMessage(R.string.delete_notify).setNeutralButton(R.string.ok_button,
                             (dialogInterface1, i1) -> {
                                 final ProgressDialog dialog = new ProgressDialog(context);
@@ -514,8 +537,9 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
         CardView card_view = itemView.findViewById(R.id.card_view);
         TextView title = itemView.findViewById(R.id.title);
         TextView excerpt = itemView.findViewById(R.id.excerpt);
-        card_view_holder(final View itemView) {
-            super(itemView);
+
+        card_view_holder(final View item) {
+            super(item);
         }
     }
 }
