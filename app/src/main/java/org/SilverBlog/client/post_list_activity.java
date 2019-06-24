@@ -505,11 +505,11 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                         dialog.cancel();
                                         Intent broadcast_intent = new Intent();
                                         broadcast_intent.setAction(context.getPackageName());
-                                        if(response.code()!=200){
-                                            broadcast_intent.putExtra("result", context.getString(R.string.request_error) + response.code()      );
+                                        if (response.code() != 200) {
+                                            broadcast_intent.putExtra("result", context.getString(R.string.request_error) + response.code());
                                             broadcast_intent.putExtra("success", false);
                                         }
-                                        if(response.code()==200) {
+                                        if (response.code() == 200) {
                                             JsonParser parser = new JsonParser();
                                             final JsonObject objects = parser.parse(Objects.requireNonNull(response.body()).string()).getAsJsonObject();
                                             String result_message = context.getString(R.string.submit_error);
