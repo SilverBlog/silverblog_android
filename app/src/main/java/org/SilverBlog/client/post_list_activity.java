@@ -64,6 +64,7 @@ import static org.SilverBlog.client.recycler_view_adapter.sharedpreferences;
 public class post_list_activity extends AppCompatActivity {
     SwipeRefreshLayout swipe_refresh_widget;
     NavigationView navigation_view;
+    boolean unload_system_info = true;
     private RecyclerView recycler_view;
     private Context context;
     private Toolbar toolbar;
@@ -138,6 +139,9 @@ public class post_list_activity extends AppCompatActivity {
         swipe_refresh_widget = findViewById(R.id.swipe_refresh_widget);
         swipe_refresh_widget.setColorSchemeResources(R.color.colorPrimary);
         swipe_refresh_widget.setOnRefreshListener(() -> {
+            if (unload_system_info) {
+                get_system_info();
+            }
             get_post_list();
             get_menu_list();
         });
@@ -300,6 +304,7 @@ public class post_list_activity extends AppCompatActivity {
                     Looper.loop();
                     return;
                 }
+                unload_system_info = false;
                 runOnUiThread(() -> {
                     JsonParser parser = new JsonParser();
                     JsonObject result_object = null;
@@ -343,7 +348,6 @@ public class post_list_activity extends AppCompatActivity {
                     desc.setText(result_object.get("project_description").getAsString());
                     toolbar.setTitle(result_object.get("project_name").getAsString());
                 });
-
             }
         });
 
