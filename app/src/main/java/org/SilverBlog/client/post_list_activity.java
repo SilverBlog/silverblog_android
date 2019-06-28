@@ -404,10 +404,6 @@ public class post_list_activity extends AppCompatActivity {
                         intent.putExtra("edit", true);
                         intent.putExtra("uuid", menu_item.get("uuid").getAsString());
                         intent.putExtra("menu", true);
-                        intent.putExtra("share_title", public_value.share_title);
-                        intent.putExtra("share_text", public_value.share_text);
-                        public_value.share_text = null;
-                        public_value.share_title = null;
                         startActivity(intent);
                         DrawerLayout drawer = findViewById(R.id.drawer_layout);
                         drawer.closeDrawer(GravityCompat.START);
@@ -466,10 +462,6 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                     Intent intent = new Intent(context, edit_activity.class);
                     intent.putExtra("edit", true);
                     intent.putExtra("uuid", post_list.get(position).uuid);
-                    intent.putExtra("share_title", public_value.share_title);
-                    intent.putExtra("share_text", public_value.share_text);
-                    public_value.share_text = null;
-                    public_value.share_title = null;
                     context.startActivity(intent);
                     break;
                 case 1:
