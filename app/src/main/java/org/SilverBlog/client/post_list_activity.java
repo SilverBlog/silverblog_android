@@ -69,14 +69,9 @@ public class post_list_activity extends AppCompatActivity {
     private Context context;
     private Toolbar toolbar;
 
-    public static Boolean is_abs_url(String URL) {
-        try {
+    public static Boolean is_abs_url(String URL) throws URISyntaxException {
             URI u = new URI(URL);
             return u.isAbsolute();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return true;
     }
 
     public static String get_abs_url(String absolutePath, String relativePath) throws MalformedURLException {
@@ -331,7 +326,14 @@ public class post_list_activity extends AppCompatActivity {
                     View header_view = navigation_view.getHeaderView(0);
                     ImageView image_view = header_view.findViewById(R.id.imageView);
                     String image_url = result_object.get("author_image").getAsString();
-                    if (!is_abs_url(image_url)) {
+                    boolean is_abs = false;
+                    try {
+                        is_abs = is_abs_url(image_url);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                        image_url = null;
+                    }
+                    if (!is_abs && image_url != null) {
                         try {
                             image_url = get_abs_url(public_value.host, image_url);
                         } catch (MalformedURLException e) {
