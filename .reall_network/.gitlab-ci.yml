@@ -21,7 +21,7 @@ release_github:
 
 
 build:
-    image: preventis/docker-android-alpine:latest
+    image: registry.git.reallserver.cn/docker/docker-android-alpine:latest
     stage: build
     script:
         - curl https://keystore.reallserver.cn/android/silverblog/keys.jks -o app/keys.jks -u gitlab:${key_store_passwd}
@@ -37,7 +37,7 @@ build:
         expire_in: 1 week
 
 release_play_build_develop:
-    image: preventis/docker-android-alpine:latest
+    image: registry.git.reallserver.cn/docker/docker-android-alpine:latest
     stage: play
     only:
         - nightly
@@ -52,7 +52,7 @@ release_play_build_develop:
         - ./gradlew publishApk --track beta
 
 release_play_build_master:
-    image: preventis/docker-android-alpine:latest
+    image: registry.git.reallserver.cn/docker/docker-android-alpine:latest
     stage: play
     only:
         - master
