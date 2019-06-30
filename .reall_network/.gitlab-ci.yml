@@ -21,11 +21,12 @@ release_github:
 
 
 build:
-    image: registry.git.reallserver.cn/docker/docker-android-alpine:latest
+    image: preventis/docker-android-alpine:latest
     stage: build
     script:
         - curl https://keystore.reallserver.cn/android/silverblog/keys.jks -o app/keys.jks -u gitlab:${key_store_passwd}
-        - export GRADLE_USER_HOME=$(pwd)/.gradle
+        - export GRADLE_USER_HOME=$(pwd)/.gradle && mkdir -p $(pwd)/.gradle
+        - echo "org.gradle.daemon=true org.gradle.parallel=true" >> $(pwd)/.gradle/gradle.properties
         - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}\"}" > ./app/version.gradle
         - echo -e "systemProp.http.nonProxyHosts=dl.google.com\n systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n android.enableJetifier=true\n android.useAndroidX=true" >> gradle.properties
         - chmod +x ./gradlew
@@ -36,29 +37,31 @@ build:
         expire_in: 1 week
 
 release_play_build_develop:
-    image: registry.git.reallserver.cn/docker/docker-android-alpine:latest
+    image: preventis/docker-android-alpine:latest
     stage: play
     only:
         - nightly
     script:
         - curl https://keystore.reallserver.cn/android/silverblog/keys.jks -o app/keys.jks -u gitlab:${key_store_passwd}
         - curl https://keystore.reallserver.cn/android/play-service-key.json -o app/play-service-key.json -u gitlab:${key_store_passwd}
-        - export GRADLE_USER_HOME=$(pwd)/.gradle
+        - export GRADLE_USER_HOME=$(pwd)/.gradle && mkdir -p $(pwd)/.gradle
+        - echo "org.gradle.daemon=true org.gradle.parallel=true" >> $(pwd)/.gradle/gradle.properties
         - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}\"}" > ./app/version.gradle
-        - echo -e "systemProp.http.nonProxyHosts=dl.google.com\n systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n android.enableJetifier=true\n android.useAndroidX=true\n android.enableAapt2=false" >> gradle.properties
+        - echo -e "systemProp.http.nonProxyHosts=dl.google.com\n systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n android.enableJetifier=true\n android.useAndroidX=true" >> gradle.properties
         - chmod +x ./gradlew
         - ./gradlew publishApk --track beta
 
 release_play_build_master:
-    image: registry.git.reallserver.cn/docker/docker-android-alpine:latest
+    image: preventis/docker-android-alpine:latest
     stage: play
     only:
         - master
     script:
         - curl https://keystore.reallserver.cn/android/silverblog/keys.jks -o app/keys.jks -u gitlab:${key_store_passwd}
         - curl https://keystore.reallserver.cn/android/play-service-key.json -o app/play-service-key.json -u gitlab:${key_store_passwd}
-        - export GRADLE_USER_HOME=$(pwd)/.gradle
+        - export GRADLE_USER_HOME=$(pwd)/.gradle && mkdir -p $(pwd)/.gradle
+        - echo "org.gradle.daemon=true org.gradle.parallel=true" >> $(pwd)/.gradle/gradle.properties
         - echo -e "ext {\n appVersionCode = ${CI_PIPELINE_ID}\n appVersionName = \"${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}\"}" > ./app/version.gradle
-        - echo -e "systemProp.http.nonProxyHosts=dl.google.com\n systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n android.enableJetifier=true\n android.useAndroidX=true\n android.enableAapt2=false" >> gradle.properties
+        - echo -e "systemProp.http.nonProxyHosts=dl.google.com\n systemProp.http.proxyHost=192.168.3.8\n systemProp.http.proxyPort=1080\n systemProp.https.proxyHost=192.168.3.8\n systemProp.https.proxyPort=1080\n org.gradle.jvmargs=-Xmx1536m\n android.enableJetifier=true\n android.useAndroidX=true" >> gradle.properties
         - chmod +x ./gradlew
         - ./gradlew publishApk --track production
