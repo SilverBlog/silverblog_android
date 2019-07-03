@@ -1,14 +1,16 @@
 package org.SilverBlog.client;
 
 import com.google.gson.JsonArray;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 
 
 class public_func {
@@ -62,8 +64,6 @@ class public_value {
     static String host;
     static String password;
     static Boolean init = false;
-    static String share_title = null;
-    static String share_text = null;
     static JsonArray post_list;
     static JsonArray menu_list;
 }

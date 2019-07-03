@@ -5,8 +5,6 @@
     <string name="blog_address">Blog address</string>
     <string name="admin_password">Password</string>
     <string name="save_button">Save</string>
-    <string name="document">Article</string>
-    <string name="menu">Menu</string>
     <string name="document_title">Article title</string>
     <string name="document_url">Article URL</string>
     <string name="document_content">Article Content</string>
@@ -24,12 +22,10 @@
     <string name="modify">Modify</string>
     <string name="delete">Delete</string>
     <string name="scan_title">Scan QR Code</string>
-    <string name="share_menu_button">Share</string>
     <string name="edit_title">Edit article</string>
     <string name="content_not_none">Title and content can not be empty!</string>
     <string name="post_title">New article</string>
     <string name="check_input">Please configure server information first!</string>
-    <string name="config_save">Config Saved</string>
     <string name="scan_qrcode">Please allow camera access for QR code scanning.</string>
     <string name="qrcode_format_error">Wrong QR code format!</string>
     <string name="check_config">Please check your configuration file.</string>

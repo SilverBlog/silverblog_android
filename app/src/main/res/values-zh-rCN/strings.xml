@@ -4,8 +4,6 @@
     <string name="blog_address">博客地址(例：demo.silverblog.org)</string>
     <string name="admin_password">管理员密码</string>
     <string name="save_button">保存配置</string>
-    <string name="document">文章</string>
-    <string name="menu">菜单</string>
     <string name="document_title">文章标题</string>
     <string name="document_url">文章URL(留空将使用拼音)</string>
     <string name="document_content">文章内容</string>
@@ -24,12 +22,10 @@
     <string name="delete">删除</string>
     <string name="select">请选择操作</string>
     <string name="scan_title">扫描二维码</string>
-    <string name="share_menu_button">分享</string>
     <string name="edit_title">修改文章</string>
     <string name="content_not_none">标题和内容不能为空！</string>
     <string name="post_title">发布文章</string>
     <string name="check_input">请先配置服务器信息</string>
-    <string name="config_save">配置已保存</string>
     <string name="scan_qrcode">扫描二维码需要相机权限。</string>
     <string name="qrcode_format_error">二维码格式错误！</string>
     <string name="check_config">请检查您的配置文件。</string>

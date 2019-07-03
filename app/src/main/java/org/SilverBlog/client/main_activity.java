@@ -14,22 +14,29 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import okhttp3.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class main_activity extends AppCompatActivity {
@@ -111,7 +118,7 @@ public class main_activity extends AppCompatActivity {
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     mpDialog.cancel();
                     Looper.prepare();
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
@@ -122,7 +129,7 @@ public class main_activity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) {
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
                     mpDialog.cancel();
                     if (response.code() != 204) {
                         Looper.prepare();

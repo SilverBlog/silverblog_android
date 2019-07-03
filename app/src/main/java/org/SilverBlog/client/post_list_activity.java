@@ -178,19 +178,19 @@ public class post_list_activity extends AppCompatActivity {
                 sign_json request_json_obj = new sign_json();
                 request_json_obj.send_time = System.currentTimeMillis();
                 request_json_obj.sign = public_func.get_hmac_hash("git_page_publish", public_value.password + request_json_obj.send_time, "HmacSHA512");
-                RequestBody body = RequestBody.create(final_value.JSON, gson.toJson(request_json_obj));
+                RequestBody body = RequestBody.create(gson.toJson(request_json_obj), final_value.JSON);
                 Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/git_page_publish").method("POST", body).build();
                 Call call = okHttpClient.newCall(request);
                 call.enqueue(new Callback() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
                         dialog.cancel();
                         Snackbar.make(findViewById(R.id.toolbar), R.string.git_push_error, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                         dialog.cancel();
                         if (response.code() != 200) {
                             Looper.prepare();
@@ -229,7 +229,7 @@ public class post_list_activity extends AppCompatActivity {
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Looper.prepare();
                 swipe_refresh_widget.setRefreshing(false);
                 Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
@@ -237,7 +237,7 @@ public class post_list_activity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, final Response response) {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() != 200) {
                     Looper.prepare();
                     swipe_refresh_widget.setRefreshing(false);
@@ -284,7 +284,7 @@ public class post_list_activity extends AppCompatActivity {
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Looper.prepare();
                 Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
                 Looper.loop();
@@ -292,7 +292,7 @@ public class post_list_activity extends AppCompatActivity {
             }
 
             @Override
-            public void onResponse(Call call, final Response response) {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() != 200) {
                     Looper.prepare();
                     Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
@@ -361,14 +361,14 @@ public class post_list_activity extends AppCompatActivity {
         Call call = okHttpClient.newCall(request);
         call.enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 Looper.prepare();
                 Snackbar.make(findViewById(R.id.toolbar), R.string.network_error, Snackbar.LENGTH_LONG).show();
                 Looper.loop();
             }
 
             @Override
-            public void onResponse(Call call, final Response response) {
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
                 if (response.code() != 200) {
                     Looper.prepare();
                     Snackbar.make(findViewById(R.id.toolbar), getString(R.string.request_error) + response.code(), Snackbar.LENGTH_LONG).show();
@@ -483,13 +483,13 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                 request_json_obj.post_uuid = post_list.get(position).uuid;
                                 request_json_obj.send_time = System.currentTimeMillis();
                                 request_json_obj.sign = public_func.get_hmac_hash(request_json_obj.post_uuid + post_obj.get("title").getAsString() + post_obj.get("name").getAsString(), public_value.password + request_json_obj.send_time, "HmacSHA512");
-                                RequestBody body = RequestBody.create(final_value.JSON, gson.toJson(request_json_obj));
+                                RequestBody body = RequestBody.create(gson.toJson(request_json_obj), final_value.JSON);
                                 Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/delete").method("POST", body).build();
                                 OkHttpClient okHttpClient = public_func.get_okhttp_obj();
                                 Call call = okHttpClient.newCall(request);
                                 call.enqueue(new Callback() {
                                     @Override
-                                    public void onFailure(Call call, IOException e) {
+                                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
                                         dialog.cancel();
                                         Intent broadcast_intent = new Intent();
                                         broadcast_intent.putExtra("result", context.getString(R.string.submit_error));
@@ -499,7 +499,7 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                                     }
 
                                     @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
+                                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                                         dialog.cancel();
                                         Intent broadcast_intent = new Intent();
                                         broadcast_intent.setAction(context.getPackageName());

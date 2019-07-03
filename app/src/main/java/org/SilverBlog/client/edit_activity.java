@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -103,13 +104,13 @@ public class edit_activity extends AppCompatActivity {
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
-            RequestBody body = RequestBody.create(final_value.JSON, json);
+            RequestBody body = RequestBody.create(json, final_value.JSON);
             OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/" + action_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     mpDialog.cancel();
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                     alertDialog.setTitle(R.string.network_error);
@@ -117,7 +118,7 @@ public class edit_activity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) {
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
                     mpDialog.cancel();
                     if (response.code() != 200) {
                         Looper.prepare();
@@ -260,14 +261,14 @@ public class edit_activity extends AppCompatActivity {
             }
             request_json request_obj = new request_json();
             request_obj.post_uuid = post_uuid;
-            RequestBody body = RequestBody.create(final_value.JSON, new Gson().toJson(request_obj));
+            RequestBody body = RequestBody.create(new Gson().toJson(request_obj), final_value.JSON);
             OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/" + active_name).method("POST", body).build();
             Call call = okHttpClient.newCall(request);
             call.enqueue(new Callback() {
 
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
                     mpDialog.cancel();
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
                     alertDialog.setTitle(R.string.submit_error);
@@ -275,7 +276,7 @@ public class edit_activity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(Call call, final Response response) {
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
                     if (response.code() != 200) {
                         Looper.prepare();
 
