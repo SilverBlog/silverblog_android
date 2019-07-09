@@ -62,25 +62,25 @@ import okhttp3.Response;
 import static org.SilverBlog.client.recycler_view_adapter.sharedpreferences;
 
 public class post_list_activity extends AppCompatActivity {
-    SwipeRefreshLayout swipe_refresh_widget;
-    NavigationView navigation_view;
-    boolean unload_system_info = true;
+    private SwipeRefreshLayout swipe_refresh_widget;
+    private NavigationView navigation_view;
+    private boolean unload_system_info = true;
     private RecyclerView recycler_view;
     private Context context;
     private Toolbar toolbar;
 
-    public static Boolean is_abs_url(String URL) throws URISyntaxException {
+    private static Boolean is_abs_url(String URL) throws URISyntaxException {
             URI u = new URI(URL);
             return u.isAbsolute();
     }
 
-    public static String get_abs_url(String absolutePath, String relativePath) throws MalformedURLException {
+    private static String get_abs_url(String absolutePath, String relativePath) throws MalformedURLException {
         URL absoluteUrl = new URL(absolutePath);
         URL parseUrl = new URL(absoluteUrl, relativePath);
         return parseUrl.toString();
     }
 
-    void start_login() {
+    private void start_login() {
         Intent main_activity = new Intent(context, main_activity.class);
         startActivity(main_activity);
         finish();
@@ -222,7 +222,7 @@ public class post_list_activity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    void get_post_list() {
+    private void get_post_list() {
         swipe_refresh_widget.setRefreshing(true);
         Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/get/list/post").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
@@ -278,7 +278,7 @@ public class post_list_activity extends AppCompatActivity {
 
     }
 
-    void get_system_info() {
+    private void get_system_info() {
         Request request = new Request.Builder().url("https://" + public_value.host + "/control/system_info").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
@@ -355,7 +355,7 @@ public class post_list_activity extends AppCompatActivity {
 
     }
 
-    void get_menu_list() {
+    private void get_menu_list() {
         Request request = new Request.Builder().url("https://" + public_value.host + "/control/" + final_value.API_VERSION + "/get/list/menu").build();
         OkHttpClient okHttpClient = public_func.get_okhttp_obj();
         Call call = okHttpClient.newCall(request);
@@ -437,8 +437,8 @@ public class post_list_activity extends AppCompatActivity {
 class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.card_view_holder> {
 
     static SharedPreferences sharedpreferences;
-    private List<post_list> post_list;
-    private Context context;
+    private final List<post_list> post_list;
+    private final Context context;
 
     recycler_view_adapter(List<post_list> post_list, Context context) {
         this.post_list = post_list;
@@ -533,9 +533,9 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
     }
 
     static class card_view_holder extends RecyclerView.ViewHolder {
-        CardView card_view = itemView.findViewById(R.id.card_view);
-        TextView title = itemView.findViewById(R.id.title);
-        TextView excerpt = itemView.findViewById(R.id.excerpt);
+        final CardView card_view = itemView.findViewById(R.id.card_view);
+        final TextView title = itemView.findViewById(R.id.title);
+        final TextView excerpt = itemView.findViewById(R.id.excerpt);
 
         card_view_holder(final View item) {
             super(item);

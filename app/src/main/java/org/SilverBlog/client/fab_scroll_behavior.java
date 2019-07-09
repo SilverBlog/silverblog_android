@@ -9,7 +9,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class fab_scroll_behavior extends FloatingActionButton.Behavior {
+class fab_scroll_behavior extends FloatingActionButton.Behavior {
 
     public fab_scroll_behavior(Context context, AttributeSet attrs) {
         super(context, attrs);

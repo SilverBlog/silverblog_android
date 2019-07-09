@@ -40,12 +40,12 @@ public class edit_activity extends AppCompatActivity {
     private EditText title_view;
     private EditText name_view;
     private EditText content_view;
-    String post_uuid;
-    String action_name = "new";
-    Boolean edit_mode = false;
+    private String post_uuid;
+    private String action_name = "new";
+    private Boolean edit_mode = false;
     private Context context;
     private Boolean edit_menu;
-    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+    private final Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             return send_post();

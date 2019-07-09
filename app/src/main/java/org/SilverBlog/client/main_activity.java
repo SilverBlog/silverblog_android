@@ -40,21 +40,21 @@ import okhttp3.Response;
 
 
 public class main_activity extends AppCompatActivity {
-    SharedPreferences sharedPreferences;
-    String host_save;
-    String password_save;
-    EditText host;
-    EditText password;
-    JsonObject host_list;
-    ArrayList<String> host_name_list;
-    Context context;
+    private SharedPreferences sharedPreferences;
+    private String host_save;
+    private String password_save;
+    private EditText host;
+    private EditText password;
+    private JsonObject host_list;
+    private ArrayList<String> host_name_list;
+    private Context context;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
         return true;
     }
 
-    View.OnClickListener history_host = new View.OnClickListener() {
+    private final View.OnClickListener history_host = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             new AlertDialog.Builder(view.getContext()).setTitle(R.string.select_config).setItems(host_name_list.toArray(new String[0]), (dialogInterface, index) -> {
@@ -89,7 +89,7 @@ public class main_activity extends AppCompatActivity {
             }).setPositiveButton(R.string.cancel, null).show();
         }
     };
-    View.OnClickListener save_host = new View.OnClickListener() {
+    private final View.OnClickListener save_host = new View.OnClickListener() {
         @Override
         public void onClick(final View view) {
             InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -106,31 +106,40 @@ public class main_activity extends AppCompatActivity {
 
             host_save = String.valueOf(host.getText());
             password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
-            final ProgressDialog mpDialog = new ProgressDialog(main_activity.this);
-            mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle(getString(R.string.loading));
-            mpDialog.setMessage(getString(R.string.loading_message));
-            mpDialog.setIndeterminate(false);
-            mpDialog.setCancelable(false);
-            mpDialog.show();
+            final ProgressDialog progress_dialog = new ProgressDialog(main_activity.this);
+            progress_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress_dialog.setTitle(getString(R.string.loading));
+            progress_dialog.setMessage(getString(R.string.loading_message));
+            progress_dialog.setIndeterminate(false);
+            progress_dialog.setCancelable(false);
+            progress_dialog.show();
             OkHttpClient okHttpClient = public_func.get_okhttp_obj();
             Request request = new Request.Builder().url("https://" + host_save + "/control").method("OPTIONS", null).build();
             Call call = okHttpClient.newCall(request);
+            progress_dialog.setOnKeyListener((dialogInterface, i, keyEvent) -> {
+                if (keyEvent.getKeyCode() == android.view.KeyEvent.KEYCODE_BACK) {
+                    call.cancel();
+                }
+                return false;
+            });
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    mpDialog.cancel();
-                    Looper.prepare();
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
-                    alertDialog.setTitle(R.string.cannot_connect);
-                    alertDialog.setNegativeButton(getString(R.string.ok_button), null);
-                    alertDialog.show();
-                    Looper.loop();
+                    progress_dialog.cancel();
+                    if(!Objects.equals(e.getMessage(), "Canceled")){
+                        Looper.prepare();
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
+                        alertDialog.setTitle(R.string.cannot_connect);
+                        alertDialog.setNegativeButton(getString(R.string.ok_button), null);
+                        alertDialog.show();
+                        Looper.loop();
+                    }
+
                 }
 
                 @Override
                 public void onResponse(@NonNull Call call, @NonNull Response response) {
-                    mpDialog.cancel();
+                    progress_dialog.cancel();
                     if (response.code() != 204) {
                         Looper.prepare();
                         AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
@@ -187,7 +196,7 @@ public class main_activity extends AppCompatActivity {
         save_button.setOnClickListener(save_host);
     }
 
-    void start_edit() {
+    private void start_edit() {
         Intent edit_post_activity = new Intent(context, post_list_activity.class);
         startActivity(edit_post_activity);
         finish();

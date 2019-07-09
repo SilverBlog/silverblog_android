@@ -69,7 +69,7 @@ class public_value {
 }
 
 final class final_value {
-    static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    static String API_VERSION = "v2";
-    static int current_api_code = 3;
+    static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    static final String API_VERSION = "v2";
+    static final int current_api_code = 3;
 }
