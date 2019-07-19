@@ -69,6 +69,7 @@ class public_value {
 }
 
 final class final_value {
+    static final String public_passwd_key = "SiLvErBlOg";
     static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     static final String API_VERSION = "v2";
     static final int current_api_code = 3;

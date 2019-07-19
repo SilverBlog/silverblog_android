@@ -38,7 +38,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class main_activity extends AppCompatActivity {
+public class login_activity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private String host_save;
     private String password_save;
@@ -61,7 +61,7 @@ public class main_activity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 host_save = host_info.get("host").getAsString();
                 if (host_info.has("password")) {
-                    String password_v2 = public_func.get_hmac_hash(host_info.get("password").getAsString(), "SiLvErBlOg", "HmacSHA256");
+                    String password_v2 = public_func.get_hmac_hash(host_info.get("password").getAsString(), final_value.public_passwd_key, "HmacSHA256");
                     host_list.remove(host_name_list.get(index));
                     JsonObject object = new JsonObject();
                     object.addProperty("host", host_save);
@@ -104,8 +104,8 @@ public class main_activity extends AppCompatActivity {
             }
 
             host_save = String.valueOf(host.getText());
-            password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
-            final ProgressDialog progress_dialog = new ProgressDialog(main_activity.this);
+            password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), final_value.public_passwd_key, "HmacSHA256");
+            final ProgressDialog progress_dialog = new ProgressDialog(login_activity.this);
             progress_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progress_dialog.setTitle(getString(R.string.loading));
             progress_dialog.setMessage(getString(R.string.loading_message));
@@ -127,7 +127,7 @@ public class main_activity extends AppCompatActivity {
                     progress_dialog.cancel();
                     if(!Objects.equals(e.getMessage(), "Canceled")){
                         Looper.prepare();
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(login_activity.this);
                         alertDialog.setTitle(R.string.cannot_connect);
                         alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                         alertDialog.show();
@@ -141,7 +141,7 @@ public class main_activity extends AppCompatActivity {
                     progress_dialog.cancel();
                     if (response.code() != 204) {
                         Looper.prepare();
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(main_activity.this);
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(login_activity.this);
                         alertDialog.setTitle(R.string.cannot_connect);
                         alertDialog.setNegativeButton(getString(R.string.ok_button), null);
                         alertDialog.show();
@@ -177,7 +177,7 @@ public class main_activity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
-            ActivityCompat.requestPermissions(main_activity.this, new String[]{Manifest.permission.CAMERA}, 1);
+            ActivityCompat.requestPermissions(login_activity.this, new String[]{Manifest.permission.CAMERA}, 1);
             return true;
         });
         host_list = new JsonParser().parse(Objects.requireNonNull(sharedPreferences.getString("host_list", "{}"))).getAsJsonObject();

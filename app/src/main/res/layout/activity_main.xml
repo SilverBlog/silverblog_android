@@ -5,7 +5,7 @@
                                                      android:layout_width="match_parent"
                                                      android:layout_height="match_parent"
                                                      android:fitsSystemWindows="true"
-                                                     tools:context="org.SilverBlog.client.main_activity">
+    tools:context="org.SilverBlog.client.login_activity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="org.SilverBlog.client.main_activity"
+        tools:context="org.SilverBlog.client.login_activity"
         tools:showIn="@layout/activity_main">
 
         <com.google.android.material.textfield.TextInputLayout

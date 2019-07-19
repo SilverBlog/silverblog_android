@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -67,7 +66,7 @@ public class edit_activity extends AppCompatActivity {
                 host_save = sharedpreferences.getString("host", null);
                 password_save = sharedpreferences.getString("password_v2", null);
                 if (password_save == null || host_save == null) {
-                    Intent main_activity = new Intent(context, main_activity.class);
+                    Intent main_activity = new Intent(context, login_activity.class);
                     startActivity(main_activity);
                     finish();
                     return false;
@@ -144,7 +143,7 @@ public class edit_activity extends AppCompatActivity {
                             alertDialog.setTitle(R.string.submit_error);
                             alertDialog.setView(et);
                             alertDialog.setNegativeButton(ok_button, (dialogInterface, i) -> {
-                                String password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(et.getText()), "MD5")), "SiLvErBlOg", "HmacSHA256");
+                                String password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(et.getText()), "MD5")), final_value.public_passwd_key, "HmacSHA256");
                                 public_value.password = password_save;
                                 JsonObject host_list = new JsonParser().parse(Objects.requireNonNull(sharedpreferences.getString("host_list", "{}"))).getAsJsonObject();
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -157,7 +156,6 @@ public class edit_activity extends AppCompatActivity {
                                 editor.putString("host_list", new Gson().toJson(host_list));
                                 editor.putString("host", public_value.host);
                                 editor.putString("password_v2", password_save);
-                                Log.d("silverblog", "onActivityResult: " + password_save);
                                 editor.apply();
                                 send_post();
                             });

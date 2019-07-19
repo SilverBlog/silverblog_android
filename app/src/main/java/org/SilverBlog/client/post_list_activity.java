@@ -81,7 +81,7 @@ public class post_list_activity extends AppCompatActivity {
     }
 
     private void start_login() {
-        Intent main_activity = new Intent(context, main_activity.class);
+        Intent main_activity = new Intent(context, login_activity.class);
         startActivity(main_activity);
         finish();
     }

@@ -11,13 +11,18 @@ import android.view.ViewGroup;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.zxing.Result;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class scanner_activity extends Activity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
@@ -92,7 +97,7 @@ public class scanner_activity extends Activity implements ZXingScannerView.Resul
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), main_activity.class);
+        Intent intent = new Intent(getApplicationContext(), login_activity.class);
         startActivity(intent);
         finish();
     }
