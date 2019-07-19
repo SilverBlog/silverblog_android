@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -159,7 +158,6 @@ public class main_activity extends AppCompatActivity {
                     editor.putString("host_list", new Gson().toJson(host_list));
                     editor.putString("host", host_save);
                     editor.putString("password_v2", password_save);
-                    Log.d("silverblog", "onActivityResult: " + password_save);
                     editor.apply();
                     start_edit();
 
