@@ -107,8 +107,8 @@ public class login_activity extends AppCompatActivity {
             password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), final_value.public_passwd_key, "HmacSHA256");
             final ProgressDialog progress_dialog = new ProgressDialog(login_activity.this);
             progress_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progress_dialog.setTitle(getString(R.string.loading));
-            progress_dialog.setMessage(getString(R.string.loading_message));
+            progress_dialog.setTitle(getString(R.string.connecting));
+            progress_dialog.setMessage(getString(R.string.connecting_message));
             progress_dialog.setIndeterminate(false);
             progress_dialog.setCancelable(false);
             progress_dialog.show();

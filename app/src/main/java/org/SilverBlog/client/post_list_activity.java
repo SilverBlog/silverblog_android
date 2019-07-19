@@ -106,7 +106,7 @@ public class post_list_activity extends AppCompatActivity {
         public_value.password = password_save;
         setContentView(R.layout.activity_post_list_card);
         toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Loading...");
+        toolbar.setTitle(getString(R.string.loading));
         setSupportActionBar(toolbar);
         recycler_view = findViewById(R.id.my_recycler_view);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(context);
@@ -168,8 +168,8 @@ public class post_list_activity extends AppCompatActivity {
             case R.id.send_git_button:
                 final ProgressDialog dialog = new ProgressDialog(post_list_activity.this);
                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                dialog.setTitle(getString(R.string.loading));
-                dialog.setMessage(getString(R.string.loading_message));
+                dialog.setTitle(getString(R.string.connecting));
+                dialog.setMessage(getString(R.string.connecting_message));
                 dialog.setIndeterminate(false);
                 dialog.setCancelable(false);
                 dialog.show();
@@ -472,8 +472,8 @@ class recycler_view_adapter extends RecyclerView.Adapter<recycler_view_adapter.c
                             (dialogInterface1, i1) -> {
                                 final ProgressDialog dialog = new ProgressDialog(context);
                                 dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                                dialog.setTitle(context.getString(R.string.loading));
-                                dialog.setMessage(context.getString(R.string.loading_message));
+                                dialog.setTitle(context.getString(R.string.connecting));
+                                dialog.setMessage(context.getString(R.string.connecting_message));
                                 dialog.setIndeterminate(false);
                                 dialog.setCancelable(false);
                                 dialog.show();

@@ -12,8 +12,8 @@
     <string name="submit_success">操作完成！</string>
     <string name="visit_document">訪問新博文</string>
     <string name="cancel">取消</string>
-    <string name="loading">正在連接伺服器…</string>
-    <string name="loading_message">請稍後…</string>
+    <string name="connecting">正在連接伺服器…</string>
+    <string name="connecting_message">請稍後…</string>
     <string name="list_is_none">當前文章列表為空</string>
     <string name="network_error">請檢查網絡狀態！</string>
     <string name="git_push_error">操作失敗！請查看伺服器日誌。</string>
@@ -42,5 +42,5 @@
     <string name="cannot_connect">無法連接到伺服器</string>
     <string name="api_too_high">當前客戶端API版本太低，請升級後重試。</string>
     <string name="request_error">請求失敗，錯誤碼：</string>
-    <string name="load">載入中…</string>
+    <string name="loading">載入中…</string>
 </resources>

@@ -13,8 +13,8 @@
     <string name="submit_success">Request is completed!</string>
     <string name="visit_document">Visit new blog</string>
     <string name="cancel">Cancel</string>
-    <string name="loading">Connecting to server…</string>
-    <string name="loading_message">Please wait…</string>
+    <string name="connecting">Connecting to server…</string>
+    <string name="connecting_message">Please wait…</string>
     <string name="list_is_none">The current article list is empty</string>
     <string name="network_error">Please check network status!</string>
     <string name="git_push_error">Request failed,Please check the server log.</string>
@@ -43,5 +43,5 @@
     <string name="cannot_connect">Unable to connect to server.</string>
     <string name="api_too_high">The current client API version is too low. Please try again after upgrading.</string>
     <string name="request_error">Request failed, error code:</string>
-    <string name="load">Loading…</string>
+    <string name="loading">Loading…</string>
 </resources>

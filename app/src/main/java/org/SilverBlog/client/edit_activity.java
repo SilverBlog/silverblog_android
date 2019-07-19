@@ -98,8 +98,8 @@ public class edit_activity extends AppCompatActivity {
             String json = gson.toJson(json_obj);
             final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle(getString(R.string.loading));
-            mpDialog.setMessage(getString(R.string.loading_message));
+            mpDialog.setTitle(getString(R.string.connecting));
+            mpDialog.setMessage(getString(R.string.connecting_message));
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
@@ -248,8 +248,8 @@ public class edit_activity extends AppCompatActivity {
             post_uuid = intent.getStringExtra("uuid");
             final ProgressDialog mpDialog = new ProgressDialog(edit_activity.this);
             mpDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mpDialog.setTitle(getString(R.string.loading));
-            mpDialog.setMessage(getString(R.string.loading_message));
+            mpDialog.setTitle(getString(R.string.connecting));
+            mpDialog.setMessage(getString(R.string.connecting_message));
             mpDialog.setIndeterminate(false);
             mpDialog.setCancelable(false);
             mpDialog.show();
