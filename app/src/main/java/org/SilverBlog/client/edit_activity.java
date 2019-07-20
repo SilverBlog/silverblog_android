@@ -143,7 +143,7 @@ public class edit_activity extends AppCompatActivity {
                             alertDialog.setTitle(R.string.submit_error);
                             alertDialog.setView(et);
                             alertDialog.setNegativeButton(ok_button, (dialogInterface, i) -> {
-                                String password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(et.getText()), "MD5")), final_value.public_passwd_key, "HmacSHA256");
+                                String password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(et.getText()), "MD5")), final_value.public_key, "HmacSHA256");
                                 public_value.password = password_save;
                                 JsonObject host_list = new JsonParser().parse(Objects.requireNonNull(sharedpreferences.getString("host_list", "{}"))).getAsJsonObject();
                                 SharedPreferences.Editor editor = sharedpreferences.edit();

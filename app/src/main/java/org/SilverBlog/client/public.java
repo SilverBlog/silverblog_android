@@ -25,13 +25,13 @@ class public_func {
             return byte2hex(digest);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
-    private static String byte2hex(byte[] b) {
-        StringBuilder sb = new StringBuilder(b.length * 2);
-        for (byte aB : b) {
+    private static String byte2hex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+        for (byte aB : bytes) {
             int v = aB & 0xff;
             if (v < 16) {
                 sb.append('0');
@@ -69,7 +69,7 @@ class public_value {
 }
 
 final class final_value {
-    static final String public_passwd_key = "SiLvErBlOg";
+    static final String public_key = "SiLvErBlOg";
     static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     static final String API_VERSION = "v2";
     static final int current_api_code = 3;

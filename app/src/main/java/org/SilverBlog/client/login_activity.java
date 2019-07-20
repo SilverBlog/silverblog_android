@@ -61,7 +61,7 @@ public class login_activity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 host_save = host_info.get("host").getAsString();
                 if (host_info.has("password")) {
-                    String password_v2 = public_func.get_hmac_hash(host_info.get("password").getAsString(), final_value.public_passwd_key, "HmacSHA256");
+                    String password_v2 = public_func.get_hmac_hash(host_info.get("password").getAsString(), final_value.public_key, "HmacSHA256");
                     host_list.remove(host_name_list.get(index));
                     JsonObject object = new JsonObject();
                     object.addProperty("host", host_save);
@@ -104,7 +104,7 @@ public class login_activity extends AppCompatActivity {
             }
 
             host_save = String.valueOf(host.getText());
-            password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), final_value.public_passwd_key, "HmacSHA256");
+            password_save = public_func.get_hmac_hash(Objects.requireNonNull(public_func.get_hash(String.valueOf(password.getText()), "MD5")), final_value.public_key, "HmacSHA256");
             final ProgressDialog progress_dialog = new ProgressDialog(login_activity.this);
             progress_dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progress_dialog.setTitle(getString(R.string.connecting));
